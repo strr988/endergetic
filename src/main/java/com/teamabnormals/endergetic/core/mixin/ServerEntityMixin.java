@@ -9,7 +9,7 @@ import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.interfaces.BalloonHolder;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,7 +32,7 @@ public final class ServerEntityMixin {
 		List<BolloomBalloon> currentBalloons = ((BalloonHolder) this.entity).getBalloons();
 		if (!currentBalloons.equals(this.prevBalloons)) {
 			this.prevBalloons = currentBalloons;
-			EndergeticExpansion.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new S2CUpdateBalloonsMessage(this.entity));
+			PacketDistributor.sendToPlayersTrackingEntity(this.entity, new S2CUpdateBalloonsMessage(this.entity));
 		}
 	}
 

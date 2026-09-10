@@ -5,6 +5,7 @@ import com.teamabnormals.endergetic.common.entity.booflo.Booflo;
 import com.teamabnormals.endergetic.common.network.entity.booflo.C2SBoostMessage;
 import com.teamabnormals.endergetic.common.network.entity.booflo.C2SInflateMessage;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
@@ -37,10 +38,10 @@ public final class LocalPlayerMixin extends AbstractClientPlayer {
 		if (ridingEntity instanceof Booflo booflo) {
 			if (!booflo.onGround()) {
 				if (!flag && this.input.jumping) {
-					EndergeticExpansion.CHANNEL.sendToServer(new C2SInflateMessage());
+					PacketDistributor.sendToServer(new C2SInflateMessage());
 				} else if (!this.input.jumping) {
 					if (booflo.isBoostExpanding() && booflo.isBoofed() && !booflo.isBoostLocked() && booflo.getBoostPower() > 0) {
-						EndergeticExpansion.CHANNEL.sendToServer(new C2SBoostMessage());
+						PacketDistributor.sendToServer(new C2SBoostMessage());
 					}
 				}
 			}

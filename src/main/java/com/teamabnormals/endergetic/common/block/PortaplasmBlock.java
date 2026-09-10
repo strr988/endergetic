@@ -23,7 +23,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 
@@ -251,7 +251,7 @@ public class PortaplasmBlock extends Block {
 	private static boolean tryToTeleportLiving(LivingEntity livingEntity, double randomX, double randomY, double randomZ) {
 		if (livingEntity.randomTeleport(randomX, randomY, randomZ, false)) {
 			if (livingEntity instanceof ServerPlayer player) {
-				EndergeticExpansion.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CEnablePurpoidFlash());
+				PacketDistributor.sendToPlayer(player, new S2CEnablePurpoidFlash());
 			}
 			return true;
 		}

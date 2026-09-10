@@ -16,7 +16,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -106,7 +106,7 @@ public class PurpoidTelefragGoal extends Goal {
 					teleportController.beginTeleportation(purpoid, teleportPos, true);
 					ridingEntity.hurt(purpoid.level().damageSources().mobAttack(purpoid), (float) purpoid.getAttributeValue(Attributes.ATTACK_DAMAGE));
 					if (ridingEntity instanceof ServerPlayer) {
-						EndergeticExpansion.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) ridingEntity), new S2CEnablePurpoidFlash());
+						PacketDistributor.sendToPlayer((ServerPlayer) ridingEntity, new S2CEnablePurpoidFlash());
 					}
 				}
 			}

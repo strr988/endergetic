@@ -6,34 +6,35 @@ import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraft.network.protocol.PacketFlow;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Message that requests the server to slam the Booflo the sending player is riding.
  *
  * @author SmellyModder (Luke Tonon)
  */
-public final class C2SSlamMessage {
+public final class C2SSlamMessage implements CustomPacketPayload {
+	public static final Type<C2SSlamMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "slam_booflo"));
+	public static final StreamCodec<FriendlyByteBuf, C2SSlamMessage> STREAM_CODEC = StreamCodec.unit(new C2SSlamMessage());
 
-	public void serialize(FriendlyByteBuf buf) {
+	@Override
+	public Type<C2SSlamMessage> type() {
+		return TYPE;
 	}
 
-	public static C2SSlamMessage deserialize(FriendlyByteBuf buf) {
-		return new C2SSlamMessage();
-	}
-
-	public static void handle(C2SSlamMessage message, Supplier<NetworkEvent.Context> ctx) {
-		NetworkEvent.Context context = ctx.get();
-		if (context.getDirection().getReceptionSide() == LogicalSide.SERVER) {
+	public static void handle(C2SSlamMessage message, IPayloadContext context) {
+		if (context.flow() == PacketFlow.SERVERBOUND) {
 			context.enqueueWork(() -> {
-				Player player = context.getSender();
-				if (player != null) {
+				Player player = context.player();
+				if (player != null && !player.isSpectator()) {
 					Entity ridingEntity = player.getVehicle();
 					if (ridingEntity instanceof Booflo) {
 						Booflo booflo = (Booflo) ridingEntity;
+						if (booflo.getControllingPassenger() != player) return;
 						if (booflo.isBoofed() && booflo.getBoostPower() <= 0 && booflo.isNoEndimationPlaying()) {
 							NetworkUtil.setPlayingAnimation(booflo, EEPlayableEndimations.BOOFLO_CHARGE);
 							booflo.setBoostExpanding(true);
@@ -42,7 +43,6 @@ public final class C2SSlamMessage {
 					}
 				}
 			});
-			context.setPacketHandled(true);
 		}
 	}
 

@@ -8,7 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class InstabilityMobEffect extends MobEffect {
 
@@ -29,7 +29,7 @@ public class InstabilityMobEffect extends MobEffect {
 			double randomZ = z + (random.nextDouble() - 0.5D) * 32.0D;
 			if (entity.randomTeleport(randomX, randomY, randomZ, false)) {
 				if (entity instanceof ServerPlayer player) {
-					EndergeticExpansion.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CEnablePurpoidFlash());
+					PacketDistributor.sendToPlayer(player, new S2CEnablePurpoidFlash());
 				}
 				break;
 			}

@@ -14,12 +14,21 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.protocol.PacketFlow;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-import java.util.function.Supplier;
+public final class C2SInflateBoofloVestMessage implements CustomPacketPayload {
+	public static final Type<C2SInflateBoofloVestMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "inflate_booflo_vest"));
+	public static final StreamCodec<FriendlyByteBuf, C2SInflateBoofloVestMessage> STREAM_CODEC = StreamCodec.unit(new C2SInflateBoofloVestMessage());
 
-public final class C2SInflateBoofloVestMessage {
+	@Override
+	public Type<C2SInflateBoofloVestMessage> type() {
+		return TYPE;
+	}
+
 	private static final String POISE_BUBBLE_ID = "endergetic:short_poise_bubble";
 	public static final float HORIZONTAL_BOOST_FORCE = 4.0F;
 	public static final float VERTICAL_BOOST_FORCE = 0.75F;
@@ -27,18 +36,10 @@ public final class C2SInflateBoofloVestMessage {
 	private static final int DELAY_INCREASE_THRESHOLD = 5;
 	private static final int DELAY_MULTIPLIER = 5;
 
-	public static void serialize(C2SInflateBoofloVestMessage message, FriendlyByteBuf buffer) {
-	}
-
-	public static C2SInflateBoofloVestMessage deserialize(FriendlyByteBuf buffer) {
-		return new C2SInflateBoofloVestMessage();
-	}
-
-	public static boolean handle(C2SInflateBoofloVestMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
-		if (context.getDirection().getReceptionSide() == LogicalSide.SERVER) {
+	public static void handle(C2SInflateBoofloVestMessage message, IPayloadContext context) {
+		if (context.flow() == PacketFlow.SERVERBOUND) {
 			context.enqueueWork(() -> {
-				Player player = context.getSender();
+				Player player = context.player();
 				if (player != null && !player.onGround() && !player.isSpectator()) {
 					ItemStack stack = player.getInventory().armor.get(2);
 					if (stack.is(EEItems.BOOFLO_VEST.get()) && BoofloVestItem.canBoof(stack, player)) {
@@ -74,9 +75,7 @@ public final class C2SInflateBoofloVestMessage {
 					}
 				}
 			});
-			return true;
 		}
-		return false;
 	}
 
 	private static double makeNegativeRandomly(double value, RandomSource rand) {

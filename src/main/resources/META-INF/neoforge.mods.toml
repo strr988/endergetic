@@ -1,11 +1,11 @@
 modLoader = "javafml"
-loaderVersion = "[32,)"
+loaderVersion = "[4,)"
 issueTrackerURL = "https://github.com/team-abnormals/endergetic/issues"
 license = "https://github.com/team-abnormals/endergetic/blob/main/LICENSE.txt"
 
 [[mods]]
     modId = "endergetic"
-    version = "${file.jarVersion}"
+    version = "${mod_version}"
     logoFile = "logo.png"
     itemIcon = "endergetic:poismoss"
     authors = "Team Abnormals"
@@ -17,21 +17,24 @@ license = "https://github.com/team-abnormals/endergetic/blob/main/LICENSE.txt"
 
 [[dependencies.endergetic]]
     modId = "minecraft"
-    mandatory = true
-    versionRange = "[1.20.1,1.20.2)"
+    type = "required"
+    versionRange = "[${mc_version}]"
     ordering = "AFTER"
     side = "BOTH"
 
 [[dependencies.endergetic]]
-    modId = "forge"
-    mandatory = true
-    versionRange = "[47.1.3,)"
+    modId = "neoforge"
+    type = "required"
+    versionRange = "[${neoforge},)"
     ordering = "AFTER"
     side = "BOTH"
 
 [[dependencies.endergetic]]
     modId = "blueprint"
-    mandatory = true
-    versionRange = "[7.1.0,)"
+    type = "required"
+    versionRange = "[${blueprint},)"
     ordering = "AFTER"
     side = "BOTH"
+
+[[mixins]]
+    config = "endergetic.mixins.json"

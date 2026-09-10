@@ -15,7 +15,7 @@ import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.PlayerDataStorage;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -66,7 +66,7 @@ public final class PlayerListMixin {
 					Entity entity = EntityType.loadEntityRecursive(balloonsTag.getCompound(i), serverWorld, (balloon -> !serverWorld.addWithUUID(balloon) ? null : balloon));
 					if (entity instanceof BolloomBalloon) {
 						((BolloomBalloon) entity).attachToEntity(player);
-						EndergeticExpansion.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new S2CUpdateBalloonsMessage(player));
+						PacketDistributor.sendToPlayersTrackingEntity(entity, new S2CUpdateBalloonsMessage(player));
 					}
 				}
 			}

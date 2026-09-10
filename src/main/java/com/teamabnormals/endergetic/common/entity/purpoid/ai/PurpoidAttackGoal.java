@@ -20,7 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -101,7 +101,7 @@ public class PurpoidAttackGoal extends Goal {
 						double randomZ = targetZ + (random.nextDouble() - 0.5D) * 32.0D;
 						if (target.randomTeleport(randomX, randomY, randomZ, false)) {
 							if (target instanceof ServerPlayer) {
-								EndergeticExpansion.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) target), new S2CEnablePurpoidFlash());
+								PacketDistributor.sendToPlayer((ServerPlayer) target, new S2CEnablePurpoidFlash());
 							}
 							break;
 						}

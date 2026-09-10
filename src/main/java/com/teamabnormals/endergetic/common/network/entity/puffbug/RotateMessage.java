@@ -1,20 +1,29 @@
 package com.teamabnormals.endergetic.common.network.entity.puffbug;
 
-import com.teamabnormals.blueprint.client.ClientInfo;
 import com.teamabnormals.endergetic.common.entity.puffbug.PuffBug;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.protocol.PacketFlow;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-import java.util.function.Supplier;
 
 /**
  * Message that tells the client to rotate a Puff Bug
  *
  * @author - SmellyModder(Luke Tonon)
  */
-public class RotateMessage {
+public class RotateMessage implements CustomPacketPayload {
+	public static final Type<RotateMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "rotate_puffbug"));
+	public static final StreamCodec<FriendlyByteBuf, RotateMessage> STREAM_CODEC = StreamCodec.ofMember(RotateMessage::serialize, RotateMessage::deserialize);
+
+	@Override
+	public Type<RotateMessage> type() {
+		return TYPE;
+	}
+
 	private int entityId;
 	private int tickLength;
 	private float yaw;
@@ -41,16 +50,14 @@ public class RotateMessage {
 		return new RotateMessage(buf.readInt(), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat());
 	}
 
-	public static void handle(RotateMessage message, Supplier<NetworkEvent.Context> ctx) {
-		NetworkEvent.Context context = ctx.get();
-		if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+	public static void handle(RotateMessage message, IPayloadContext context) {
+		if (context.flow() == PacketFlow.CLIENTBOUND) {
 			context.enqueueWork(() -> {
-				Entity entity = ClientInfo.getClientPlayerLevel().getEntity(message.entityId);
+				Entity entity = context.player().level().getEntity(message.entityId);
 				if (entity instanceof PuffBug) {
 					((PuffBug) entity).getRotationController().rotate(message.yaw, message.pitch, message.roll, message.tickLength);
 				}
 			});
-			context.setPacketHandled(true);
 		}
 	}
 }

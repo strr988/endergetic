@@ -1,19 +1,28 @@
 package com.teamabnormals.endergetic.common.network.entity;
 
-import com.teamabnormals.blueprint.client.ClientInfo;
 import com.teamabnormals.endergetic.common.entity.bolloom.BolloomBalloon;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.interfaces.BalloonHolder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.protocol.PacketFlow;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
-import java.util.function.Supplier;
 
-public final class S2CUpdateBalloonsMessage {
+public final class S2CUpdateBalloonsMessage implements CustomPacketPayload {
+	public static final Type<S2CUpdateBalloonsMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "update_balloons"));
+	public static final StreamCodec<FriendlyByteBuf, S2CUpdateBalloonsMessage> STREAM_CODEC = StreamCodec.ofMember(S2CUpdateBalloonsMessage::serialize, S2CUpdateBalloonsMessage::deserialize);
+
+	@Override
+	public Type<S2CUpdateBalloonsMessage> type() {
+		return TYPE;
+	}
+
 	private int entityId;
 	private int[] balloonIds;
 
@@ -40,11 +49,10 @@ public final class S2CUpdateBalloonsMessage {
 		return new S2CUpdateBalloonsMessage(buf.readVarInt(), buf.readVarIntArray());
 	}
 
-	public static void handle(S2CUpdateBalloonsMessage message, Supplier<NetworkEvent.Context> ctx) {
-		NetworkEvent.Context context = ctx.get();
-		if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+	public static void handle(S2CUpdateBalloonsMessage message, IPayloadContext context) {
+		if (context.flow() == PacketFlow.CLIENTBOUND) {
 			context.enqueueWork(() -> {
-				Level world = ClientInfo.getClientPlayerLevel();
+				Level world = context.player().level();
 				Entity entity = world.getEntity(message.entityId);
 				if (entity == null) {
 					EndergeticExpansion.LOGGER.warn("Received balloons for unknown entity!");
@@ -59,6 +67,5 @@ public final class S2CUpdateBalloonsMessage {
 				}
 			});
 		}
-		context.setPacketHandled(true);
 	}
 }

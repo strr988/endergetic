@@ -55,7 +55,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.Map;
@@ -164,10 +164,10 @@ public final class EEEvents {
 		if (trackingEntity instanceof BolloomBalloon balloon) {
 			Entity attachedEntity = balloon.getAttachedEntity();
 			if (attachedEntity != null) {
-				EndergeticExpansion.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CUpdateBalloonsMessage(attachedEntity));
+				PacketDistributor.sendToPlayer(player, new S2CUpdateBalloonsMessage(attachedEntity));
 			}
 		} else {
-			EndergeticExpansion.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CUpdateBalloonsMessage(trackingEntity));
+			PacketDistributor.sendToPlayer(player, new S2CUpdateBalloonsMessage(trackingEntity));
 		}
 	}
 

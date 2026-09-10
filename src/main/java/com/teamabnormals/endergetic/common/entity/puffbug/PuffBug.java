@@ -69,7 +69,7 @@ import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -1397,7 +1397,7 @@ public class PuffBug extends Animal implements Endimatable {
 			this.ticksSinceNotRotating = 0;
 
 			if (!this.puffbug.level().isClientSide) {
-				EndergeticExpansion.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.puffbug), new RotateMessage(this.puffbug.getId(), tickLength, yaw, pitch, roll));
+				PacketDistributor.sendToPlayersTrackingEntity(this.puffbug, new RotateMessage(this.puffbug.getId(), tickLength, yaw, pitch, roll));
 			}
 		}
 

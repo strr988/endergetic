@@ -4,7 +4,7 @@ import com.teamabnormals.blueprint.core.util.registry.ItemSubRegistryHelper;
 import com.teamabnormals.blueprint.core.util.registry.RegistryHelper;
 import com.teamabnormals.endergetic.common.item.EetleSpawnEggItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 public final class EndergeticItemSubRegistryHelper extends ItemSubRegistryHelper {
 
@@ -12,7 +12,7 @@ public final class EndergeticItemSubRegistryHelper extends ItemSubRegistryHelper
 		super(parent, parent.getItemSubHelper().getDeferredRegister());
 	}
 
-	public RegistryObject<EetleSpawnEggItem> createEetleSpawnEgg() {
+	public DeferredItem<EetleSpawnEggItem> createEetleSpawnEgg() {
 		return this.deferredRegister.register("eetle_spawn_egg", () -> new EetleSpawnEggItem(7964867, 3943508, new Item.Properties()));
 	}
 }

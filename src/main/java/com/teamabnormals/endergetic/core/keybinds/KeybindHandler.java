@@ -7,6 +7,7 @@ import com.teamabnormals.endergetic.common.item.BoofloVestItem;
 import com.teamabnormals.endergetic.common.network.C2SInflateBoofloVestMessage;
 import com.teamabnormals.endergetic.common.network.entity.booflo.C2SSlamMessage;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.teamabnormals.endergetic.core.registry.EEItems;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -51,7 +52,7 @@ public final class KeybindHandler {
 			if (stack.getItem() == EEItems.BOOFLO_VEST.get() && !player.onGround() && !player.isSpectator()) {
 				if (BoofloVestItem.canBoof(stack, player)) {
 					EntityMotionHelper.knockbackEntity(player, C2SInflateBoofloVestMessage.HORIZONTAL_BOOST_FORCE, C2SInflateBoofloVestMessage.VERTICAL_BOOST_FORCE, true, true);
-					EndergeticExpansion.CHANNEL.sendToServer(new C2SInflateBoofloVestMessage());
+					PacketDistributor.sendToServer(new C2SInflateBoofloVestMessage());
 				}
 			}
 		}
@@ -59,7 +60,7 @@ public final class KeybindHandler {
 			if (!booflo.onGround()) {
 				if (BOOFLO_SLAM.isDown()) {
 					if (booflo.isBoofed() && booflo.getBoostPower() <= 0 && booflo.isNoEndimationPlaying()) {
-						EndergeticExpansion.CHANNEL.sendToServer(new C2SSlamMessage());
+						PacketDistributor.sendToServer(new C2SSlamMessage());
 					}
 				}
 			}

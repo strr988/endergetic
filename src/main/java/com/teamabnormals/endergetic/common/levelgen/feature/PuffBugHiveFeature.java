@@ -59,7 +59,7 @@ public class PuffBugHiveFeature extends Feature<NoneFeatureConfiguration> {
 			PuffBug puffbug = EEEntityTypes.PUFF_BUG.get().create(level.getLevel());
 			if (puffbug != null) {
 				puffbug.moveTo(offset.getX() + 0.5F, offset.getY() + 0.5F, offset.getZ() + 0.5F, 0.0F, 0.0F);
-				puffbug.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null, null);
+				puffbug.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null);
 				puffbug.setHivePos(pos);
 				level.addFreshEntity(puffbug);
 			}

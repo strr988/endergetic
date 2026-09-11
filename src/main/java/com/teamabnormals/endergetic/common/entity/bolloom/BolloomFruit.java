@@ -17,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.network.PlayMessages;
 
 /**
  * @author - SmellyModder (Luke Tonon)
@@ -29,10 +28,6 @@ public class BolloomFruit extends AbstractBolloom {
 	public BolloomFruit(EntityType<? extends BolloomFruit> type, Level world) {
 		super(EEEntityTypes.BOLLOOM_FRUIT.get(), world);
 		this.setNoGravity(true);
-	}
-
-	public BolloomFruit(PlayMessages.SpawnEntity spawnEntity, Level world) {
-		this(EEEntityTypes.BOLLOOM_FRUIT.get(), world);
 	}
 
 	public BolloomFruit(Level world, BlockPos budPos, BlockPos origin, int height, Direction direction) {
@@ -52,10 +47,10 @@ public class BolloomFruit extends AbstractBolloom {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(VINE_HEIGHT, 1);
-		this.entityData.define(BUD_POS, BlockPos.ZERO);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(VINE_HEIGHT, 1);
+		builder.define(BUD_POS, BlockPos.ZERO);
 	}
 
 	@Override

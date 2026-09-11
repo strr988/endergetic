@@ -14,12 +14,12 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class BoofloRenderer extends MobRenderer<Booflo, EntityModel<Booflo>> {
-	private static final ResourceLocation DEFAULT = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/booflo/booflo.png");
+	private static final ResourceLocation DEFAULT = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/booflo/booflo.png");
 	private static final EntitySkinHelper<Booflo> SKIN_HELPER = EntitySkinHelper.create(EndergeticExpansion.MOD_ID, "textures/entity/booflo/", "booflo", (skinHelper) -> {
 		skinHelper.putSkins("snake", "snake", "snake block", "the forsaken one");
 		skinHelper.putSkins("cam", "cameron", "cam");

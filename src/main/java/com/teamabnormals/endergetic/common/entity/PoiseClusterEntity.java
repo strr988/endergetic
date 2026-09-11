@@ -33,8 +33,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -63,12 +63,12 @@ public class PoiseClusterEntity extends LivingEntity {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(ORIGIN, BlockPos.ZERO);
-		this.entityData.define(BLOCKS_TO_MOVE_UP, 0);
-		this.entityData.define(TIMES_HIT, 0);
-		this.entityData.define(ASCEND, true);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(ORIGIN, BlockPos.ZERO);
+		builder.define(BLOCKS_TO_MOVE_UP, 0);
+		builder.define(TIMES_HIT, 0);
+		builder.define(ASCEND, true);
 	}
 
 	@Override
@@ -291,8 +291,9 @@ public class PoiseClusterEntity extends LivingEntity {
 	}
 
 	@Override
-	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions size) {
-		return size.height;
+	protected EntityDimensions getDefaultDimensions(Pose pose) {
+		EntityDimensions dimensions = super.getDefaultDimensions(pose);
+		return dimensions.withEyeHeight(dimensions.height());
 	}
 
 	private boolean isBlockBlockingPath(boolean down) {
@@ -375,11 +376,6 @@ public class PoiseClusterEntity extends LivingEntity {
 	protected void doPush(Entity entityIn) {
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.ILLAGER;
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean displayFireAnimation() {
@@ -424,11 +420,6 @@ public class PoiseClusterEntity extends LivingEntity {
 	@Override
 	public boolean startRiding(Entity entityIn, boolean force) {
 		return false;
-	}
-
-	@Override
-	public boolean canBreatheUnderwater() {
-		return true;
 	}
 
 	@Override

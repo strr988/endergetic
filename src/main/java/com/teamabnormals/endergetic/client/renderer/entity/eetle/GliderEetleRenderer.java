@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nonnull;
 
 public class GliderEetleRenderer extends AbstractEetleRenderer<GliderEetle> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/eetle/glider_eetle.png");
-	private static final ResourceLocation EMISSIVE_TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/eetle/glider_eetle_emissive.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/eetle/glider_eetle.png");
+	private static final ResourceLocation EMISSIVE_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/eetle/glider_eetle_emissive.png");
 
 	public GliderEetleRenderer(EntityRendererProvider.Context context) {
 		super(context, new GliderEetleModel(context.bakeLayer(EEModelLayers.GLIDER_EETLE)), EMISSIVE_TEXTURE, 0.75F);

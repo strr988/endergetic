@@ -34,10 +34,9 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.eventbus.api.Event.Result;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nullable;
 
@@ -188,8 +187,11 @@ public class PoiseTallBushBlock extends Block implements BonemealableBlock {
 		} else {
 			Holder<ConfiguredFeature<?, ?>> holder = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).getHolder(EEConfiguredFeatures.POISE_TREE).orElse(null);
 			BlockPos treePos = state.getValue(HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
-			if (holder != null && ForgeEventFactory.blockGrowFeature(level, rand, treePos, holder).getResult() != Result.DENY) {
-				holder.get().place(level, level.getChunkSource().getGenerator(), rand, treePos);
+			if (holder != null) {
+				var event = EventHooks.fireBlockGrowFeature(level, rand, treePos, holder);
+				if (!event.isCanceled() && event.getFeature() != null) {
+					event.getFeature().value().place(level, level.getChunkSource().getGenerator(), rand, treePos);
+				}
 			}
 		}
 	}

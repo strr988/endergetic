@@ -29,6 +29,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
@@ -36,25 +37,25 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult.Type;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
@@ -92,10 +93,9 @@ public final class EEEvents {
 		Projectile projectileEntity = event.getProjectile();
 		if (projectileEntity instanceof ThrownPotion potionEntity) {
 			ItemStack itemstack = potionEntity.getItem();
-			Potion potion = PotionUtils.getPotion(itemstack);
-			List<MobEffectInstance> list = PotionUtils.getMobEffects(itemstack);
+			PotionContents potion = itemstack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
 
-			if (potion == Potions.WATER && list.isEmpty() && event.getRayTraceResult() instanceof BlockHitResult blockraytraceresult) {
+			if (potion.is(Potions.WATER) && !potion.hasEffects() && event.getRayTraceResult() instanceof BlockHitResult blockraytraceresult) {
 				Level world = potionEntity.level();
 				Direction direction = blockraytraceresult.getDirection();
 				BlockPos blockpos = blockraytraceresult.getBlockPos().relative(Direction.DOWN).relative(direction);
@@ -110,11 +110,11 @@ public final class EEEvents {
 	}
 
 	@SubscribeEvent
-	public static void onLivingTick(LivingEvent.LivingTickEvent event) {
-		LivingEntity entity = event.getEntity();
+	public static void onLivingTick(EntityTickEvent.Post event) {
+		if (!(event.getEntity() instanceof LivingEntity entity)) return;
 		if (!entity.level().isClientSide) {
 			int balloonCount = ((BalloonHolder) entity).getBalloons().size();
-			AttributeInstance gravity = entity.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
+			AttributeInstance gravity = entity.getAttribute(Attributes.GRAVITY);
 
 			if (gravity != null) {
 				boolean hasABalloon = balloonCount > 0;
@@ -143,7 +143,7 @@ public final class EEEvents {
 				if (balloonCount > 3) {
 					entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 2, balloonCount - 4, false, false, false));
 					if (entity instanceof ServerPlayer serverPlayer) {
-						EECriteriaTriggers.UP_UP_AND_AWAY.trigger(serverPlayer);
+						EECriteriaTriggers.UP_UP_AND_AWAY.get().trigger(serverPlayer);
 					}
 				}
 			}

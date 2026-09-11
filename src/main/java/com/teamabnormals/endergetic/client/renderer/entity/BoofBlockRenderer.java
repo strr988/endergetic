@@ -26,13 +26,13 @@ public class BoofBlockRenderer extends EntityRenderer<BoofBlockEntity> {
 		stack.pushPose();
 
 		VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(boof)));
-		this.model.renderToBuffer(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.model.renderToBuffer(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
 
 		stack.popPose();
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(BoofBlockEntity boof) {
-		return new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/boof_block_inflated.png");
+		return ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/boof_block_inflated.png");
 	}
 }

@@ -23,7 +23,7 @@ public final class EEChunkGeneratorModifierProvider extends ChunkGeneratorModifi
 	@Override
 	protected void registerEntries(Provider provider) {
 		// TODO: Do I have to worry about ModdednessSliceConditionSource?
-		//ConditionSource inSlice = new BlueprintSurfaceRules.ModdednessSliceConditionSource(new ResourceLocation(EndergeticExpansion.MOD_ID, "poise_forest"));
+		//ConditionSource inSlice = new BlueprintSurfaceRules.ModdednessSliceConditionSource(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "poise_forest"));
 		ConditionSource inPoiseForest = isBiome(EEBiomes.POISE_FOREST);
 		RuleSource poismoss = ifTrue(noiseCondition(Noises.SURFACE, 0.43F, Double.MAX_VALUE), sequence(ifTrue(ON_FLOOR, state(EEBlocks.POISMOSS.get().defaultBlockState())), state(Blocks.END_STONE.defaultBlockState())));
 		RuleSource eumus = ifTrue(noiseCondition(Noises.SURFACE, 0.35F, 0.43F), ifTrue(UNDER_FLOOR, state(EEBlocks.EUMUS.get().defaultBlockState())));

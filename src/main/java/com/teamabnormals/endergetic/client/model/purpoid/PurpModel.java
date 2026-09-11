@@ -34,8 +34,8 @@ public class PurpModel extends PurpoidModel {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int packedColor) {
+		this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
 	}
 
 	@Override

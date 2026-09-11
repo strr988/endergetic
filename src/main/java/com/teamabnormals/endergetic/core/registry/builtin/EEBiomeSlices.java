@@ -9,7 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 public class EEBiomeSlices {
 	public static final ResourceKey<ModdedBiomeSlice> POISE_FOREST = createKey("poise_forest");
 
-	public static void bootstrap(BootstapContext<ModdedBiomeSlice> context) {
+	public static void bootstrap(BootstrapContext<ModdedBiomeSlice> context) {
 		HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
 		context.register(POISE_FOREST, new ModdedBiomeSlice(40,
 				new OverlayModdedBiomeProvider(List.of(
@@ -34,6 +34,6 @@ public class EEBiomeSlices {
 	}
 
 	public static ResourceKey<ModdedBiomeSlice> createKey(String name) {
-		return ResourceKey.create(BlueprintDataPackRegistries.MODDED_BIOME_SLICES, new ResourceLocation(EndergeticExpansion.MOD_ID, name));
+		return ResourceKey.create(BlueprintDataPackRegistries.MODDED_BIOME_SLICES, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, name));
 	}
 }

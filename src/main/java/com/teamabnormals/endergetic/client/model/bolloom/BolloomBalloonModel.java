@@ -48,12 +48,12 @@ public class BolloomBalloonModel<T extends BolloomBalloon> extends EntityModel<T
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrix, VertexConsumer arg1, int f, int f1, float f2, float f3, float f4, float f5) {
-		this.balloon.render(matrix, arg1, 240, f1, f5, f5, f5, f5);
+	public void renderToBuffer(PoseStack matrix, VertexConsumer arg1, int f, int f1, int packedColor) {
+		this.balloon.render(matrix, arg1, 240, f1, packedColor);
 	}
 
 	public void renderString(PoseStack matrix, VertexConsumer vertexBuilder, int light) {
-		this.x_string.render(matrix, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.x_string.render(matrix, vertexBuilder, light, OverlayTexture.NO_OVERLAY, -1);
 	}
 
 	@Override

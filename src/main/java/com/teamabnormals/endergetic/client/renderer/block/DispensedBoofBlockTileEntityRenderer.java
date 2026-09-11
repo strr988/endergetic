@@ -16,7 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
 public class DispensedBoofBlockTileEntityRenderer implements BlockEntityRenderer<DispensedBlockBoofTileEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/block/boof_block_dispensed.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/block/boof_block_dispensed.png");
 	private final BoofBlockDispenserModel model;
 
 	public DispensedBoofBlockTileEntityRenderer(BlockEntityRendererProvider.Context context) {

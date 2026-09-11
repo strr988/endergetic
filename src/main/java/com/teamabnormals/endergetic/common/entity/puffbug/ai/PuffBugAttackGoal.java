@@ -118,9 +118,9 @@ public class PuffBugAttackGoal extends Goal {
 	}
 
 	private AABB getBoundingBoxForSize(EntityDimensions size) {
-		float f = size.width / 2.0F;
+		float f = size.width() / 2.0F;
 		Vec3 vec3d = new Vec3(this.puffbug.getX() - (double) f, this.puffbug.getY(), this.puffbug.getZ() - (double) f);
-		Vec3 vec3d1 = new Vec3(this.puffbug.getX() + (double) f, this.puffbug.getY() + (double) size.height, this.puffbug.getZ() + (double) f);
+		Vec3 vec3d1 = new Vec3(this.puffbug.getX() + (double) f, this.puffbug.getY() + (double) size.height(), this.puffbug.getZ() + (double) f);
 		return new AABB(vec3d, vec3d1);
 	}
 

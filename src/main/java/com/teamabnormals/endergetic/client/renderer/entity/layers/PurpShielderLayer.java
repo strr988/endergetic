@@ -38,9 +38,9 @@ public class PurpShielderLayer extends RenderLayer<Purpoid, PurpoidModel> {
 		stack.scale(scale, scale, scale);
 		float alpha = 0.15F + inAndOut;
 		VertexConsumer nonEmissiveBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(PurpoidRenderer.getTexture(2)));
-		model.renderToBuffer(stack, nonEmissiveBuffer, 240, OverlayTexture.pack(0, 10), 1.0F, 1.0F, 1.0F, alpha);
-		gelModel.renderToBuffer(stack, nonEmissiveBuffer, 240, OverlayTexture.pack(0, 10), 1.0F, 1.0F, 1.0F, alpha);
-		gelModel.renderToBuffer(stack, bufferIn.getBuffer(RenderType.entityTranslucent(PurpoidEmissiveLayer.TEXTURES[2])), 240, OverlayTexture.pack(0, 10), 1.0F, 1.0F, 1.0F, alpha);
+		model.renderToBuffer(stack, nonEmissiveBuffer, 240, OverlayTexture.pack(0, 10), net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
+		gelModel.renderToBuffer(stack, nonEmissiveBuffer, 240, OverlayTexture.pack(0, 10), net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
+		gelModel.renderToBuffer(stack, bufferIn.getBuffer(RenderType.entityTranslucent(PurpoidEmissiveLayer.TEXTURES[2])), 240, OverlayTexture.pack(0, 10), net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
 		stack.popPose();
 	}
 }

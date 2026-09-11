@@ -11,6 +11,7 @@ import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -42,11 +43,6 @@ public class BolloomBudTileEntity extends BlockEntity {
 
 	public BolloomBudTileEntity(BlockPos pos, BlockState state) {
 		super(EEBlockEntityTypes.BOLLOOM_BUD.get(), pos, state);
-	}
-
-	@Override
-	public AABB getRenderBoundingBox() {
-		return INFINITE_EXTENT_AABB;
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, BolloomBudTileEntity bud) {
@@ -163,8 +159,8 @@ public class BolloomBudTileEntity extends BlockEntity {
 	}
 
 	@Override
-	public void load(CompoundTag tag) {
-		super.load(tag);
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
 
 		this.maxFruitHeight = tag.contains("MaxFruitHeight") ? Mth.clamp(tag.getInt("MaxFruitHeight"), 1, 7) : 7;
 
@@ -182,8 +178,8 @@ public class BolloomBudTileEntity extends BlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag compound) {
-		super.saveAdditional(compound);
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.saveAdditional(compound, registries);
 
 		if (compound.contains("MaxFruitHeight")) {
 			compound.putInt("MaxFruitHeight", this.maxFruitHeight);
@@ -211,8 +207,8 @@ public class BolloomBudTileEntity extends BlockEntity {
 	}
 
 	@Override
-	public CompoundTag getUpdateTag() {
-		return this.saveWithoutMetadata();
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		return this.saveWithoutMetadata(registries);
 	}
 
 	@Override

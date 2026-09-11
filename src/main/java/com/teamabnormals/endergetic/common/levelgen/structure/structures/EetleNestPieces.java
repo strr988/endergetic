@@ -78,7 +78,7 @@ public final class EetleNestPieces {
 	}
 
 	public static class EetleNestPiece extends StructurePiece {
-		private static final ResourceLocation ARENA = new ResourceLocation(EndergeticExpansion.MOD_ID, "eetle_nest/arena");
+		private static final ResourceLocation ARENA = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "eetle_nest/arena");
 		private final StructureTemplate arena;
 		private NestDesign nestDesign = null;
 
@@ -897,7 +897,7 @@ public final class EetleNestPieces {
 					if (broodEetle != null) {
 						broodEetle.setSleeping(true);
 						broodEetle.moveTo(mutable.getX() + 0.5D, mutable.getY(), mutable.getZ() + 0.5D, 0.0F, 0.0F);
-						broodEetle.finalizeSpawn(world, world.getCurrentDifficultyAt(broodEetle.blockPosition()), MobSpawnType.STRUCTURE, null, null);
+						broodEetle.finalizeSpawn(world, world.getCurrentDifficultyAt(broodEetle.blockPosition()), MobSpawnType.STRUCTURE, null);
 						world.addFreshEntityWithPassengers(broodEetle);
 					}
 				}

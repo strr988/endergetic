@@ -22,7 +22,9 @@ import com.teamabnormals.endergetic.core.other.EEDataSerializers;
 import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -58,7 +60,8 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -67,8 +70,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
@@ -125,16 +128,16 @@ public class PuffBug extends Animal implements Endimatable {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.getEntityData().define(HIVE_POS, Optional.empty());
-		this.getEntityData().define(ATTACHED_HIVE_SIDE, Direction.UP);
-		this.getEntityData().define(LAUNCH_DIRECTION, Optional.empty());
-		this.getEntityData().define(FIRE_DIRECTION, Optional.empty());
-		this.getEntityData().define(COLOR, -1);
-		this.getEntityData().define(FROM_BOTTLE, false);
-		this.getEntityData().define(INFLATED, true);
-		this.getEntityData().define(BOOSTING, false);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(HIVE_POS, Optional.empty());
+		builder.define(ATTACHED_HIVE_SIDE, Direction.UP);
+		builder.define(LAUNCH_DIRECTION, Optional.empty());
+		builder.define(FIRE_DIRECTION, Optional.empty());
+		builder.define(COLOR, -1);
+		builder.define(FROM_BOTTLE, false);
+		builder.define(INFLATED, true);
+		builder.define(BOOSTING, false);
 	}
 
 	@Override
@@ -449,26 +452,25 @@ public class PuffBug extends Animal implements Endimatable {
 
 		this.teleportCooldown = compound.getInt("TeleportCooldown");
 		this.ticksAwayFromHive = compound.getInt("TicksAwayFromHive");
+		if (compound.contains("ColorTag", 3)) {
+			this.setColor(compound.getInt("ColorTag"));
+		}
 
 		if (compound.contains("IsInflated")) {
 			this.setInflated(compound.getBoolean("IsInflated"));
 		}
 
 		if (compound.contains("HivePos", 10)) {
-			this.setHivePos(NbtUtils.readBlockPos(compound.getCompound("HivePos")));
+			NbtUtils.readBlockPos(compound, "HivePos").ifPresent(this::setHivePos);
 		}
 
 		if (compound.contains("StuckInBlockState", 10)) {
 			this.stuckInBlockState = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), compound.getCompound("StuckInBlockState"));
 		}
 
-		CompoundTag stackToCreate = compound.getCompound("ItemStackToCreate");
-
-		if (stackToCreate != null) {
-			ItemStack newStackToCreate = ItemStack.of(stackToCreate);
-			if (!newStackToCreate.isEmpty()) {
-				this.setStackToCreate(newStackToCreate);
-			}
+		ItemStack newStackToCreate = ItemStack.parseOptional(this.registryAccess(), compound.getCompound("ItemStackToCreate"));
+		if (!newStackToCreate.isEmpty()) {
+			this.setStackToCreate(newStackToCreate);
 		}
 
 		this.rotationController = this.getRotationController().read(this, compound.getCompound("Orientation"));
@@ -484,13 +486,14 @@ public class PuffBug extends Animal implements Endimatable {
 
 		compound.putInt("TeleportCooldown", this.teleportCooldown);
 		compound.putInt("TicksAwayFromHive", this.ticksAwayFromHive);
+		compound.putInt("ColorTag", this.getColor());
 
 		if (this.getHivePos() != null) {
 			compound.put("HivePos", NbtUtils.writeBlockPos(this.getHivePos()));
 		}
 
 		if (this.hasStackToCreate()) {
-			compound.put("ItemStackToCreate", this.getStackToCreate().save(new CompoundTag()));
+			compound.put("ItemStackToCreate", this.getStackToCreate().save(this.registryAccess()));
 		}
 
 		if (this.stuckInBlockState != null) {
@@ -779,37 +782,39 @@ public class PuffBug extends Animal implements Endimatable {
 
 	protected void setBottleData(ItemStack bottle) {
 		if (this.hasCustomName()) {
-			bottle.setHoverName(this.getCustomName());
+			bottle.set(DataComponents.CUSTOM_NAME, this.getCustomName());
 		}
 
-		CompoundTag nbt = bottle.getOrCreateTag();
+		CompoundTag entityData = new CompoundTag();
 
 		if (this.getColor() != -1) {
-			nbt.putInt("ColorTag", this.getColor());
+			entityData.putInt("ColorTag", this.getColor());
 		}
 
-		nbt.putInt("TeleportCooldown", this.teleportCooldown);
+		entityData.putInt("TeleportCooldown", this.teleportCooldown);
 
 		if (!this.getActiveEffects().isEmpty()) {
-			ListTag listnbt = new ListTag();
+			ListTag effects = new ListTag();
 
 			for (MobEffectInstance effectinstance : this.getActiveEffects()) {
-				listnbt.add(effectinstance.save(new CompoundTag()));
+				effects.add(effectinstance.save());
 			}
 
-			nbt.put("CustomPotionEffects", listnbt);
+			entityData.put("active_effects", effects);
+			bottle.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.ofNullable(this.getColor() == -1 ? null : this.getColor()), List.copyOf(this.getActiveEffects())));
 		}
 
-		nbt.putBoolean("IsFromBottle", true);
-		nbt.putBoolean("IsChild", this.isBaby());
+		entityData.putBoolean("FromBottle", true);
+		entityData.putInt("Age", this.isBaby() ? -24000 : 0);
+		bottle.set(DataComponents.ENTITY_DATA, CustomData.of(entityData));
 	}
 
 	private void keepEffectsAbsorbed() {
-		Map<MobEffect, MobEffectInstance> activePotionMap = this.getActiveEffectsMap();
-		Iterator<MobEffect> iterator = activePotionMap.keySet().iterator();
+		Map<Holder<MobEffect>, MobEffectInstance> activePotionMap = this.getActiveEffectsMap();
+		Iterator<Holder<MobEffect>> iterator = activePotionMap.keySet().iterator();
 		while (iterator.hasNext()) {
-			MobEffect effect = iterator.next();
-			if (effect != MobEffects.LEVITATION) {
+			Holder<MobEffect> effect = iterator.next();
+			if (!effect.is(MobEffects.LEVITATION)) {
 				MobEffectInstance effectInstance = activePotionMap.get(effect);
 				activePotionMap.put(effect, new MobEffectInstance(effect, effectInstance.getDuration() + 1, effectInstance.getAmplifier(), effectInstance.isAmbient(), effectInstance.isVisible()));
 			}
@@ -982,17 +987,12 @@ public class PuffBug extends Animal implements Endimatable {
 	}
 
 	@Override
-	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions size) {
-		return this.isProjectile() ? 0.0F : size.height * 0.5F;
-	}
-
-	@Override
 	protected void updateInvisibilityStatus() {
 		super.updateInvisibilityStatus();
 		Collection<MobEffectInstance> effects = this.getActiveEffects();
 
 		if (!effects.isEmpty()) {
-			this.setColor(PotionUtils.getColor(effects));
+			this.setColor(PotionContents.getColor(effects));
 		} else {
 			this.setColor(-1);
 		}
@@ -1001,11 +1001,6 @@ public class PuffBug extends Animal implements Endimatable {
 	@Override
 	public ItemStack getPickedResult(HitResult target) {
 		return new ItemStack(EEItems.PUFF_BUG_SPAWN_EGG.get());
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.ARTHROPOD;
 	}
 
 	@Override
@@ -1053,26 +1048,8 @@ public class PuffBug extends Animal implements Endimatable {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
 		RandomSource rng = this.getRandom();
-
-		if (dataTag != null) {
-			int age = dataTag.getBoolean("IsChild") ? -24000 : 0;
-
-			this.setAge(age);
-			this.teleportCooldown = dataTag.getInt("TeleportCooldown");
-			this.setFromBottle(dataTag.getBoolean("IsFromBottle"));
-
-			if (dataTag.contains("ColorTag", 3)) {
-				this.setColor(dataTag.getInt("ColorTag"));
-			}
-
-			if (dataTag.contains("CustomPotionEffects")) {
-				for (MobEffectInstance effectinstance : PotionUtils.getCustomEffects(dataTag)) {
-					this.addEffect(effectinstance);
-				}
-			}
-		}
 
 		if (reason == MobSpawnType.STRUCTURE) {
 			this.ticksAwayFromHive = rng.nextInt(1500) + 1500;
@@ -1090,7 +1067,7 @@ public class PuffBug extends Animal implements Endimatable {
 					if (this.level().isEmptyBlock(BlockPos.containing(spawnPos))) {
 						PuffBug swarmChild = EEEntityTypes.PUFF_BUG.get().create(this.level());
 						swarmChild.moveTo(spawnPos.x(), spawnPos.y(), spawnPos.z(), 0.0F, 0.0F);
-						swarmChild.finalizeSpawn(worldIn, this.level().getCurrentDifficultyAt(BlockPos.containing(spawnPos)), MobSpawnType.EVENT, null, null);
+						swarmChild.finalizeSpawn(worldIn, this.level().getCurrentDifficultyAt(BlockPos.containing(spawnPos)), MobSpawnType.EVENT, null);
 						swarmChild.setAge(-24000);
 
 						this.level().addFreshEntity(swarmChild);
@@ -1098,7 +1075,7 @@ public class PuffBug extends Animal implements Endimatable {
 				}
 			}
 		}
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
 	}
 
 	@Override
@@ -1133,8 +1110,9 @@ public class PuffBug extends Animal implements Endimatable {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose pose) {
-		return this.isProjectile() ? this.isBaby() ? PROJECTILE_SIZE_CHILD : PROJECTILE_SIZE : super.getDimensions(pose);
+	protected EntityDimensions getDefaultDimensions(Pose pose) {
+		EntityDimensions dimensions = this.isProjectile() ? this.isBaby() ? PROJECTILE_SIZE_CHILD : PROJECTILE_SIZE : super.getDefaultDimensions(pose);
+		return dimensions.withEyeHeight(this.isProjectile() ? 0.0F : dimensions.height() * 0.5F);
 	}
 
 	@Override

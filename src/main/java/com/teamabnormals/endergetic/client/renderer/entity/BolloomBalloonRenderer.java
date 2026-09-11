@@ -34,7 +34,7 @@ public final class BolloomBalloonRenderer extends EntityRenderer<BolloomBalloon>
 
 		VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(balloon)));
 		this.model.setupAnim(balloon, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-		this.model.renderToBuffer(matrixStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.model.renderToBuffer(matrixStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
 		this.model.renderString(matrixStack, bufferIn.getBuffer(EERenderTypes.BOLLOOM_STRING), packedLightIn);
 
 		matrixStack.popPose();

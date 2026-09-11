@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class BolloomFruitRenderer extends EntityRenderer<BolloomFruit> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/bolloom_fruit.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/bolloom_fruit.png");
 	private final BolloomFruitModel<BolloomFruit> model;
 
 	public BolloomFruitRenderer(EntityRendererProvider.Context context) {
@@ -31,7 +31,7 @@ public class BolloomFruitRenderer extends EntityRenderer<BolloomFruit> {
 
 		VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entity)));
 		this.model.setupAnim(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-		this.model.renderToBuffer(matrixStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.model.renderToBuffer(matrixStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
 		this.model.renderVine(matrixStack, bufferIn.getBuffer(EERenderTypes.BOLLOOM_VINE), packedLightIn);
 
 		matrixStack.popPose();

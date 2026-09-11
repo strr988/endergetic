@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class BolloomKnotRenderer extends EntityRenderer<BolloomKnot> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/bolloom_knot.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/bolloom_knot.png");
 	public BolloomKnotModel<BolloomKnot> model;
 
 	public BolloomKnotRenderer(EntityRendererProvider.Context context) {
@@ -26,7 +26,7 @@ public class BolloomKnotRenderer extends EntityRenderer<BolloomKnot> {
 		matrixStack.pushPose();
 		matrixStack.translate(0.0F, -1.31F, 0.0F);
 		VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entity)));
-		this.model.renderToBuffer(matrixStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.model.renderToBuffer(matrixStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
 		matrixStack.popPose();
 		super.render(entity, entityYaw, partialTicks, matrixStack, bufferIn, packedLightIn);
 	}

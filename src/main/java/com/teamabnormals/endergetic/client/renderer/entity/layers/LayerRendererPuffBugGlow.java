@@ -10,14 +10,14 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerRendererPuffBugGlow<T extends PuffBug, M extends EntityModel<T>> extends RenderLayer<T, M> {
-	private static final ResourceLocation GRAYSCALE_TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_inflated_overlay_grayscale.png");
-	private static final ResourceLocation POLLINATED_TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_inflated_levitation_overlay.png");
-	private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_inflated_overlay.png");
+	private static final ResourceLocation GRAYSCALE_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_inflated_overlay_grayscale.png");
+	private static final ResourceLocation POLLINATED_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_inflated_levitation_overlay.png");
+	private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_inflated_overlay.png");
 
 	public LayerRendererPuffBugGlow(RenderLayerParent<T, M> entityRenderer) {
 		super(entityRenderer);
@@ -32,13 +32,13 @@ public class LayerRendererPuffBugGlow<T extends PuffBug, M extends EntityModel<T
 		int color = puffbug.getColor();
 		switch (color) {
 			case -1:
-				model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(BlueprintRenderTypes.getUnshadedCutoutEntity(DEFAULT_TEXTURE, false)), 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+				model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(BlueprintRenderTypes.getUnshadedCutoutEntity(DEFAULT_TEXTURE, false)), 240, OverlayTexture.NO_OVERLAY, -1);
 				break;
 			case 13565951:
-				model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(BlueprintRenderTypes.getUnshadedCutoutEntity(POLLINATED_TEXTURE, false)), 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+				model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(BlueprintRenderTypes.getUnshadedCutoutEntity(POLLINATED_TEXTURE, false)), 240, OverlayTexture.NO_OVERLAY, -1);
 				break;
 			default:
-				model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(BlueprintRenderTypes.getUnshadedCutoutEntity(GRAYSCALE_TEXTURE, false)), 240, OverlayTexture.NO_OVERLAY, (color >> 16 & 255) / 255.0F, (color >> 8 & 255) / 255.0F, (color & 255) / 255.0F, 1.0F);
+				model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(BlueprintRenderTypes.getUnshadedCutoutEntity(GRAYSCALE_TEXTURE, false)), 240, OverlayTexture.NO_OVERLAY, 0xFF000000 | color & 0xFFFFFF);
 				break;
 		}
 	}

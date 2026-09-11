@@ -22,7 +22,7 @@ public class PoiseClusterRender extends LivingEntityRenderer<PoiseClusterEntity,
 
 	@Override
 	public ResourceLocation getTextureLocation(PoiseClusterEntity entity) {
-		return new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/poise_cluster.png");
+		return ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/poise_cluster.png");
 	}
 
 	protected boolean shouldShowName(PoiseClusterEntity entity) {

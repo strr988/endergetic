@@ -8,7 +8,7 @@ import com.teamabnormals.endergetic.core.interfaces.BalloonHolder;
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import com.teamabnormals.endergetic.core.other.tags.EEEntityTypeTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +31,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -150,7 +150,7 @@ public class BolloomBalloonItem extends Item {
 	}
 
 	public static double getPlayerReach(Player player) {
-		double reach = player.getAttribute(ForgeMod.ENTITY_REACH.get()).getValue();
+		double reach = player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
 		return (player.isCreative() ? reach : reach - 0.5F);
 	}
 

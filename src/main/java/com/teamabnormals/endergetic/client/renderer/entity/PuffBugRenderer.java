@@ -13,8 +13,8 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class PuffBugRenderer extends MobRenderer<PuffBug, EntityModel<PuffBug>> {
-	private static final ResourceLocation DEFLATED = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_deflated.png");
-	private static final ResourceLocation INFLATED = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_inflated.png");
+	private static final ResourceLocation DEFLATED = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_deflated.png");
+	private static final ResourceLocation INFLATED = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/puffbug/puffbug_inflated.png");
 
 	public PuffBugRenderer(EntityRendererProvider.Context context) {
 		super(context, new PuffBugModel<>(context.bakeLayer(EEModelLayers.PUFF_BUG)), 0.3F);

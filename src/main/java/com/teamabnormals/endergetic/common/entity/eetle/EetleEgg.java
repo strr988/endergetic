@@ -10,9 +10,8 @@ import com.teamabnormals.endergetic.core.registry.EESoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -31,13 +30,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
-public class EetleEgg extends Entity implements IEntityAdditionalSpawnData {
+public class EetleEgg extends Entity implements IEntityWithComplexSpawn {
 	private static final Block EETLE_EGGS_BLOCK = EEBlocks.EETLE_EGG.get();
 	private static final Direction[] DIRECTIONS = Direction.values();
 	private final EetleEggTileEntity.SackGrowth[] sackGrowths = new EetleEggTileEntity.SackGrowth[]{
@@ -60,12 +57,8 @@ public class EetleEgg extends Entity implements IEntityAdditionalSpawnData {
 		this.fromBroodEetle = true;
 	}
 
-	public EetleEgg(PlayMessages.SpawnEntity spawnEntity, Level world) {
-		super(EEEntityTypes.EETLE_EGG.get(), world);
-	}
-
 	@Override
-	protected void defineSynchedData() {
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 	}
 
 	@Override
@@ -172,18 +165,13 @@ public class EetleEgg extends Entity implements IEntityAdditionalSpawnData {
 	}
 
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer) {
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
 		buffer.writeInt(this.eggSize.ordinal());
 	}
 
 	@Override
-	public void readSpawnData(FriendlyByteBuf buffer) {
+	public void readSpawnData(RegistryFriendlyByteBuf buffer) {
 		this.eggSize = EggSize.getById(buffer.readInt());
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	public EetleEggTileEntity.SackGrowth[] getSackGrowths() {

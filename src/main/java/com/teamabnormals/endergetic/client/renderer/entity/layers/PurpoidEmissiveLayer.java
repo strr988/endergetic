@@ -15,9 +15,9 @@ import net.minecraft.util.Mth;
 
 public class PurpoidEmissiveLayer extends RenderLayer<Purpoid, PurpoidModel> {
 	public static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purpoid_emissive.png"),
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purp_emissive.png"),
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purpazoid_emissive.png"),
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purpoid_emissive.png"),
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purp_emissive.png"),
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purpazoid_emissive.png"),
 	};
 
 	public PurpoidEmissiveLayer(RenderLayerParent<Purpoid, PurpoidModel> entityRendererIn) {
@@ -36,6 +36,6 @@ public class PurpoidEmissiveLayer extends RenderLayer<Purpoid, PurpoidModel> {
 			float progress = 1.0F - 2.0F * Mth.abs(stunTimerHalfCycles - Mth.floor(stunTimerHalfCycles + 0.5F));
 			alpha = (progress * progress);
 		}
-		model.renderToBuffer(matrixStack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+		model.renderToBuffer(matrixStack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
 	}
 }

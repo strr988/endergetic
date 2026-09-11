@@ -43,7 +43,7 @@ public class BroodEetleRenderer extends MobRenderer<BroodEetle, BroodEetleModel>
 	private static ResourceLocation[] getStageTextures() {
 		List<ResourceLocation> textures = new ArrayList<>();
 		for (BroodEetle.HealthStage stage : BroodEetle.HealthStage.values()) {
-			textures.add(new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/eetle/brood/brood_eetle_" + stage.ordinal() + ".png"));
+			textures.add(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/eetle/brood/brood_eetle_" + stage.ordinal() + ".png"));
 		}
 		return textures.toArray(new ResourceLocation[0]);
 	}

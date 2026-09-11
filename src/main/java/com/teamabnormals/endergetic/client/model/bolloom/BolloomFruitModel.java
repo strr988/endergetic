@@ -80,12 +80,12 @@ public class BolloomFruitModel<T extends BolloomFruit> extends EntityModel<T> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		this.fruit.render(matrixStackIn, bufferIn, 240, packedOverlayIn, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int packedColor) {
+		this.fruit.render(matrixStackIn, bufferIn, 240, packedOverlayIn, packedColor);
 	}
 
 	public void renderVine(PoseStack matrix, VertexConsumer vertexBuilder, int light) {
-		this.vine_x.render(matrix, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.vine_x.render(matrix, vertexBuilder, light, OverlayTexture.NO_OVERLAY, -1);
 	}
 
 	@Override

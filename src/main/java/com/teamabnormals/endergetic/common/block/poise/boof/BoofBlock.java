@@ -6,7 +6,7 @@ import com.teamabnormals.endergetic.core.registry.EEBlockEntityTypes;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.sounds.SoundSource;
@@ -14,7 +14,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacements.Type;
+import net.minecraft.world.entity.SpawnPlacementType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import org.jetbrains.annotations.Nullable;
 
 public class BoofBlock extends BaseEntityBlock {
@@ -42,8 +42,8 @@ public class BoofBlock extends BaseEntityBlock {
 
 	@Override
 	@Nullable
-	public BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
-		return BlockPathTypes.DANGER_OTHER;
+	public PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+		return PathType.DANGER_OTHER;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class BoofBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, Type type, EntityType<?> entityType) {
+	public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, SpawnPlacementType type, EntityType<?> entityType) {
 		return false;
 	}
 

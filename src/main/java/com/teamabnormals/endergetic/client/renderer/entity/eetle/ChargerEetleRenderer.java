@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nonnull;
 
 public class ChargerEetleRenderer extends AbstractEetleRenderer<ChargerEetle> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/eetle/charger_eetle.png");
-	private static final ResourceLocation EMISSIVE_TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/eetle/charger_eetle_emissive.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/eetle/charger_eetle.png");
+	private static final ResourceLocation EMISSIVE_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/eetle/charger_eetle_emissive.png");
 
 	public ChargerEetleRenderer(EntityRendererProvider.Context context) {
 		super(context, new ChargerEetleModel(context.bakeLayer(EEModelLayers.CHARGER_EETLE)), EMISSIVE_TEXTURE, 0.8F);

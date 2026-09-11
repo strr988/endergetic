@@ -61,8 +61,8 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 	private static final EntityDataAccessor<Optional<BlockPos>> RESTING_POS = SynchedEntityData.defineId(Purpoid.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 	private static final EntityDataAccessor<Direction> RESTING_SIDE = SynchedEntityData.defineId(Purpoid.class, EntityDataSerializers.DIRECTION);
 	private static final EntityDataAccessor<Integer> SHIELDED_MOMMY_ID = SynchedEntityData.defineId(Purpoid.class, EntityDataSerializers.INT);
-	private static final ResourceLocation PURP_LOOT_TABLE = new ResourceLocation(EndergeticExpansion.MOD_ID, "entities/purp");
-	private static final ResourceLocation PURPAZOID_LOOT_TABLE = new ResourceLocation(EndergeticExpansion.MOD_ID, "entities/purpazoid");
+	private static final ResourceLocation PURP_LOOT_TABLE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purp");
+	private static final ResourceLocation PURPAZOID_LOOT_TABLE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purpazoid");
 	private final TeleportController teleportController = new TeleportController();
 	private int growingAge;
 	private int teleportCooldown;
@@ -92,15 +92,15 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SIZE, PurpoidSize.NORMAL);
-		this.entityData.define(BOOSTING_TICKS, 0);
-		this.entityData.define(STUN_TIMER, 0);
-		this.entityData.define(APPLY_ROTATION_SNAPS, true);
-		this.entityData.define(RESTING_POS, Optional.empty());
-		this.entityData.define(RESTING_SIDE, Direction.DOWN);
-		this.entityData.define(SHIELDED_MOMMY_ID, -1);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(SIZE, PurpoidSize.NORMAL);
+		builder.define(BOOSTING_TICKS, 0);
+		builder.define(STUN_TIMER, 0);
+		builder.define(APPLY_ROTATION_SNAPS, true);
+		builder.define(RESTING_POS, Optional.empty());
+		builder.define(RESTING_SIDE, Direction.DOWN);
+		builder.define(SHIELDED_MOMMY_ID, -1);
 	}
 
 	@Override
@@ -372,7 +372,7 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 		var shielders = this.shielders;
 		for (Tag tag : compound.getList("Shielders", 11)) shielders.add(NbtUtils.loadUUID(tag));
 		if (compound.contains("RestingPos", 10)) {
-			this.setRestingPos(NbtUtils.readBlockPos(compound.getCompound("RestingPos")));
+			NbtUtils.readBlockPos(compound, "RestingPos").ifPresent(this::setRestingPos);
 		}
 		this.setRestingSide(Direction.from3DDataValue(compound.getInt("RestingSide")));
 	}
@@ -570,7 +570,7 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 	@Nullable
 	@Override
 	@SuppressWarnings("deprecation")
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
 		RandomSource random = this.random;
 		if (random.nextFloat() < 0.5F) {
 			this.updateAge(-24000);
@@ -579,7 +579,7 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 		} else if (random.nextFloat() < 0.75F) {
 			this.allowRest();
 		}
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnData, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnData);
 	}
 
 	@Override
@@ -707,8 +707,9 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions size) {
-		return size.height * 0.5F;
+	protected EntityDimensions getDefaultDimensions(Pose pose) {
+		EntityDimensions dimensions = super.getDefaultDimensions(pose);
+		return dimensions.withEyeHeight(dimensions.height() * 0.5F);
 	}
 
 	@Override

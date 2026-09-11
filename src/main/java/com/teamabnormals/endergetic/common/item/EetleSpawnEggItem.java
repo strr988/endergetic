@@ -3,11 +3,11 @@ package com.teamabnormals.endergetic.common.item;
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import javax.annotation.Nullable;
 
-public final class EetleSpawnEggItem extends ForgeSpawnEggItem {
+public final class EetleSpawnEggItem extends DeferredSpawnEggItem {
 
 	public EetleSpawnEggItem(int primaryColor, int secondaryColor, Properties properties) {
 		super(EEEntityTypes.CHARGER_EETLE, primaryColor, secondaryColor, properties);

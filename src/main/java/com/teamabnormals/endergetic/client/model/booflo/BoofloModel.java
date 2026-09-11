@@ -15,8 +15,8 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * BoofloDefault - Endergized
@@ -88,11 +88,11 @@ public class BoofloModel<E extends Booflo> extends EndimatorEntityModel<E> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, int packedColor) {
 		if (this.entity.isBoofed()) {
-			this.HeadInflated.render(matrixStack, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+			this.HeadInflated.render(matrixStack, buffer, packedLightIn, packedOverlayIn, packedColor);
 		} else {
-			this.Head.render(matrixStack, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+			this.Head.render(matrixStack, buffer, packedLightIn, packedOverlayIn, packedColor);
 		}
 	}
 

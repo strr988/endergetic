@@ -6,7 +6,7 @@ import com.teamabnormals.endergetic.common.advancement.EECriteriaTriggers;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import com.teamabnormals.endergetic.core.registry.EEItems;
-import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.AdvancementRequirements.Strategy;
 import net.minecraft.advancements.critereon.BredAnimalsTrigger;
 import net.minecraft.advancements.critereon.ConsumeItemTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -14,7 +14,7 @@ import net.minecraft.advancements.critereon.KilledTrigger;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -34,20 +34,20 @@ public final class EEAdvancementModifierProvider extends AdvancementModifierProv
 		balancedDiet.addCriterion("bolloom_fruit", ConsumeItemTrigger.TriggerInstance.usedItem(EEItems.BOLLOOM_FRUIT.get()));
 		this.entry("husbandry/balanced_diet")
 				.selects("husbandry/balanced_diet")
-				.addModifier(balancedDiet.requirements(RequirementsStrategy.AND).build());
+				.addModifier(balancedDiet.requirements(Strategy.AND).build());
 
 		CriteriaModifier.Builder breedAllAnimals = CriteriaModifier.builder(this.modId);
-		breedAllAnimals.addCriterion("booflo", EECriteriaTriggers.BRED_BOOFLO.createInstance());
+		breedAllAnimals.addCriterion("booflo", EECriteriaTriggers.bredBooflo());
 		for (EntityType<?> entityType : BREEDABLE_ANIMALS) {
-			breedAllAnimals.addCriterion(ForgeRegistries.ENTITY_TYPES.getKey(entityType).getPath(), BredAnimalsTrigger.TriggerInstance.bredAnimals(EntityPredicate.Builder.entity().of(entityType)));
+			breedAllAnimals.addCriterion(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath(), BredAnimalsTrigger.TriggerInstance.bredAnimals(EntityPredicate.Builder.entity().of(entityType)));
 		}
 		this.entry("husbandry/bred_all_animals")
 				.selects("husbandry/bred_all_animals")
-				.addModifier(breedAllAnimals.requirements(RequirementsStrategy.AND).build());
+				.addModifier(breedAllAnimals.requirements(Strategy.AND).build());
 
 
 		CriteriaModifier.Builder breedAnAnimal = CriteriaModifier.builder(this.modId);
-		breedAnAnimal.addCriterion("bred_booflo", EECriteriaTriggers.BRED_BOOFLO.createInstance());
+		breedAnAnimal.addCriterion("bred_booflo", EECriteriaTriggers.bredBooflo());
 		breedAnAnimal.addIndexedRequirements(0, false, "bred_booflo");
 		this.entry("husbandry/breed_an_animal")
 				.selects("husbandry/breed_an_animal")
@@ -57,7 +57,7 @@ public final class EEAdvancementModifierProvider extends AdvancementModifierProv
 		CriteriaModifier.Builder killAllMobs = CriteriaModifier.builder(this.modId);
 		ArrayList<String> names = new ArrayList<>();
 		for (EntityType<?> entityType : MOBS_TO_KILL) {
-			String name = ForgeRegistries.ENTITY_TYPES.getKey(entityType).getPath();
+			String name = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath();
 			KilledTrigger.TriggerInstance triggerInstance = KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(entityType));
 			killAMob.addCriterion(name, triggerInstance);
 			killAllMobs.addCriterion(name, triggerInstance);
@@ -69,7 +69,7 @@ public final class EEAdvancementModifierProvider extends AdvancementModifierProv
 				.addModifier(killAMob.addIndexedRequirements(0, false, names.toArray(new String[0])).build());
 		this.entry("adventure/kill_all_mobs")
 				.selects("adventure/kill_all_mobs")
-				.addModifier(killAllMobs.requirements(RequirementsStrategy.AND).build());
+				.addModifier(killAllMobs.requirements(Strategy.AND).build());
 	}
 
 }

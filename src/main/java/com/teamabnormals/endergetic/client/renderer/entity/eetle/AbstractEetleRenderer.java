@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nonnull;
 
 public abstract class AbstractEetleRenderer<E extends AbstractEetle> extends MobRenderer<E, EntityModel<E>> {
-	private static final ResourceLocation LEETLE_TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/eetle/leetle.png");
+	private static final ResourceLocation LEETLE_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/eetle/leetle.png");
 	private final LeetleModel<E> leetleModel;
 	private final EntityModel<E> adultModel;
 	private final float adultShadowSize;

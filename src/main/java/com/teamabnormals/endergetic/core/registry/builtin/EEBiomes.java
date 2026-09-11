@@ -7,7 +7,7 @@ import com.teamabnormals.endergetic.core.registry.EESoundEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -16,13 +16,13 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber(modid = EndergeticExpansion.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EEBiomes {
 	public static final ResourceKey<Biome> POISE_FOREST = createKey("poise_forest");
 
-	public static void bootstrap(BootstapContext<Biome> context) {
+	public static void bootstrap(BootstrapContext<Biome> context) {
 		HolderGetter<PlacedFeature> features = context.lookup(Registries.PLACED_FEATURE);
 		HolderGetter<ConfiguredWorldCarver<?>> carvers = context.lookup(Registries.CONFIGURED_CARVER);
 
@@ -30,7 +30,7 @@ public final class EEBiomes {
 	}
 
 	public static ResourceKey<Biome> createKey(String name) {
-		return ResourceKey.create(Registries.BIOME, new ResourceLocation(EndergeticExpansion.MOD_ID, name));
+		return ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, name));
 	}
 
 	public static Biome poiseForest(HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers) {

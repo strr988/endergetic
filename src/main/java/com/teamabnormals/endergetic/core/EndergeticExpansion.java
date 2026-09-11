@@ -2,6 +2,7 @@ package com.teamabnormals.endergetic.core;
 
 import com.teamabnormals.blueprint.core.util.registry.RegistryHelper;
 import com.teamabnormals.endergetic.common.network.C2SInflateBoofloVestMessage;
+import com.teamabnormals.endergetic.common.advancement.EECriteriaTriggers;
 import com.teamabnormals.endergetic.common.network.entity.S2CEnablePurpoidFlash;
 import com.teamabnormals.endergetic.common.network.entity.S2CUpdateBalloonsMessage;
 import com.teamabnormals.endergetic.common.network.entity.booflo.C2SBoostMessage;
@@ -70,6 +71,8 @@ public class EndergeticExpansion {
 		EEDataProcessors.registerTrackedData();
 
 		REGISTRY_HELPER.register(bus);
+		EECriteriaTriggers.TRIGGERS.register(bus);
+		EEArmorMaterials.ARMOR_MATERIALS.register(bus);
 		EEParticleTypes.PARTICLES.register(bus);
 		EEMobEffects.MOB_EFFECTS.register(bus);
 		EEMobEffects.POTIONS.register(bus);
@@ -109,8 +112,8 @@ public class EndergeticExpansion {
 		generator.addProvider(server, datapackEntries);
 		provider = datapackEntries.getRegistryProvider();
 		generator.addProvider(server, new EEChunkGeneratorModifierProvider(output, provider));
-		generator.addProvider(server, new EERecipeProvider(output));
-		generator.addProvider(server, new EELootTableProvider(output));
+		generator.addProvider(server, new EERecipeProvider(output, provider));
+		generator.addProvider(server, new EELootTableProvider(output, provider));
 		generator.addProvider(server, new EEAdvancementModifierProvider(output, provider));
 		generator.addProvider(server, new EELootModifierProvider(output, provider));
 		EEBlockTagsProvider blockTags = new EEBlockTagsProvider(output, provider, helper);

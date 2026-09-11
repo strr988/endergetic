@@ -21,9 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.ObjectUtils;
 
 /**
@@ -47,14 +46,14 @@ public abstract class AbstractBolloom extends Entity {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		this.entityData.define(ORIGIN_X, 0.0F);
-		this.entityData.define(ORIGIN_Y, 0.0F);
-		this.entityData.define(ORIGIN_Z, 0.0F);
-		this.entityData.define(VINE_Y_ROT, 0.0F);
-		this.entityData.define(DESIRED_VINE_Y_ROT, 0.0F);
-		this.entityData.define(UNTIED, false);
-		this.entityData.define(TICKS_EXISTED, 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		builder.define(ORIGIN_X, 0.0F);
+		builder.define(ORIGIN_Y, 0.0F);
+		builder.define(ORIGIN_Z, 0.0F);
+		builder.define(VINE_Y_ROT, 0.0F);
+		builder.define(DESIRED_VINE_Y_ROT, 0.0F);
+		builder.define(UNTIED, false);
+		builder.define(TICKS_EXISTED, 0);
 	}
 
 	@Override
@@ -296,8 +295,4 @@ public abstract class AbstractBolloom extends Entity {
 		return MovementEmission.NONE;
 	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
 }

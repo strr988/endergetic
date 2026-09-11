@@ -17,10 +17,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -37,13 +35,9 @@ public class BroodEggSack extends Entity {
 		super(EEEntityTypes.BROOD_EGG_SACK.get(), world);
 	}
 
-	public BroodEggSack(PlayMessages.SpawnEntity spawnEntity, Level world) {
-		super(EEEntityTypes.BROOD_EGG_SACK.get(), world);
-	}
-
 	@Override
-	protected void defineSynchedData() {
-		this.entityData.define(BROOD_ID, -1);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		builder.define(BROOD_ID, -1);
 	}
 
 	@Override
@@ -161,11 +155,6 @@ public class BroodEggSack extends Entity {
 	@OnlyIn(Dist.CLIENT)
 	public boolean displayFireAnimation() {
 		return false;
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	public static Vec3 getEggPos(Vec3 pos, float yaw, float eggCannonProgress, float eggCannonFlyingProgress, float flyPitch, boolean exposed) {

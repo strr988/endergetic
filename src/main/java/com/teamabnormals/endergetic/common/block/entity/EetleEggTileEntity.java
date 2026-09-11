@@ -8,6 +8,7 @@ import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import com.teamabnormals.endergetic.core.registry.EEParticleTypes;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -149,8 +150,8 @@ public class EetleEggTileEntity extends BlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag compound) {
-		super.saveAdditional(compound);
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.saveAdditional(compound, registries);
 
 		compound.putInt("HatchDelay", this.hatchDelay);
 		compound.putInt("HatchProgress", this.hatchProgress);
@@ -159,8 +160,8 @@ public class EetleEggTileEntity extends BlockEntity {
 	}
 
 	@Override
-	public void load(CompoundTag compound) {
-		super.load(compound);
+	protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.loadAdditional(compound, registries);
 
 		if (compound.contains("HatchDelay", 3)) {
 			this.hatchDelay = compound.getInt("HatchDelay");
@@ -172,8 +173,8 @@ public class EetleEggTileEntity extends BlockEntity {
 	}
 
 	@Override
-	public CompoundTag getUpdateTag() {
-		return this.saveWithoutMetadata();
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		return this.saveWithoutMetadata(registries);
 	}
 
 	@Nullable

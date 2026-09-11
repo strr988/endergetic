@@ -29,7 +29,7 @@ import net.minecraft.world.level.dimension.end.EndDragonFight;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -293,7 +293,7 @@ public final class EndergeticDragonFightManager extends EndDragonFight {
 			ServerLevel level = this.level;
 			level.levelEvent(3000, pos, 0);
 			//Turns out datapacks can't replace the delayed end gateway. Silly Mojang!
-			var endGateway = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).get(new ResourceLocation("end_gateway_delayed"));
+			var endGateway = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).get(ResourceLocation.parse("end_gateway_delayed"));
 			if (endGateway != null) endGateway.place(this.level, this.level.getChunkSource().getGenerator(), RandomSource.create(), pos);
 		}
 	}

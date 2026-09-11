@@ -10,14 +10,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 
 public final class EESurfaceRules extends SurfaceRules {
 	public static final DeferredRegister<Codec<? extends RuleSource>> RULES = DeferredRegister.create(Registries.MATERIAL_RULE, EndergeticExpansion.MOD_ID);
 
-	public static final RegistryObject<Codec<CorrockRuleSource>> CORROCK = RULES.register("corrock", CorrockRuleSource.CODEC::codec);
+	public static final DeferredHolder<?, Codec<CorrockRuleSource>> CORROCK = RULES.register("corrock", CorrockRuleSource.CODEC::codec);
 
 	public enum CorrockRuleSource implements SurfaceRules.RuleSource {
 		INSTANCE;
@@ -33,7 +33,7 @@ public final class EESurfaceRules extends SurfaceRules {
 		public SurfaceRule apply(Context context) {
 			NormalNoise corrockNoise = context.randomState.getOrCreateNoise(EENoises.CORROCK);
 			NormalNoise tendrilsNoise = context.randomState.getOrCreateNoise(EENoises.CORROCK_TENDRILS);
-			PositionalRandomFactory randomFactory = context.randomState.getOrCreateRandomFactory(new ResourceLocation(EndergeticExpansion.MOD_ID, "corrock"));
+			PositionalRandomFactory randomFactory = context.randomState.getOrCreateRandomFactory(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "corrock"));
 			BlockState corrock = EEBlocks.END_CORROCK_BLOCK.get().defaultBlockState();
 			BlockState eumus = EEBlocks.EUMUS.get().defaultBlockState();
 			BlockState speckledCorrock = EEBlocks.SPECKLED_END_CORROCK.get().defaultBlockState();

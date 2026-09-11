@@ -20,7 +20,7 @@ public class BoofloSwimGoal extends RandomStrollGoal {
 	protected Vec3 getPosition() {
 		Vec3 vec3d = DefaultRandomPos.getPos(this.mob, 8, 2);
 
-		for (int i = 0; vec3d != null && !this.mob.level().getBlockState(BlockPos.containing(vec3d)).isPathfindable(this.mob.level(), BlockPos.containing(vec3d), PathComputationType.AIR) && i++ < 8; vec3d = DefaultRandomPos.getPos(this.mob, 10, 2)) {
+		for (int i = 0; vec3d != null && !this.mob.level().getBlockState(BlockPos.containing(vec3d)).isPathfindable(PathComputationType.AIR) && i++ < 8; vec3d = DefaultRandomPos.getPos(this.mob, 10, 2)) {
 		}
 
 		return vec3d;

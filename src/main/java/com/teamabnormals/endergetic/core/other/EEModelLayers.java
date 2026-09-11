@@ -37,6 +37,6 @@ public class EEModelLayers {
 	}
 
 	public static ModelLayerLocation register(String name, String layer) {
-		return new ModelLayerLocation(new ResourceLocation(EndergeticExpansion.MOD_ID, name), layer);
+		return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, name), layer);
 	}
 }

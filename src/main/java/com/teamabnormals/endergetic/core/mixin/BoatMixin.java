@@ -21,7 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 @Mixin(Boat.class)
 public abstract class BoatMixin extends Entity implements CustomBalloonPositioner {
-	private static final ResourceLocation LARGE_BOAT_NAME = new ResourceLocation("boatload", "large_boat");
+	private static final ResourceLocation LARGE_BOAT_NAME = ResourceLocation.fromNamespaceAndPath("boatload", "large_boat");
 
 	private BoatMixin(EntityType<?> entityType, Level world) {
 		super(entityType, world);
@@ -66,7 +66,7 @@ public abstract class BoatMixin extends Entity implements CustomBalloonPositione
 		Map<UUID, BalloonOrder> orderMap = ((IDataManager) this).getValue(EEDataProcessors.ORDER_DATA);
 		if (!orderMap.containsKey(balloon.getUUID())) return;
 		BalloonOrder balloonOrder = orderMap.get(balloon.getUUID());
-		boolean large = this.getType() == ForgeRegistries.ENTITY_TYPES.getValue(LARGE_BOAT_NAME);
+		boolean large = this.getType() == BuiltInRegistries.ENTITY_TYPE.getValue(LARGE_BOAT_NAME);
 		Vec3 attachedOffset = (new Vec3(large ? balloonOrder.largeX : balloonOrder.normalX, 0.0D, large ? balloonOrder.largeZ : balloonOrder.normalZ)).yRot((float) (-this.getYRot() * (Math.PI / 180F) - (Math.PI / 2F)));
 		balloon.setPos(this.getX() + attachedOffset.x() + balloon.getSway() * Math.sin(-balloon.getVineYRot()), this.getY() + balloon.getPassengersRidingOffset() + balloon.getEyeHeight(), this.getZ() + attachedOffset.z() + balloon.getSway() * Math.cos(-balloon.getVineYRot()));
 	}

@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public final class BoofloEmissiveLayer<B extends Booflo, M extends EntityModel<B>> extends RenderLayer<B, M> {
-	private static final ResourceLocation DEFAULT = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/booflo/booflo_emissive.png");
+	private static final ResourceLocation DEFAULT = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/booflo/booflo_emissive.png");
 	private static final EntitySkinHelper<Booflo> SKIN_HELPER = EntitySkinHelper.create(EndergeticExpansion.MOD_ID, "textures/entity/booflo/", "booflo_emissive", (skinHelper) -> {
 		skinHelper.putSkins("snake", "snake", "snakeblock", "theforsakenone");
 		skinHelper.putSkins("cam", "cameron", "cam");
@@ -29,7 +29,7 @@ public final class BoofloEmissiveLayer<B extends Booflo, M extends EntityModel<B
 		VertexConsumer ivertexbuilder = buffer.getBuffer(BlueprintRenderTypes.getUnshadedCutoutEntity(this.getEmissiveTexture(entity), true));
 		M model = this.getParentModel();
 		model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-		model.renderToBuffer(matrixStack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		model.renderToBuffer(matrixStack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, -1);
 	}
 
 	private ResourceLocation getEmissiveTexture(B booflo) {

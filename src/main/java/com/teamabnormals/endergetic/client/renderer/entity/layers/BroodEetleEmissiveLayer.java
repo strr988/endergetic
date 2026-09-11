@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class BroodEetleEmissiveLayer<E extends BroodEetle, M extends EntityModel<E>> extends RenderLayer<E, M> {
-	private static final ResourceLocation EMISSIVE_TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/eetle/brood/brood_eetle_emissive.png");
+	private static final ResourceLocation EMISSIVE_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/eetle/brood/brood_eetle_emissive.png");
 
 	public BroodEetleEmissiveLayer(RenderLayerParent<E, M> entityRendererIn) {
 		super(entityRendererIn);
@@ -26,6 +26,6 @@ public class BroodEetleEmissiveLayer<E extends BroodEetle, M extends EntityModel
 		model.setupAnim(brood, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 		VertexConsumer ivertexbuilder = buffer.getBuffer(BlueprintRenderTypes.getUnshadedCutoutEntity(EMISSIVE_TEXTURE, true));
 		int pulseAnimation = (int) ((0.5F * Mth.cos(Mth.PI * 0.1F * (brood.deathTime + partialTicks)) + 0.5F) * 240);
-		model.renderToBuffer(matrixStack, ivertexbuilder, pulseAnimation, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		model.renderToBuffer(matrixStack, ivertexbuilder, pulseAnimation, OverlayTexture.NO_OVERLAY, -1);
 	}
 }

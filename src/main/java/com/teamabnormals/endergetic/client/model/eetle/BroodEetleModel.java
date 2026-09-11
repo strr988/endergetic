@@ -115,10 +115,10 @@ public class BroodEetleModel extends EndimatorEntityModel<BroodEetle> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
 		this.wingLeft.visible = this.wingLeft.yRot >= WING_SHOW_THRESHOLD;
 		this.wingRight.visible = this.wingRight.yRot <= -WING_SHOW_THRESHOLD;
-		this.body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.body.render(matrixStack, buffer, packedLight, packedOverlay, packedColor);
 	}
 
 	@Override

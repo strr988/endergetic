@@ -53,11 +53,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.event.entity.EntityEvent;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -135,16 +135,16 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(FIRING_CANNON, false);
-		this.entityData.define(FLYING, false);
-		this.entityData.define(MOVING, false);
-		this.entityData.define(DROPPING_EGGS, false);
-		this.entityData.define(SLEEPING, false);
-		this.entityData.define(TARGET_FLYING_ROTATIONS, TargetFlyingRotations.ZERO);
-		this.entityData.define(EGG_SACK_ID, -1);
-		this.entityData.define(HEALTH_STAGE, HealthStage.ZERO);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(FIRING_CANNON, false);
+		builder.define(FLYING, false);
+		builder.define(MOVING, false);
+		builder.define(DROPPING_EGGS, false);
+		builder.define(SLEEPING, false);
+		builder.define(TARGET_FLYING_ROTATIONS, TargetFlyingRotations.ZERO);
+		builder.define(EGG_SACK_ID, -1);
+		builder.define(HEALTH_STAGE, HealthStage.ZERO);
 	}
 
 	@Override
@@ -383,7 +383,7 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 		}
 		this.setSleeping(compound.getBoolean("IsSleeping"));
 		if (compound.contains("TakeoffPos", 10)) {
-			this.takeoffPos = NbtUtils.readBlockPos(compound.getCompound("TakeoffPos"));
+			NbtUtils.readBlockPos(compound, "TakeoffPos").ifPresent(pos -> this.takeoffPos = pos);
 		}
 		this.eggCannonCooldown = compound.getInt("EggCannonCooldown");
 		this.flyCooldown = compound.getInt("FlyCooldown");
@@ -451,13 +451,8 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 	}
 
 	@Override
-	public boolean canChangeDimensions() {
+	public boolean canChangeDimensions(Level oldLevel, Level newLevel) {
 		return false;
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.ARTHROPOD;
 	}
 
 	@Override
@@ -543,8 +538,8 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose pose) {
-		return this.isFlying() ? FLYING_SIZE : this.isOnLastHealthStage() ? FINAL_STAGE_SIZE : super.getDimensions(pose);
+	protected EntityDimensions getDefaultDimensions(Pose pose) {
+		return this.isFlying() ? FLYING_SIZE : this.isOnLastHealthStage() ? FINAL_STAGE_SIZE : super.getDefaultDimensions(pose);
 	}
 
 	@Override
@@ -777,16 +772,16 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 			EntityDimensions currentSize = (EntityDimensions) SIZE_FIELD.get(this);
 			Pose pose = this.getPose();
 			EntityDimensions newSize = this.getDimensions(pose);
-			EntityEvent.Size sizeEvent = ForgeEventFactory.getEntitySizeForge(this, pose, currentSize, newSize, this.getEyeHeight(pose, newSize));
+			EntityEvent.Size sizeEvent = EventHooks.getEntitySizeForge(this, pose, currentSize, newSize);
 			newSize = sizeEvent.getNewSize();
 			SIZE_FIELD.set(this, newSize);
-			EYE_HEIGHT_FIELD.set(this, sizeEvent.getNewEyeHeight());
-			if (newSize.width < currentSize.width) {
-				double d0 = newSize.width / 2.0D;
-				this.setBoundingBox(new AABB(this.getX() - d0, this.getY(), this.getZ() - d0, this.getX() + d0, this.getY() + newSize.height, this.getZ() + d0));
+			EYE_HEIGHT_FIELD.set(this, newSize.eyeHeight());
+			if (newSize.width() < currentSize.width()) {
+				double d0 = newSize.width() / 2.0D;
+				this.setBoundingBox(new AABB(this.getX() - d0, this.getY(), this.getZ() - d0, this.getX() + d0, this.getY() + newSize.height(), this.getZ() + d0));
 			} else {
 				AABB axisalignedbb = this.getBoundingBox();
-				this.setBoundingBox(new AABB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + newSize.width, axisalignedbb.minY + newSize.height, axisalignedbb.minZ + newSize.width));
+				this.setBoundingBox(new AABB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + newSize.width(), axisalignedbb.minY + newSize.height(), axisalignedbb.minZ + newSize.width()));
 			}
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();

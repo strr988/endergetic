@@ -102,7 +102,7 @@ public class PuffBugModel<E extends PuffBug> extends EndimatorEntityModel<E> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int packedColor) {
 		Entity ridingEntity = this.entity.getVehicle();
 		if (ridingEntity instanceof Booflo && !(((Booflo) ridingEntity).isEndimationPlaying(EEPlayableEndimations.BOOFLO_EAT) && ((Booflo) ridingEntity).getAnimationTick() >= 20)) {
 			return;
@@ -113,12 +113,12 @@ public class PuffBugModel<E extends PuffBug> extends EndimatorEntityModel<E> {
 		}
 
 		if (this.entity.isInflated()) {
-			this.Body.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+			this.Body.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
 		} else {
 			if (this.entity.isProjectile()) {
-				this.BodyDeflatedProjectile.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+				this.BodyDeflatedProjectile.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
 			} else {
-				this.BodyDeflated.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+				this.BodyDeflated.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
 			}
 		}
 	}

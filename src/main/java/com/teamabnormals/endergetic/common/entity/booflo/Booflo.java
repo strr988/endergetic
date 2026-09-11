@@ -17,6 +17,7 @@ import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
 import com.teamabnormals.endergetic.core.registry.*;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Position;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -53,8 +54,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -107,27 +108,26 @@ public class Booflo extends PathfinderMob implements Endimatable {
 		this.attackingNavigator = new EndergeticFlyingPathNavigator(this, this.level());
 		this.moveControl = new GroundMoveHelperController(this);
 		this.hopDelay = this.getDefaultGroundHopDelay();
-		this.setMaxUpStep(1.0F);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
-		this.entityData.define(LAST_FED_UNIQUE_ID, Optional.empty());
-		this.entityData.define(ON_GROUND, false);
-		this.entityData.define(TAMED, false);
-		this.entityData.define(MOVING_IN_AIR, false);
-		this.entityData.define(BOOFED, false);
-		this.entityData.define(HUNGRY, this.getRandom().nextFloat() < 0.6F);
-		this.entityData.define(HAS_FRUIT, false);
-		this.entityData.define(BOOST_STATUS, (byte) 0);
-		this.entityData.define(BOOST_POWER, 0);
-		this.entityData.define(FRUITS_NEEDED, this.getRandom().nextInt(3) + 2);
-		this.entityData.define(LOVE_TICKS, 0);
-		this.entityData.define(ATTACK_TARGET, 0);
-		this.entityData.define(BRACELETS_COLOR, DyeColor.YELLOW.getId());
-		this.entityData.define(LOCKED_YAW, 0.0F);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(OWNER_UNIQUE_ID, Optional.empty());
+		builder.define(LAST_FED_UNIQUE_ID, Optional.empty());
+		builder.define(ON_GROUND, false);
+		builder.define(TAMED, false);
+		builder.define(MOVING_IN_AIR, false);
+		builder.define(BOOFED, false);
+		builder.define(HUNGRY, this.getRandom().nextFloat() < 0.6F);
+		builder.define(HAS_FRUIT, false);
+		builder.define(BOOST_STATUS, (byte) 0);
+		builder.define(BOOST_POWER, 0);
+		builder.define(FRUITS_NEEDED, this.getRandom().nextInt(3) + 2);
+		builder.define(LOVE_TICKS, 0);
+		builder.define(ATTACK_TARGET, 0);
+		builder.define(BRACELETS_COLOR, DyeColor.YELLOW.getId());
+		builder.define(LOCKED_YAW, 0.0F);
 	}
 
 	@Override
@@ -152,7 +152,7 @@ public class Booflo extends PathfinderMob implements Endimatable {
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
-		return Mob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 7.0F).add(Attributes.MAX_HEALTH, 40.0F).add(Attributes.MOVEMENT_SPEED, 1.05F).add(Attributes.ARMOR, 4.0F).add(Attributes.FOLLOW_RANGE, 22.0F).add(Attributes.KNOCKBACK_RESISTANCE, 0.6F);
+		return Mob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 7.0F).add(Attributes.MAX_HEALTH, 40.0F).add(Attributes.MOVEMENT_SPEED, 1.05F).add(Attributes.ARMOR, 4.0F).add(Attributes.FOLLOW_RANGE, 22.0F).add(Attributes.KNOCKBACK_RESISTANCE, 0.6F).add(Attributes.STEP_HEIGHT, 1.0F);
 	}
 
 	@Override
@@ -573,14 +573,14 @@ public class Booflo extends PathfinderMob implements Endimatable {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
 		if (reason == MobSpawnType.NATURAL) {
 			if (worldIn.getRandom().nextFloat() < 0.2F) {
 				this.babiesToBirth = 3;
 			}
 			this.setFruitsNeeded(worldIn.getRandom().nextInt(3) + 2);
 		}
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
 	}
 
 	@Override
@@ -795,7 +795,7 @@ public class Booflo extends PathfinderMob implements Endimatable {
 			//Creates wolf to still trigger tamed - as booflo isn't an AnimalEntity
 			CriteriaTriggers.TAME_ANIMAL.trigger(serverPlayer, EntityType.WOLF.create(this.level()));
 			if (!this.level().isClientSide) {
-				EECriteriaTriggers.TAME_BOOFLO.trigger(serverPlayer);
+				EECriteriaTriggers.TAME_BOOFLO.get().trigger(serverPlayer);
 			}
 		}
 	}
@@ -903,7 +903,7 @@ public class Booflo extends PathfinderMob implements Endimatable {
 	}
 
 	public boolean isTempted() {
-		for (Object goals : this.goalSelector.getRunningGoals().toArray()) {
+		for (Object goals : this.goalSelector.getAvailableGoals().stream().filter(WrappedGoal::isRunning).toArray()) {
 			if (goals instanceof WrappedGoal) {
 				return ((WrappedGoal) goals).getGoal() instanceof BoofloTemptGoal;
 			}
@@ -917,11 +917,6 @@ public class Booflo extends PathfinderMob implements Endimatable {
 
 	public boolean isPlayerNear(float multiplier) {
 		return !this.getNearbyPlayers(multiplier).isEmpty();
-	}
-
-	@Override
-	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-		return this.isBoofed() ? 1.2F : 0.9F;
 	}
 
 	@Override
@@ -946,7 +941,7 @@ public class Booflo extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	protected void jumpFromGround() {
+	public void jumpFromGround() {
 		Vec3 vec3d = this.getDeltaMovement();
 		this.setDeltaMovement(vec3d.x, 0.55D, vec3d.z);
 		this.hasImpulse = true;
@@ -963,13 +958,13 @@ public class Booflo extends PathfinderMob implements Endimatable {
 		ItemStack itemstack = player.getItemInHand(hand);
 		Item item = itemstack.getItem();
 
-		if (item instanceof SpawnEggItem && ((SpawnEggItem) item).spawnsEntity(itemstack.getTag(), this.getType())) {
+		if (item instanceof SpawnEggItem spawnEgg && spawnEgg.spawnsEntity(itemstack, this.getType())) {
 			if (!this.level().isClientSide) {
 				BoofloBaby baby = EEEntityTypes.BOOFLO_BABY.get().create(this.level());
 				baby.setGrowingAge(-24000);
 				baby.moveTo(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
 				this.level().addFreshEntity(baby);
-				if (itemstack.hasCustomHoverName()) {
+				if (itemstack.has(DataComponents.CUSTOM_NAME)) {
 					baby.setCustomName(itemstack.getHoverName());
 				}
 
@@ -1066,9 +1061,9 @@ public class Booflo extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	public double getPassengersRidingOffset() {
-		double original = super.getPassengersRidingOffset();
-		return this.isBoofed() ? original + 0.15F : original;
+	protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scale) {
+		Vec3 attachment = super.getPassengerAttachmentPoint(passenger, dimensions, scale);
+		return this.isBoofed() ? attachment.add(0.0D, 0.15D, 0.0D) : attachment;
 	}
 
 	@Override
@@ -1133,8 +1128,8 @@ public class Booflo extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose poseIn) {
-		return this.isBoofed() ? BOOFED_SIZE : super.getDimensions(poseIn);
+	protected EntityDimensions getDefaultDimensions(Pose poseIn) {
+		return (this.isBoofed() ? BOOFED_SIZE : super.getDefaultDimensions(poseIn)).withEyeHeight(this.isBoofed() ? 1.2F : 0.9F);
 	}
 
 	@Override

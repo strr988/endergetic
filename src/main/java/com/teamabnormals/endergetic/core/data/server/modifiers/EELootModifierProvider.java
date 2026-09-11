@@ -1,35 +1,31 @@
 package com.teamabnormals.endergetic.core.data.server.modifiers;
 
-import com.teamabnormals.blueprint.common.loot.modification.LootModifierProvider;
-import com.teamabnormals.blueprint.common.loot.modification.modifiers.LootPoolsModifier;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
-import com.teamabnormals.endergetic.core.registry.EEItems;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.AddTableLootModifier;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public final class EELootModifierProvider extends LootModifierProvider {
+public final class EELootModifierProvider extends GlobalLootModifierProvider {
+	public static final ResourceKey<LootTable> KILOBYTE_BONUS = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "chests/kilobyte_bonus"));
 
 	public EELootModifierProvider(PackOutput output, CompletableFuture<Provider> provider) {
-		super(EndergeticExpansion.MOD_ID, output, provider);
+		super(output, provider, EndergeticExpansion.MOD_ID);
 	}
 
 	@Override
-	protected void registerEntries(Provider provider) {
-		LootPool kilobyte = LootPool.lootPool()
-				.name(EndergeticExpansion.MOD_ID + ":" + "kilobyte")
-				.add(LootItem.lootTableItem(EEItems.MUSIC_DISC_KILOBYTE.get()).apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(1, 0.08F))))
-				.build();
-		this.entry("chests/end_city_treasure")
-				.selects(BuiltInLootTables.END_CITY_TREASURE)
-				.addModifier(new LootPoolsModifier(List.of(kilobyte), false));
+	protected void start() {
+		this.add("end_city_kilobyte", new AddTableLootModifier(
+				new LootItemCondition[]{LootTableIdCondition.builder(BuiltInLootTables.END_CITY_TREASURE.location()).build()},
+				KILOBYTE_BONUS));
 	}
-
 }

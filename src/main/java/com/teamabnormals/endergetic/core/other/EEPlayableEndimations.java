@@ -5,9 +5,9 @@ import com.teamabnormals.blueprint.core.endimator.PlayableEndimation.LoopType;
 import com.teamabnormals.blueprint.core.endimator.PlayableEndimationManager;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = EndergeticExpansion.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = EndergeticExpansion.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EEPlayableEndimations {
 	public static final PlayableEndimation ADOLESCENT_BOOFLO_BOOF = register("adolescent_booflo/boof", 10, LoopType.NONE);
 	public static final PlayableEndimation ADOLESCENT_BOOFLO_EATING = register("adolescent_booflo/eating", 10, LoopType.NONE);
@@ -63,6 +63,6 @@ public final class EEPlayableEndimations {
 	public static final PlayableEndimation PURPOID_SQUIRT_ATTACK = register("purpoid/squirt_attack", 65, LoopType.NONE);
 
 	private static PlayableEndimation register(String name, int duration, PlayableEndimation.LoopType loopType) {
-		return PlayableEndimationManager.INSTANCE.registerPlayableEndimation(new PlayableEndimation(new ResourceLocation(EndergeticExpansion.MOD_ID, name), duration, loopType));
+		return PlayableEndimationManager.INSTANCE.registerPlayableEndimation(new PlayableEndimation(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, name), duration, loopType));
 	}
 }

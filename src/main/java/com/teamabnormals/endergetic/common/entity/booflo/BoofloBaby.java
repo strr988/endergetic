@@ -35,8 +35,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -62,12 +62,12 @@ public class BoofloBaby extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(MOVING, false);
-		this.entityData.define(BIRTH_TIMER, 0);
-		this.entityData.define(MOTHER_IMMUNITY_TICKS, 0);
-		this.entityData.define(BIRTH_POSITION_ID, 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(MOVING, false);
+		builder.define(BIRTH_TIMER, 0);
+		builder.define(MOTHER_IMMUNITY_TICKS, 0);
+		builder.define(BIRTH_POSITION_ID, 0);
 	}
 
 	@Override
@@ -341,9 +341,9 @@ public class BoofloBaby extends PathfinderMob implements Endimatable {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
 		this.setGrowingAge(-24000);
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
 	}
 
 	@Override
@@ -384,7 +384,7 @@ public class BoofloBaby extends PathfinderMob implements Endimatable {
 			double viewZ = view.z;
 			Vec3 vec3d = HoverRandomPos.getPos(this.mob, 7, 4, viewX, viewZ, ((float) Math.PI / 2F), 3, 1);
 
-			for (int i = 0; vec3d != null && !this.mob.level().getBlockState(BlockPos.containing(vec3d)).isPathfindable(this.mob.level(), BlockPos.containing(vec3d), PathComputationType.WATER) && i++ < 10; vec3d = HoverRandomPos.getPos(this.mob, 7, 4, viewX, viewZ, ((float) Math.PI / 2F), 3, 1)) {
+			for (int i = 0; vec3d != null && !this.mob.level().getBlockState(BlockPos.containing(vec3d)).isPathfindable(PathComputationType.WATER) && i++ < 10; vec3d = HoverRandomPos.getPos(this.mob, 7, 4, viewX, viewZ, ((float) Math.PI / 2F), 3, 1)) {
 			}
 
 			return vec3d;

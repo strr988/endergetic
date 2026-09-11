@@ -19,21 +19,22 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
+import net.minecraft.core.HolderLookup.Provider;
 
 import static com.teamabnormals.endergetic.core.registry.EEBlocks.*;
 
 public class EERecipeProvider extends BlueprintRecipeProvider {
 
-	public EERecipeProvider(PackOutput output) {
-		super(EndergeticExpansion.MOD_ID, output);
+	public EERecipeProvider(PackOutput output, CompletableFuture<Provider> provider) {
+		super(EndergeticExpansion.MOD_ID, output, provider);
 	}
 
 	@Override
-	public void buildRecipes(Consumer<FinishedRecipe> consumer) {
+	public void buildRecipes(RecipeOutput consumer) {
 		storageRecipes(consumer, RecipeCategory.FOOD, EEItems.BOLLOOM_FRUIT.get(), RecipeCategory.BUILDING_BLOCKS, BOLLOOM_CRATE.get());
 
 		SimpleCookingRecipeBuilder.smelting(Ingredient.of(EUMUS.get()), RecipeCategory.MISC, EEItems.EUMUS_BRICK.get(), 0.1F, 200).unlockedBy("has_eumus", has(EUMUS.get())).save(consumer);
@@ -104,7 +105,7 @@ public class EERecipeProvider extends BlueprintRecipeProvider {
 		storageRecipes(consumer, RecipeCategory.REDSTONE, EEItems.PORTAPLASM.get(), RecipeCategory.BUILDING_BLOCKS, PORTAPLASM_BLOCK.get());
 	}
 
-	public static void petrifiedCorrockRecipe(Consumer<FinishedRecipe> consumer, RegistryObject<? extends Block> petrifiedCorrock, RegistryObject<? extends Block> corrock) {
+	public static void petrifiedCorrockRecipe(RecipeOutput consumer, DeferredHolder<?, ? extends Block> petrifiedCorrock, DeferredHolder<?, ? extends Block> corrock) {
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, petrifiedCorrock.get(), 8).define('#', corrock.get()).define('B', BlueprintItemTags.BUCKETS_WATER).pattern("###").pattern("#B#").pattern("###").unlockedBy(getHasName(corrock.get()), has(corrock.get())).save(consumer);
 	}
 }

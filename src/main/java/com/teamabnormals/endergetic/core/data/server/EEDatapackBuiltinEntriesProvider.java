@@ -11,8 +11,8 @@ import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -24,11 +24,12 @@ public class EEDatapackBuiltinEntriesProvider extends DatapackBuiltinEntriesProv
 			.add(Registries.PLACED_FEATURE, EEPlacedFeatures::bootstrap)
 			.add(Registries.BIOME, EEBiomes::bootstrap)
 			.add(Registries.DAMAGE_TYPE, EEDamageTypes::bootstrap)
+			.add(Registries.JUKEBOX_SONG, EEJukeboxSongs::bootstrap)
 			.add(Registries.NOISE, EENoises::bootstrap)
 			.add(Registries.STRUCTURE, EEStructures::bootstrap)
 			.add(Registries.STRUCTURE_SET, EEStructureSets::bootstrap)
 			.add(BlueprintDataPackRegistries.MODDED_BIOME_SLICES, EEBiomeSlices::bootstrap)
-			.add(ForgeRegistries.Keys.BIOME_MODIFIERS, EEBiomeModifiers::bootstrap);
+			.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, EEBiomeModifiers::bootstrap);
 
 	public EEDatapackBuiltinEntriesProvider(PackOutput output, CompletableFuture<Provider> provider) {
 		super(output, provider, BUILDER, Set.of(EndergeticExpansion.MOD_ID, "minecraft"));

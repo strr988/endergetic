@@ -23,7 +23,7 @@ public class EEPlugin implements IModPlugin {
 
 	@Override
 	public ResourceLocation getPluginUid() {
-		return new ResourceLocation(EndergeticExpansion.MOD_ID, EndergeticExpansion.MOD_ID);
+		return ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, EndergeticExpansion.MOD_ID);
 	}
 
 	@Override

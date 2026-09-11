@@ -11,9 +11,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
 
 public class BolloomBudTileEntityRenderer implements BlockEntityRenderer<BolloomBudTileEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/tile/bolloom_bud.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/tile/bolloom_bud.png");
 	private BolloomBudModel budModel;
 
 	public BolloomBudTileEntityRenderer(BlockEntityRendererProvider.Context context) {
@@ -35,5 +36,10 @@ public class BolloomBudTileEntityRenderer implements BlockEntityRenderer<Bolloom
 	@Override
 	public int getViewDistance() {
 		return 256;
+	}
+
+	@Override
+	public AABB getRenderBoundingBox(BolloomBudTileEntity blockEntity) {
+		return AABB.INFINITE;
 	}
 }

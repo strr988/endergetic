@@ -4,7 +4,7 @@ import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 
 public class EEClientCompat {
 

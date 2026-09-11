@@ -12,8 +12,8 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.GameRules;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -77,8 +77,8 @@ public class BoofloBreedGoal extends Goal {
 	}
 
 	protected void impregnateBooflo() {
-		final BabyEntitySpawnEvent event = new net.minecraftforge.event.entity.living.BabyEntitySpawnEvent(this.booflo, this.mate, null);
-		final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);
+		final BabyEntitySpawnEvent event = new net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent(this.booflo, this.mate, null);
+		final boolean cancelled = NeoForge.EVENT_BUS.post(event);
 		if (cancelled) {
 			this.booflo.resetInLove();
 			this.mate.resetInLove();
@@ -92,7 +92,7 @@ public class BoofloBreedGoal extends Goal {
 
 		if (serverplayerentity != null) {
 			serverplayerentity.awardStat(Stats.ANIMALS_BRED);
-			EECriteriaTriggers.BRED_BOOFLO.trigger(serverplayerentity);
+			EECriteriaTriggers.BRED_BOOFLO.get().trigger(serverplayerentity);
 		}
 
 		if (!this.mate.isPregnant()) {

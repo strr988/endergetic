@@ -10,6 +10,7 @@ import com.teamabnormals.endergetic.common.entity.eetle.flying.FlyingEetleMoveCo
 import com.teamabnormals.endergetic.common.entity.eetle.flying.FlyingRotations;
 import com.teamabnormals.endergetic.common.entity.eetle.flying.IFlyingEetle;
 import com.teamabnormals.endergetic.common.entity.eetle.flying.TargetFlyingRotations;
+import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.other.EEDataProcessors;
 import com.teamabnormals.endergetic.core.other.EEDataSerializers;
 import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -33,7 +35,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 	private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(GliderEetle.class, EntityDataSerializers.BOOLEAN);
@@ -42,7 +43,8 @@ public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 	private static final EntityDataAccessor<TargetFlyingRotations> TARGET_FLYING_ROTATIONS = SynchedEntityData.defineId(GliderEetle.class, EEDataSerializers.TARGET_FLYING_ROTATIONS);
 	private static final EntityDataAccessor<EntityDimensions> CAUGHT_SIZE = SynchedEntityData.defineId(GliderEetle.class, EEDataSerializers.ENTITY_SIZE);
 	public static final EntityDimensions DEFAULT_SIZE = EntityDimensions.fixed(1.0F, 0.85F);
-	public static final AttributeModifier CAUGHT_KNOCKBACK_RESISTANCE = new AttributeModifier(UUID.fromString("17da0b48-6e5f-11eb-9439-0242ac130002"), "Caught target knockback resistance", 0.8F, AttributeModifier.Operation.ADDITION);
+	public static final ResourceLocation CAUGHT_KNOCKBACK_RESISTANCE_ID = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "caught_target_knockback_resistance");
+	public static final AttributeModifier CAUGHT_KNOCKBACK_RESISTANCE = new AttributeModifier(CAUGHT_KNOCKBACK_RESISTANCE_ID, 0.8F, AttributeModifier.Operation.ADD_VALUE);
 	private final TimedEndimation takeoffEndimation = new TimedEndimation(15, 0);
 	private final TimedEndimation flyingEndimation = new TimedEndimation(20, 0);
 	private final FlyingRotations flyingRotations = new FlyingRotations();
@@ -75,13 +77,13 @@ public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(FLYING, false);
-		this.entityData.define(MOVING, false);
-		this.entityData.define(DIVING, false);
-		this.entityData.define(TARGET_FLYING_ROTATIONS, TargetFlyingRotations.ZERO);
-		this.entityData.define(CAUGHT_SIZE, DEFAULT_SIZE);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(FLYING, false);
+		builder.define(MOVING, false);
+		builder.define(DIVING, false);
+		builder.define(TARGET_FLYING_ROTATIONS, TargetFlyingRotations.ZERO);
+		builder.define(CAUGHT_SIZE, DEFAULT_SIZE);
 	}
 
 	@Override
@@ -168,9 +170,9 @@ public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 			AttributeInstance knockbackResistance = this.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
 			if (knockbackResistance != null) {
 				boolean noPassengers = this.getPassengers().isEmpty();
-				boolean hasModifier = knockbackResistance.hasModifier(CAUGHT_KNOCKBACK_RESISTANCE);
+				boolean hasModifier = knockbackResistance.hasModifier(CAUGHT_KNOCKBACK_RESISTANCE_ID);
 				if (noPassengers && hasModifier || this.isBaby()) {
-					knockbackResistance.removeModifier(CAUGHT_KNOCKBACK_RESISTANCE);
+					knockbackResistance.removeModifier(CAUGHT_KNOCKBACK_RESISTANCE_ID);
 				} else if (!noPassengers && !hasModifier) {
 					knockbackResistance.addTransientModifier(CAUGHT_KNOCKBACK_RESISTANCE);
 				}
@@ -312,7 +314,7 @@ public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 	protected void addPassenger(Entity passenger) {
 		super.addPassenger(passenger);
 		if (!this.level().isClientSide && passenger instanceof LivingEntity && passenger.getVehicle() == this && this.getPassengers().indexOf(passenger) == 0) {
-			this.setCaughtSize(EntityDimensions.fixed(1.0F + passenger.getDimensions(passenger.getPose()).width, 0.85F));
+			this.setCaughtSize(EntityDimensions.fixed(1.0F + passenger.getDimensions(passenger.getPose()).width(), 0.85F));
 		}
 	}
 
@@ -327,7 +329,7 @@ public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 			if (!this.getPassengers().isEmpty()) {
 				Entity indexZeroPassenger = this.getPassengers().get(0);
 				if (indexZeroPassenger instanceof LivingEntity && passenger.getVehicle() == this) {
-					this.setCaughtSize(EntityDimensions.fixed(1.0F + passenger.getDimensions(passenger.getPose()).width, 0.85F));
+					this.setCaughtSize(EntityDimensions.fixed(1.0F + passenger.getDimensions(passenger.getPose()).width(), 0.85F));
 				} else {
 					this.setCaughtSize(DEFAULT_SIZE);
 				}
@@ -356,11 +358,11 @@ public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose poseIn) {
+	protected EntityDimensions getDefaultDimensions(Pose poseIn) {
 		if (!this.isBaby() && !this.getPassengers().isEmpty()) {
 			return this.getCaughtSize();
 		}
-		return super.getDimensions(poseIn);
+		return super.getDefaultDimensions(poseIn);
 	}
 
 	@Override

@@ -87,11 +87,11 @@ public class ChargerEetleModel extends EndimatorEntityModel<ChargerEetle> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		this.body.render(matrixStack, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-		this.frontLeftLeg.render(matrixStack, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-		this.frontRightLeg.render(matrixStack, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-		this.backLeftLeg.render(matrixStack, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-		this.backRightLeg.render(matrixStack, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, int packedColor) {
+		this.body.render(matrixStack, buffer, packedLightIn, packedOverlayIn, packedColor);
+		this.frontLeftLeg.render(matrixStack, buffer, packedLightIn, packedOverlayIn, packedColor);
+		this.frontRightLeg.render(matrixStack, buffer, packedLightIn, packedOverlayIn, packedColor);
+		this.backLeftLeg.render(matrixStack, buffer, packedLightIn, packedOverlayIn, packedColor);
+		this.backRightLeg.render(matrixStack, buffer, packedLightIn, packedOverlayIn, packedColor);
 	}
 }

@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import java.util.function.Supplier;
 
 public class EEBoatTypes {
-	public static final BoatloadBoatType POISE = BoatloadBoatType.register(BoatloadBoatType.create(new ResourceLocation(EndergeticExpansion.MOD_ID, "poise"), () -> EEBlocks.POISE_PLANKS.get().asItem(), () -> EEItems.POISE_BOAT.getFirst().get(), () -> EEItems.POISE_BOAT.getSecond().get(), () -> EEItems.POISE_FURNACE_BOAT.get(), () -> EEItems.LARGE_POISE_BOAT.get()));
+	public static final BoatloadBoatType POISE = BoatloadBoatType.register(BoatloadBoatType.create(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "poise"), () -> EEBlocks.POISE_PLANKS.get().asItem(), () -> EEItems.POISE_BOAT.getFirst().get(), () -> EEItems.POISE_BOAT.getSecond().get(), () -> EEItems.POISE_FURNACE_BOAT.get(), () -> EEItems.LARGE_POISE_BOAT.get()));
 
 	public static final Supplier<Item> POISE_FURNACE_BOAT = () -> new FurnaceBoatItem(POISE);
 	public static final Supplier<Item> LARGE_POISE_BOAT = () -> new LargeBoatItem(POISE);

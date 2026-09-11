@@ -40,8 +40,8 @@ public class BoofloBabyModel<E extends BoofloBaby> extends EntityModel<E> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		this.Head.render(matrixStack, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, int packedColor) {
+		this.Head.render(matrixStack, buffer, packedLightIn, packedOverlayIn, packedColor);
 	}
 
 	@Override

@@ -26,7 +26,7 @@ import net.minecraft.util.Mth;
  * Created using Tabula 7.0.0
  */
 public class PurpoidModel extends EndimatorEntityModel<Purpoid> {
-	private static final ResourceLocation REST_ONTO_FLOWER_ENDIMATION = new ResourceLocation(EndergeticExpansion.MOD_ID, "purpoid/rest_onto_flower");
+	private static final ResourceLocation REST_ONTO_FLOWER_ENDIMATION = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "purpoid/rest_onto_flower");
 	public ModelPart head;
 	public ModelPart rim1;
 	public ModelPart rim2;
@@ -78,8 +78,8 @@ public class PurpoidModel extends EndimatorEntityModel<Purpoid> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		this.head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
+		this.head.render(matrixStack, buffer, packedLight, packedOverlay, packedColor);
 	}
 
 	@Override

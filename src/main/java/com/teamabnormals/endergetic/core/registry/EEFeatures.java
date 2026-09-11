@@ -16,7 +16,7 @@ import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.registry.builtin.EENoises;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.EndFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
@@ -31,37 +31,37 @@ import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.List;
 
 public final class EEFeatures {
-	public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, EndergeticExpansion.MOD_ID);
+	public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(BuiltInRegistries.FEATURE, EndergeticExpansion.MOD_ID);
 
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> POISE_BUSH_PATCH = FEATURES.register("poise_bush_patch", () -> new PoiseBushFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TALL_POISE_BUSH_PATCH = FEATURES.register("tall_poise_bush_patch", () -> new TallPoiseBushFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> POISE_CLUSTER = FEATURES.register("poise_cluster", () -> new PoiseClusterFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> BOLLOOM_BUD = FEATURES.register("bolloom_bud", () -> new BolloomBudFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> PUFFBUG_HIVE = FEATURES.register("puffbug_hive", () -> new PuffBugHiveFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> POISE_DOME = FEATURES.register("poise_dome", () -> new PoiseDomeFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> POISE_TREE = FEATURES.register("poise_tree", () -> new PoiseTreeFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> POISE_BUSH_PATCH = FEATURES.register("poise_bush_patch", () -> new PoiseBushFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> TALL_POISE_BUSH_PATCH = FEATURES.register("tall_poise_bush_patch", () -> new TallPoiseBushFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> POISE_CLUSTER = FEATURES.register("poise_cluster", () -> new PoiseClusterFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BOLLOOM_BUD = FEATURES.register("bolloom_bud", () -> new BolloomBudFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> PUFFBUG_HIVE = FEATURES.register("puffbug_hive", () -> new PuffBugHiveFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> POISE_DOME = FEATURES.register("poise_dome", () -> new PoiseDomeFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> POISE_TREE = FEATURES.register("poise_tree", () -> new PoiseTreeFeature(NoneFeatureConfiguration.CODEC));
 
-	public static final RegistryObject<Feature<EndergeticPatchConfig>> CORROCK_PATCH = FEATURES.register("corrock_patch", () -> new CorrockPatchFeature(EndergeticPatchConfig.CODEC));
-	public static final RegistryObject<Feature<DiskConfiguration>> CORROCK_GROUND_PATCH = FEATURES.register("corrock_ground_patch", () -> new CorrockGroundPatchFeature(DiskConfiguration.CODEC));
-	public static final RegistryObject<Feature<CorrockBranchConfig>> CORROCK_BRANCH = FEATURES.register("corrock_branch", () -> new CorrockBranchFeature(CorrockBranchConfig.CODEC));
-	public static final RegistryObject<Feature<ProbabilityFeatureConfiguration>> SMALL_CORROCK_TOWER = FEATURES.register("small_corrock_tower", () -> new SmallCorrockTowerFeature(ProbabilityFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<CorrockTowerConfig>> MEDIUM_CORROCK_TOWER = FEATURES.register("medium_corrock_tower", () -> new MediumCorrockTowerFeature(CorrockTowerConfig.CODEC));
-	public static final RegistryObject<Feature<CorrockTowerConfig>> LARGE_CORROCK_TOWER = FEATURES.register("large_corrock_tower", () -> new LargeCorrockTowerFeature(CorrockTowerConfig.CODEC));
-	public static final RegistryObject<Feature<ProbabilityFeatureConfiguration>> CORROCK_SHELF = FEATURES.register("corrock_shelf", () -> new CorrockShelfFeature(ProbabilityFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<CorrockArchConfig>> CORROCK_ARCH = FEATURES.register("corrock_arch", () -> new CorrockArchFeature(CorrockArchConfig.CODEC));
-	public static final RegistryObject<Feature<EndergeticPatchConfig>> EETLE_EGG = FEATURES.register("eetle_egg", () -> new EetleEggPatchFeature(EndergeticPatchConfig.CODEC));
-	public static final RegistryObject<Feature<MultiPatchConfig>> EUMUS_PATCH = FEATURES.register("eumus_patch", () -> new EumusPatchFeature(MultiPatchConfig.CODEC));
-	public static final RegistryObject<Feature<MultiPatchConfig>> SPECKLED_CORROCK_PATCH = FEATURES.register("speckled_corrock_patch", () -> new SpeckledCorrockPatchFeature(MultiPatchConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<EndergeticPatchConfig>> CORROCK_PATCH = FEATURES.register("corrock_patch", () -> new CorrockPatchFeature(EndergeticPatchConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<DiskConfiguration>> CORROCK_GROUND_PATCH = FEATURES.register("corrock_ground_patch", () -> new CorrockGroundPatchFeature(DiskConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<CorrockBranchConfig>> CORROCK_BRANCH = FEATURES.register("corrock_branch", () -> new CorrockBranchFeature(CorrockBranchConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<ProbabilityFeatureConfiguration>> SMALL_CORROCK_TOWER = FEATURES.register("small_corrock_tower", () -> new SmallCorrockTowerFeature(ProbabilityFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<CorrockTowerConfig>> MEDIUM_CORROCK_TOWER = FEATURES.register("medium_corrock_tower", () -> new MediumCorrockTowerFeature(CorrockTowerConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<CorrockTowerConfig>> LARGE_CORROCK_TOWER = FEATURES.register("large_corrock_tower", () -> new LargeCorrockTowerFeature(CorrockTowerConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<ProbabilityFeatureConfiguration>> CORROCK_SHELF = FEATURES.register("corrock_shelf", () -> new CorrockShelfFeature(ProbabilityFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<CorrockArchConfig>> CORROCK_ARCH = FEATURES.register("corrock_arch", () -> new CorrockArchFeature(CorrockArchConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<EndergeticPatchConfig>> EETLE_EGG = FEATURES.register("eetle_egg", () -> new EetleEggPatchFeature(EndergeticPatchConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<MultiPatchConfig>> EUMUS_PATCH = FEATURES.register("eumus_patch", () -> new EumusPatchFeature(MultiPatchConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<MultiPatchConfig>> SPECKLED_CORROCK_PATCH = FEATURES.register("speckled_corrock_patch", () -> new SpeckledCorrockPatchFeature(MultiPatchConfig.CODEC));
 
-	public static final RegistryObject<Feature<WeightedFeatureConfig>> WEIGHTED_FEATURES = FEATURES.register("weighted_features", () -> new WeightedMultiFeature(WeightedFeatureConfig.CODEC));
-	public static final RegistryObject<Feature<EndGatewayConfiguration>> ENDERGETIC_END_GATEWAY = FEATURES.register("end_gateway", () -> new EndergeticEndGatewayFeature(EndGatewayConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<WeightedFeatureConfig>> WEIGHTED_FEATURES = FEATURES.register("weighted_features", () -> new WeightedMultiFeature(WeightedFeatureConfig.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<EndGatewayConfiguration>> ENDERGETIC_END_GATEWAY = FEATURES.register("end_gateway", () -> new EndergeticEndGatewayFeature(EndGatewayConfiguration.CODEC));
 
 	public static final class EEConfiguredFeatures {
 		public static final ResourceKey<ConfiguredFeature<?, ?>> POISE_DOME = createKey("poise_dome");
@@ -86,7 +86,7 @@ public final class EEFeatures {
 		public static final ResourceKey<ConfiguredFeature<?, ?>> EUMUS_PATCH = createKey("eumus_patch");
 		public static final ResourceKey<ConfiguredFeature<?, ?>> SPECKLED_CORROCK_PATCH = createKey("speckled_corrock_patch");
 
-		public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+		public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
 			HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
 
 			register(context, EndFeatures.END_GATEWAY_RETURN, ENDERGETIC_END_GATEWAY.get(), EndGatewayConfiguration.knownExit(ServerLevel.END_SPAWN_POINT, true));
@@ -116,10 +116,10 @@ public final class EEFeatures {
 		}
 
 		public static ResourceKey<ConfiguredFeature<?, ?>> createKey(String name) {
-			return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(EndergeticExpansion.MOD_ID, name));
+			return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, name));
 		}
 
-		public static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC config) {
+		public static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC config) {
 			context.register(key, new ConfiguredFeature<>(feature, config));
 		}
 	}
@@ -144,7 +144,7 @@ public final class EEFeatures {
 		public static final ResourceKey<PlacedFeature> EUMUS_PATCH = createKey("eumus_patch");
 		public static final ResourceKey<PlacedFeature> SPECKLED_CORROCK_PATCH = createKey("speckled_corrock");
 
-		public static void bootstrap(BootstapContext<PlacedFeature> context) {
+		public static void bootstrap(BootstrapContext<PlacedFeature> context) {
 			HolderGetter<NormalNoise.NoiseParameters> noise = context.lookup(Registries.NOISE);
 
 			register(context, POISE_DOME, EEConfiguredFeatures.POISE_DOME, PlacementUtils.countExtra(3, 0.02F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
@@ -168,14 +168,14 @@ public final class EEFeatures {
 		}
 
 		public static ResourceKey<PlacedFeature> createKey(String name) {
-			return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(EndergeticExpansion.MOD_ID, name));
+			return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, name));
 		}
 
-		public static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, ResourceKey<ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers) {
+		public static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, ResourceKey<ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers) {
 			context.register(key, new PlacedFeature(context.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(feature), modifiers));
 		}
 
-		public static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, ResourceKey<ConfiguredFeature<?, ?>> feature, PlacementModifier... modifiers) {
+		public static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, ResourceKey<ConfiguredFeature<?, ?>> feature, PlacementModifier... modifiers) {
 			register(context, key, feature, List.of(modifiers));
 		}
 	}

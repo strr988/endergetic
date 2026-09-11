@@ -9,8 +9,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ import java.util.Optional;
  * @author SmellyModder (Luke Tonon)
  */
 public final class EEDataSerializers {
-	public static final DeferredRegister<EntityDataSerializer<?>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, EndergeticExpansion.MOD_ID);
+	public static final DeferredRegister<EntityDataSerializer<?>> SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, EndergeticExpansion.MOD_ID);
 
 	public static final EntityDataSerializer<Optional<Vec3>> OPTIONAL_VEC3D = new EntityDataSerializer<>() {
 		@Override

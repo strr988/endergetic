@@ -87,7 +87,7 @@ public class LeetleModel<E extends AbstractEetle> extends EndimatorEntityModel<E
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer vertexBuilder, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		this.body.render(matrixStack, vertexBuilder, packedLight, packedOverlay, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer vertexBuilder, int packedLight, int packedOverlay, int packedColor) {
+		this.body.render(matrixStack, vertexBuilder, packedLight, packedOverlay, packedColor);
 	}
 }

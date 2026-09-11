@@ -25,9 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class EetleEggTileEntityRenderer implements BlockEntityRenderer<EetleEggTileEntity> {
 	public static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/tile/eggs/small_eetle_egg.png"),
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/tile/eggs/medium_eetle_egg.png"),
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/tile/eggs/large_eetle_egg.png")
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/tile/eggs/small_eetle_egg.png"),
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/tile/eggs/medium_eetle_egg.png"),
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/tile/eggs/large_eetle_egg.png")
 	};
 	private static final BlockState DEFAULT_STATE = EEBlocks.EETLE_EGG.get().defaultBlockState();
 	private static final RandomSource ROTATION_RANDOM = RandomSource.create();

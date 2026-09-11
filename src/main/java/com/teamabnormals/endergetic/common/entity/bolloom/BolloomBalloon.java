@@ -30,7 +30,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -52,10 +51,6 @@ public class BolloomBalloon extends AbstractBolloom {
 
 	public BolloomBalloon(EntityType<? extends BolloomBalloon> entityType, Level world) {
 		super(entityType, world);
-	}
-
-	public BolloomBalloon(PlayMessages.SpawnEntity spawnEntity, Level world) {
-		this(EEEntityTypes.BOLLOOM_BALLOON.get(), world);
 	}
 
 	/*
@@ -110,11 +105,11 @@ public class BolloomBalloon extends AbstractBolloom {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(KNOT_UNIQUE_ID, Optional.empty());
-		this.entityData.define(FENCE_POS, BlockPos.ZERO);
-		this.entityData.define(COLOR, BalloonColor.DEFAULT);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(KNOT_UNIQUE_ID, Optional.empty());
+		builder.define(FENCE_POS, BlockPos.ZERO);
+		builder.define(COLOR, BalloonColor.DEFAULT);
 	}
 
 	@Override
@@ -201,14 +196,12 @@ public class BolloomBalloon extends AbstractBolloom {
 
 	public void updateAttachedPosition() {
 		this.setDeltaMovement(Vec3.ZERO);
-		if (this.canUpdate()) {
-			this.tick();
-			this.incrementTicksExisted(!this.level().isClientSide);
-			if (this.attachedEntity instanceof CustomBalloonPositioner customBalloonPositioner) {
-				customBalloonPositioner.updateAttachedPosition(this);
-			} else if (this.attachedEntity != null) {
-				this.setPos(this.attachedEntity.getX() + this.getSway() * Mth.sin(-this.getVineYRot()), this.attachedEntity.getY() + this.getPassengersRidingOffset() + this.attachedEntity.getEyeHeight(), this.attachedEntity.getZ() + this.getSway() * Mth.cos(-this.getVineYRot()));
-			}
+		this.tick();
+		this.incrementTicksExisted(!this.level().isClientSide);
+		if (this.attachedEntity instanceof CustomBalloonPositioner customBalloonPositioner) {
+			customBalloonPositioner.updateAttachedPosition(this);
+		} else if (this.attachedEntity != null) {
+			this.setPos(this.attachedEntity.getX() + this.getSway() * Mth.sin(-this.getVineYRot()), this.attachedEntity.getY() + this.getPassengersRidingOffset() + this.attachedEntity.getEyeHeight(), this.attachedEntity.getZ() + this.getSway() * Mth.cos(-this.getVineYRot()));
 		}
 	}
 
@@ -306,7 +299,6 @@ public class BolloomBalloon extends AbstractBolloom {
 		return super.interactAt(player, vec, hand);
 	}
 
-	@Override
 	public double getPassengersRidingOffset() {
 		return 1.75F;
 	}

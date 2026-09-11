@@ -20,8 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 
 import java.util.List;
 
@@ -34,10 +32,6 @@ public class BoofBlockEntity extends Entity {
 		super(EEEntityTypes.BOOF_BLOCK.get(), world);
 	}
 
-	public BoofBlockEntity(PlayMessages.SpawnEntity spawnEntity, Level world) {
-		this(EEEntityTypes.BOOF_BLOCK.get(), world);
-	}
-
 	public BoofBlockEntity(Level world, BlockPos pos) {
 		this(EEEntityTypes.BOOF_BLOCK.get(), world);
 		this.setPos(pos.getX() + 0.5F, pos.getY() - 0.375F, pos.getZ() + 0.5F);
@@ -45,9 +39,9 @@ public class BoofBlockEntity extends Entity {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		this.entityData.define(ORIGIN, BlockPos.ZERO);
-		this.entityData.define(FOR_PROJECTILE, false);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		builder.define(ORIGIN, BlockPos.ZERO);
+		builder.define(FOR_PROJECTILE, false);
 	}
 
 	@Override
@@ -143,8 +137,4 @@ public class BoofBlockEntity extends Entity {
 		return false;
 	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
 }

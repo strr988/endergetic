@@ -1,6 +1,6 @@
 package com.teamabnormals.endergetic.common.levelgen.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.common.levelgen.structure.structures.EetleNestPieces;
 import com.teamabnormals.endergetic.core.registry.EEStructureTypes;
 import net.minecraft.core.BlockPos;
@@ -17,7 +17,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import java.util.Optional;
 
 public class EetleNestStructure extends Structure {
-	public static final Codec<EetleNestStructure> CODEC = simpleCodec(EetleNestStructure::new);
+	public static final MapCodec<EetleNestStructure> CODEC = simpleCodec(EetleNestStructure::new);
 
 	public EetleNestStructure(Structure.StructureSettings settings) {
 		super(settings);

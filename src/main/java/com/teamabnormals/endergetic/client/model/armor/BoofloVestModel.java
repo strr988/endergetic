@@ -33,14 +33,14 @@ public class BoofloVestModel extends HumanoidModel<LivingEntity> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer vertexBuilder, int light, int p_225598_4_, float p_225598_5_, float p_225598_6_, float p_225598_7_, float f5) {
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer vertexBuilder, int light, int p_225598_4_, int packedColor) {
 		this.strap.copyFrom(this.body);
 
 		matrixStack.pushPose();
 		matrixStack.scale(1.25F, 1.25F, 1.25F);
 		matrixStack.translate(-0.25F, -0.05F, -0.125F);
 
-		this.strap.render(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.strap.render(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, -1);
 		matrixStack.popPose();
 	}
 }

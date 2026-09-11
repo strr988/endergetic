@@ -7,7 +7,7 @@ import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
@@ -29,7 +29,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -84,8 +86,8 @@ public class PuffBugBottleItem extends Item {
 				PuffBug puffbug = EEEntityTypes.PUFF_BUG.get().create(world);
 				if (puffbug != null) {
 					puffbug.setPos(target.getX(), target.getY(), target.getZ());
-					EntityType.updateCustomEntityTag(world, player, puffbug, stack.getOrCreateTag());
-					puffbug.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(puffbug.blockPosition()), MobSpawnType.BUCKET, null, stack.getOrCreateTag());
+					puffbug.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(puffbug.blockPosition()), MobSpawnType.BUCKET, null);
+					EntityType.updateCustomEntityTag(world, player, puffbug, stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY));
 					world.addFreshEntity(puffbug);
 					booflo.catchPuffBug(puffbug);
 					if (!player.getAbilities().instabuild) {
@@ -133,10 +135,10 @@ public class PuffBugBottleItem extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-		CompoundTag nbt = stack.getTag();
-		if (nbt != null && nbt.contains("CustomPotionEffects")) {
+		PotionContents potionContents = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+		if (!potionContents.customEffects().isEmpty()) {
 			tooltip.add(Component.translatable("tooltip.endergetic.activePotions").withStyle(ChatFormatting.DARK_PURPLE));
-			for (MobEffectInstance effects : PotionUtils.getCustomEffects(nbt)) {
+			for (MobEffectInstance effects : potionContents.customEffects()) {
 				ChatFormatting[] potionTextFormat = new ChatFormatting[]{ChatFormatting.ITALIC, this.getEffectTextColor(effects)};
 				tooltip.add(Component.literal(" " + I18n.get(effects.getDescriptionId()) + " " + ItemStackUtil.intToRomanNumerals(effects.getAmplifier() + 1)).withStyle(potionTextFormat));
 			}

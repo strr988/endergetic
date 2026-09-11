@@ -12,6 +12,7 @@ import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import com.teamabnormals.endergetic.core.registry.EEItems;
 import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Position;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -46,8 +47,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -84,17 +85,17 @@ public class BoofloAdolescent extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(MOVING, false);
-		this.entityData.define(HAS_FRUIT, false);
-		this.entityData.define(DESCENTING, false);
-		this.entityData.define(EATING, false);
-		this.entityData.define(HUNGRY, true);
-		this.entityData.define(EATEN, false);
-		this.entityData.define(WANTS_TO_GROW, false);
-		this.entityData.define(FALL_SPEED, 0.0F);
-		this.entityData.define(BOOF_BOOST_COOLDOWN, 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(MOVING, false);
+		builder.define(HAS_FRUIT, false);
+		builder.define(DESCENTING, false);
+		builder.define(EATING, false);
+		builder.define(HUNGRY, true);
+		builder.define(EATEN, false);
+		builder.define(WANTS_TO_GROW, false);
+		builder.define(FALL_SPEED, 0.0F);
+		builder.define(BOOF_BOOST_COOLDOWN, 0);
 	}
 
 	@Override
@@ -138,8 +139,9 @@ public class BoofloAdolescent extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-		return sizeIn.height * 0.65F;
+	protected EntityDimensions getDefaultDimensions(Pose pose) {
+		EntityDimensions dimensions = super.getDefaultDimensions(pose);
+		return dimensions.withEyeHeight(dimensions.height() * 0.65F);
 	}
 
 	@Override
@@ -532,13 +534,13 @@ public class BoofloAdolescent extends PathfinderMob implements Endimatable {
 		ItemStack itemstack = player.getItemInHand(hand);
 		Item item = itemstack.getItem();
 
-		if (item instanceof SpawnEggItem && ((SpawnEggItem) item).spawnsEntity(itemstack.getTag(), EEEntityTypes.BOOFLO.get())) {
+		if (item instanceof SpawnEggItem spawnEgg && spawnEgg.spawnsEntity(itemstack, EEEntityTypes.BOOFLO.get())) {
 			if (!this.level().isClientSide) {
 				BoofloBaby baby = EEEntityTypes.BOOFLO_BABY.get().create(this.level());
 				baby.setGrowingAge(-24000);
 				baby.moveTo(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
 				this.level().addFreshEntity(baby);
-				if (itemstack.hasCustomHoverName()) {
+				if (itemstack.has(DataComponents.CUSTOM_NAME)) {
 					baby.setCustomName(itemstack.getHoverName());
 				}
 
@@ -556,9 +558,9 @@ public class BoofloAdolescent extends PathfinderMob implements Endimatable {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
 		this.setGrowingAge(-24000);
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
 	}
 
 	@Override
@@ -579,7 +581,7 @@ public class BoofloAdolescent extends PathfinderMob implements Endimatable {
 			double viewZ = view.z;
 			Vec3 vec3d = HoverRandomPos.getPos(this.mob, 10, 0, viewX, viewZ, ((float) Math.PI / 2F), 3, 1);
 
-			for (int i = 0; vec3d != null && !this.mob.level().getBlockState(BlockPos.containing(vec3d)).isPathfindable(this.mob.level(), BlockPos.containing(vec3d), PathComputationType.AIR) && i++ < 10; vec3d = HoverRandomPos.getPos(this.mob, 10, 0, viewX, viewZ, ((float) Math.PI / 2F), 3, 1)) {
+			for (int i = 0; vec3d != null && !this.mob.level().getBlockState(BlockPos.containing(vec3d)).isPathfindable(PathComputationType.AIR) && i++ < 10; vec3d = HoverRandomPos.getPos(this.mob, 10, 0, viewX, viewZ, ((float) Math.PI / 2F), 3, 1)) {
 				;
 			}
 

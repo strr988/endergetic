@@ -65,9 +65,9 @@ public class PurpazoidStunLayer extends RenderLayer<Purpoid, PurpoidModel> {
 			gelLayer.x = head.x = originalHeadX + vertex.x;
 			gelLayer.yRot = head.yRot = rotation - i * 2.0944F;
 			VertexConsumer nonEmissiveBuffer = bufferSource.getBuffer(nonEmissiveRenderType);
-			model.renderToBuffer(stack, nonEmissiveBuffer, 240, overlay, 1.0F, 1.0F, 1.0F, alpha);
-			gelModel.renderToBuffer(stack, nonEmissiveBuffer, 240, overlay, 1.0F, 1.0F, 1.0F, alpha);
-			gelModel.renderToBuffer(stack, bufferSource.getBuffer(emissiveRenderType), 240, overlay, 1.0F, 1.0F, 1.0F, alpha);
+			model.renderToBuffer(stack, nonEmissiveBuffer, 240, overlay, net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
+			gelModel.renderToBuffer(stack, nonEmissiveBuffer, 240, overlay, net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
+			gelModel.renderToBuffer(stack, bufferSource.getBuffer(emissiveRenderType), 240, overlay, net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
 		}
 
 		stack.popPose();

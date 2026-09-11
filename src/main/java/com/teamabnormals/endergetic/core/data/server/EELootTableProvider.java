@@ -3,14 +3,18 @@ package com.teamabnormals.endergetic.core.data.server;
 import com.google.common.collect.ImmutableList;
 import com.teamabnormals.endergetic.common.block.EetleEggBlock;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
+import com.teamabnormals.endergetic.core.data.server.modifiers.EELootModifierProvider;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import com.teamabnormals.endergetic.core.registry.EEItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.PackOutput;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlags;
@@ -24,31 +28,44 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.function.BiConsumer;
 
 import static com.teamabnormals.endergetic.core.registry.EEBlocks.*;
 
 public class EELootTableProvider extends LootTableProvider {
 
-	public EELootTableProvider(PackOutput output) {
+	public EELootTableProvider(PackOutput output, CompletableFuture<Provider> provider) {
 		super(output, BuiltInLootTables.all(), ImmutableList.of(
 				new SubProviderEntry(EEBlockLoot::new, LootContextParamSets.BLOCK),
-				new SubProviderEntry(EEEntityLoot::new, LootContextParamSets.ENTITY)
-		));
+				new SubProviderEntry(EEEntityLoot::new, LootContextParamSets.ENTITY),
+				new SubProviderEntry(provider1 -> new EEChestLoot(), LootContextParamSets.CHEST)
+		), provider);
+	}
+
+	private static class EEChestLoot implements LootTableSubProvider {
+		@Override
+		public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
+			output.accept(EELootModifierProvider.KILOBYTE_BONUS, LootTable.lootTable().withPool(LootPool.lootPool()
+					.setRolls(ConstantValue.exactly(1.0F))
+					.add(LootItem.lootTableItem(EEItems.MUSIC_DISC_KILOBYTE.get())
+							.apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(1, 0.08F))))));
+		}
 	}
 
 	@Override
@@ -57,8 +74,8 @@ public class EELootTableProvider extends LootTableProvider {
 
 	private static class EEBlockLoot extends BlockLootSubProvider {
 
-		protected EEBlockLoot() {
-			super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+		protected EEBlockLoot(Provider provider) {
+			super(Set.of(), FeatureFlags.REGISTRY.allFlags(), provider);
 		}
 
 		@Override
@@ -174,7 +191,7 @@ public class EELootTableProvider extends LootTableProvider {
 
 		@Override
 		public Iterable<Block> getKnownBlocks() {
-			return ForgeRegistries.BLOCKS.getValues().stream().filter(block -> ForgeRegistries.BLOCKS.getKey(block).getNamespace().equals(EndergeticExpansion.MOD_ID)).collect(Collectors.toSet());
+			return BuiltInRegistries.BLOCK.getValues().stream().filter(block -> BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals(EndergeticExpansion.MOD_ID)).collect(Collectors.toSet());
 		}
 
 		protected LootTable.Builder createTallPoiseBushDrops(Block block) {
@@ -184,29 +201,29 @@ public class EELootTableProvider extends LootTableProvider {
 
 	private static class EEEntityLoot extends EntityLootSubProvider {
 
-		protected EEEntityLoot() {
-			super(FeatureFlags.REGISTRY.allFlags());
+		protected EEEntityLoot(Provider provider) {
+			super(FeatureFlags.REGISTRY.allFlags(), provider);
 		}
 
 		@Override
 		public void generate() {
-			this.add(EEEntityTypes.BOOFLO.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.BOOFLO_HIDE.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.2F, 0.2F))));
+			this.add(EEEntityTypes.BOOFLO.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.BOOFLO_HIDE.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.2F, 0.2F))));
 			this.add(EEEntityTypes.BOOFLO_ADOLESCENT.get(), LootTable.lootTable());
 			this.add(EEEntityTypes.BOOFLO_BABY.get(), LootTable.lootTable());
 			this.add(EEEntityTypes.BROOD_EETLE.get(), LootTable.lootTable());
 			this.add(EEEntityTypes.PUFF_BUG.get(), LootTable.lootTable());
 
-			this.add(EEEntityTypes.PURPOID.get(), new ResourceLocation(EndergeticExpansion.MOD_ID, "entities/purp"), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F))))));
-			this.add(EEEntityTypes.PURPOID.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 2.0F))))));
-			this.add(EEEntityTypes.PURPOID.get(), new ResourceLocation(EndergeticExpansion.MOD_ID, "entities/purpazoid"), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 8.0F))).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(1.0F, 3.0F))))));
+			this.add(EEEntityTypes.PURPOID.get(), ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purp"), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F))))));
+			this.add(EEEntityTypes.PURPOID.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))).apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 2.0F))))));
+			this.add(EEEntityTypes.PURPOID.get(), ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purpazoid"), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 8.0F))).apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1.0F, 3.0F))))));
 
-			this.add(EEEntityTypes.CHARGER_EETLE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEBlocks.EETLE_EGG.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.2F, 0.1F))));
-			this.add(EEEntityTypes.GLIDER_EETLE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEBlocks.EETLE_EGG.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.2F, 0.1F))));
+			this.add(EEEntityTypes.CHARGER_EETLE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEBlocks.EETLE_EGG.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.2F, 0.1F))));
+			this.add(EEEntityTypes.GLIDER_EETLE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEBlocks.EETLE_EGG.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.2F, 0.1F))));
 		}
 
 		@Override
 		public Stream<EntityType<?>> getKnownEntityTypes() {
-			return ForgeRegistries.ENTITY_TYPES.getValues().stream().filter(entity -> ForgeRegistries.ENTITY_TYPES.getKey(entity).getNamespace().equals(EndergeticExpansion.MOD_ID));
+			return BuiltInRegistries.ENTITY_TYPE.getValues().stream().filter(entity -> BuiltInRegistries.ENTITY_TYPE.getKey(entity).getNamespace().equals(EndergeticExpansion.MOD_ID));
 		}
 	}
 }

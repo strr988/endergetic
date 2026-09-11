@@ -33,8 +33,8 @@ public class PoiseClusterModel<T extends PoiseClusterEntity> extends EntityModel
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		this.cube.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, 0.3F);
+	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int packedColor) {
+		this.cube.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, 0x4DFFFFFF);
 	}
 
 	@Override

@@ -33,8 +33,8 @@ public class BoofBlockModel<T extends BoofBlockEntity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		this.base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int packedColor) {
+		this.base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
 	}
 
 	@Override

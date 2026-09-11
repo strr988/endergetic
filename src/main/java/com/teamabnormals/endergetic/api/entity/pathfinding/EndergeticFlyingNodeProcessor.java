@@ -20,7 +20,7 @@ public class EndergeticFlyingNodeProcessor extends NodeEvaluator {
 	}
 
 	@Override
-	public Target getGoal(double p_224768_1_, double p_224768_3_, double p_224768_5_) {
+	public Target getTarget(double p_224768_1_, double p_224768_3_, double p_224768_5_) {
 		return new Target(super.getNode(Mth.floor(p_224768_1_ - (double) (this.mob.getBbWidth() / 2.0F)), Mth.floor(p_224768_3_ + 0.5D), Mth.floor(p_224768_5_ - (double) (this.mob.getBbWidth() / 2.0F))));
 	}
 
@@ -39,33 +39,33 @@ public class EndergeticFlyingNodeProcessor extends NodeEvaluator {
 	}
 
 	@Override
-	public BlockPathTypes getBlockPathType(BlockGetter blockaccessIn, int x, int y, int z, Mob entitylivingIn) {
-		return this.getBlockPathType(blockaccessIn, x, y, z);
+	public PathType getPathTypeOfMob(PathfindingContext context, int x, int y, int z, Mob entitylivingIn) {
+		return this.getPathType(context, x, y, z);
 	}
 
 	@Override
-	public BlockPathTypes getBlockPathType(BlockGetter blockaccessIn, int x, int y, int z) {
+	public PathType getPathType(PathfindingContext context, int x, int y, int z) {
 		BlockPos blockpos = new BlockPos(x, y, z);
-		BlockState blockstate = blockaccessIn.getBlockState(blockpos);
-		return blockstate.isPathfindable(blockaccessIn, blockpos, PathComputationType.AIR) ? BlockPathTypes.WALKABLE : BlockPathTypes.BLOCKED;
+		BlockState blockstate = context.getBlockState(blockpos);
+		return blockstate.isPathfindable(PathComputationType.AIR) ? PathType.WALKABLE : PathType.BLOCKED;
 	}
 
 	@Nullable
 	private Node getPoint(int x, int y, int z) {
-		BlockPathTypes pathnodetype = this.isFree(x, y, z);
-		return (pathnodetype != BlockPathTypes.BREACH) && pathnodetype != BlockPathTypes.WALKABLE ? null : this.getNode(x, y, z);
+		PathType pathnodetype = this.isFree(x, y, z);
+		return (pathnodetype != PathType.BREACH) && pathnodetype != PathType.WALKABLE ? null : this.getNode(x, y, z);
 	}
 
 	@Override
 	protected Node getNode(int x, int y, int z) {
 		Node pathpoint = null;
-		BlockPathTypes pathnodetype = this.getBlockPathType(this.mob.level(), x, y, z);
+		PathType pathnodetype = this.getPathType(this.currentContext, x, y, z);
 		float malus = this.mob.getPathfindingMalus(pathnodetype);
 		if (malus >= 0.0F) {
 			pathpoint = super.getNode(x, y, z);
 			pathpoint.type = pathnodetype;
 			pathpoint.costMalus = Math.max(pathpoint.costMalus, malus);
-			if (this.level.getFluidState(new BlockPos(x, y, z)).isEmpty()) {
+			if (this.currentContext.level().getFluidState(new BlockPos(x, y, z)).isEmpty()) {
 				pathpoint.costMalus += 8.0F;
 			}
 		}
@@ -73,30 +73,30 @@ public class EndergeticFlyingNodeProcessor extends NodeEvaluator {
 		return pathpoint;
 	}
 
-	private BlockPathTypes isFree(int x, int y, int z) {
+	private PathType isFree(int x, int y, int z) {
 		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 
 		for (int i = x; i < x + this.entityWidth; ++i) {
 			for (int j = y; j < y + this.entityHeight; ++j) {
 				for (int k = z; k < z + this.entityDepth; ++k) {
-					FluidState ifluidstate = this.level.getFluidState(blockpos$mutableblockpos.set(i, j, k));
-					BlockState blockstate = this.level.getBlockState(blockpos$mutableblockpos.set(i, j, k));
-					if (ifluidstate.isEmpty() && blockstate.isPathfindable(this.level, blockpos$mutableblockpos.below(), PathComputationType.AIR) && blockstate.isAir()) {
-						return BlockPathTypes.WALKABLE;
+					FluidState ifluidstate = this.currentContext.level().getFluidState(blockpos$mutableblockpos.set(i, j, k));
+					BlockState blockstate = this.currentContext.getBlockState(blockpos$mutableblockpos.set(i, j, k));
+					if (ifluidstate.isEmpty() && blockstate.isPathfindable(PathComputationType.AIR) && blockstate.isAir()) {
+						return PathType.WALKABLE;
 					}
 
 					if (ifluidstate.is(FluidTags.WATER)) {
-						return BlockPathTypes.BLOCKED;
+						return PathType.BLOCKED;
 					}
 				}
 			}
 		}
 
-		BlockState blockstate1 = this.level.getBlockState(blockpos$mutableblockpos);
-		if (blockstate1.isPathfindable(this.level, blockpos$mutableblockpos, PathComputationType.AIR)) {
-			return BlockPathTypes.WALKABLE;
+		BlockState blockstate1 = this.currentContext.getBlockState(blockpos$mutableblockpos);
+		if (blockstate1.isPathfindable(PathComputationType.AIR)) {
+			return PathType.WALKABLE;
 		} else {
-			return BlockPathTypes.BLOCKED;
+			return PathType.BLOCKED;
 		}
 	}
 

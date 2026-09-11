@@ -14,10 +14,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,10 +33,6 @@ public class BolloomKnot extends Entity {
 		this.setPos(pos.getX() + 0.5F, pos.getY() + 0.9F, pos.getZ() + 0.5F);
 		this.hangingPosition = pos;
 		this.setDeltaMovement(Vec3.ZERO);
-	}
-
-	public BolloomKnot(PlayMessages.SpawnEntity spawnEntity, Level world) {
-		this(EEEntityTypes.BOLLOOM_KNOT.get(), world);
 	}
 
 	@Override
@@ -104,8 +98,8 @@ public class BolloomKnot extends Entity {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		this.entityData.define(BALLOONS_TIED, 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		builder.define(BALLOONS_TIED, 0);
 	}
 
 	@Override
@@ -139,9 +133,4 @@ public class BolloomKnot extends Entity {
 		return this.entityData.get(BALLOONS_TIED) > 3;
 	}
 
-	@Nonnull
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
 }

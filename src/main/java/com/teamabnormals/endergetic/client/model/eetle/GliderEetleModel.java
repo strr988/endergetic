@@ -142,9 +142,9 @@ public class GliderEetleModel extends EndimatorEntityModel<GliderEetle> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
 		this.leftWing.visible = this.leftWing.yRot >= WING_SHOW_THRESHOLD;
 		this.rightWing.visible = this.rightWing.yRot <= -WING_SHOW_THRESHOLD;
-		this.body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.body.render(matrixStack, buffer, packedLight, packedOverlay, packedColor);
 	}
 }

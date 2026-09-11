@@ -34,9 +34,9 @@ import javax.annotation.Nullable;
 
 public class PurpoidRenderer extends MobRenderer<Purpoid, PurpoidModel> {
 	private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purpoid.png"),
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purp.png"),
-			new ResourceLocation(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purpazoid.png"),
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purpoid.png"),
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purp.png"),
+			ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/entity/purpoid/purpazoid.png"),
 	};
 	private final PurpoidModel[] models;
 

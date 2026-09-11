@@ -7,6 +7,7 @@ import com.teamabnormals.endergetic.client.particle.data.CorrockCrownParticleDat
 import com.teamabnormals.endergetic.common.block.EetleEggBlock;
 import com.teamabnormals.endergetic.common.block.entity.EetleEggTileEntity;
 import com.teamabnormals.endergetic.common.entity.eetle.ai.EetleHurtByTargetGoal;
+import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
 import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -44,12 +46,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
-import java.util.UUID;
 
 public abstract class AbstractEetle extends Monster implements Endimatable {
 	private static final EntityDataAccessor<Boolean> CHILD = SynchedEntityData.defineId(AbstractEetle.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDimensions LEETLE_SIZE = EntityDimensions.fixed(0.6F, 0.4375F);
-	private static final AttributeModifier LEETLE_HEALTH = new AttributeModifier(UUID.fromString("8a1ea466-4b2d-11eb-ae93-0242ac130002"), "Leetle health decrease", -0.8F, AttributeModifier.Operation.MULTIPLY_BASE);
+	private static final ResourceLocation LEETLE_HEALTH_ID = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "leetle_health_decrease");
+	private static final AttributeModifier LEETLE_HEALTH = new AttributeModifier(LEETLE_HEALTH_ID, -0.8F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 	private static final Direction[] EGG_DIRECTIONS = Direction.values();
 	private final AvoidEntityGoal<Player> avoidEntityGoal = new AvoidEntityGoal<>(this, Player.class, 12.0F, 1.0F, 1.0F);
 	private NearestAttackableTargetGoal<Player> attackableTargetGoal;
@@ -61,13 +63,12 @@ public abstract class AbstractEetle extends Monster implements Endimatable {
 	protected AbstractEetle(EntityType<? extends AbstractEetle> type, Level world) {
 		super(type, world);
 		this.moveControl = new GroundEetleMoveController(this);
-		this.setMaxUpStep(0.5F);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(CHILD, false);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(CHILD, false);
 	}
 
 	@Override
@@ -154,7 +155,7 @@ public abstract class AbstractEetle extends Monster implements Endimatable {
 			if (wasChild) {
 				AttributeInstance maxHealth = this.getAttribute(Attributes.MAX_HEALTH);
 				if (maxHealth != null) {
-					maxHealth.removeModifier(LEETLE_HEALTH);
+					maxHealth.removeModifier(LEETLE_HEALTH_ID);
 				}
 				this.setHealth(Math.min(this.getMaxHealth(), this.getHealth() * 4.3F));
 			}
@@ -186,7 +187,7 @@ public abstract class AbstractEetle extends Monster implements Endimatable {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
 		//Patches of baby eetles will spawn 40% of the time
 		if (reason == MobSpawnType.NATURAL && this.random.nextFloat() < 0.25F) {
 			this.updateAge(-(20000 + this.random.nextInt(4001)));
@@ -214,7 +215,7 @@ public abstract class AbstractEetle extends Monster implements Endimatable {
 				}
 			}
 		}
-		return super.finalizeSpawn(world, difficultyIn, reason, spawnData, dataTag);
+		return super.finalizeSpawn(world, difficultyIn, reason, spawnData);
 	}
 
 	@Override
@@ -279,8 +280,8 @@ public abstract class AbstractEetle extends Monster implements Endimatable {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose poseIn) {
-		return this.isBaby() ? LEETLE_SIZE : super.getDimensions(poseIn);
+	protected EntityDimensions getDefaultDimensions(Pose poseIn) {
+		return (this.isBaby() ? LEETLE_SIZE : super.getDefaultDimensions(poseIn)).withEyeHeight(0.65F);
 	}
 
 	@Override
@@ -314,18 +315,8 @@ public abstract class AbstractEetle extends Monster implements Endimatable {
 	}
 
 	@Override
-	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-		return 0.65F;
-	}
-
-	@Override
 	public boolean isSensitiveToWater() {
 		return true;
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.ARTHROPOD;
 	}
 
 	@Override

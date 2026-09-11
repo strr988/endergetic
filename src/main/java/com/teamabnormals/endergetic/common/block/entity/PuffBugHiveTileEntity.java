@@ -5,6 +5,7 @@ import com.teamabnormals.endergetic.api.entity.util.DetectionHelper;
 import com.teamabnormals.endergetic.common.entity.puffbug.PuffBug;
 import com.teamabnormals.endergetic.core.registry.EEBlockEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -137,15 +138,15 @@ public class PuffBugHiveTileEntity extends BlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag compound) {
-		super.saveAdditional(compound);
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.saveAdditional(compound, registries);
 		compound.put("HiveOccupants", HiveOccupantData.createCompoundList(this));
 		compound.putInt("TeleportCooldown", this.teleportCooldown);
 	}
 
 	@Override
-	public void load(CompoundTag compound) {
-		super.load(compound);
+	protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.loadAdditional(compound, registries);
 
 		this.hiveOccupants.clear();
 		ListTag Occupants = compound.getList("HiveOccupants", 10);
@@ -168,17 +169,12 @@ public class PuffBugHiveTileEntity extends BlockEntity {
 
 	@Nonnull
 	@Override
-	public CompoundTag getUpdateTag() {
-		return this.saveWithoutMetadata();
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		return this.saveWithoutMetadata(registries);
 	}
 
 	public boolean onlyOpCanSetNbt() {
 		return true;
-	}
-
-	@Override
-	public AABB getRenderBoundingBox() {
-		return INFINITE_EXTENT_AABB;
 	}
 
 	public static class HiveOccupantData {

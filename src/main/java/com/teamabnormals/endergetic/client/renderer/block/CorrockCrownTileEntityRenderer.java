@@ -24,9 +24,9 @@ public class CorrockCrownTileEntityRenderer implements BlockEntityRenderer<Corro
 	public CorrockCrownStandingModel standingModel;
 	public CorrockCrownWallModel wallModel;
 	private static final ResourceLocation[] TEXTURES = {
-			new ResourceLocation(EndergeticExpansion.MOD_ID + ":textures/tile/end_corrock_crown.png"),
-			new ResourceLocation(EndergeticExpansion.MOD_ID + ":textures/tile/nether_corrock_crown.png"),
-			new ResourceLocation(EndergeticExpansion.MOD_ID + ":textures/tile/overworld_corrock_crown.png")
+			ResourceLocation.parse(EndergeticExpansion.MOD_ID + ":textures/tile/end_corrock_crown.png"),
+			ResourceLocation.parse(EndergeticExpansion.MOD_ID + ":textures/tile/nether_corrock_crown.png"),
+			ResourceLocation.parse(EndergeticExpansion.MOD_ID + ":textures/tile/overworld_corrock_crown.png")
 	};
 
 	public CorrockCrownTileEntityRenderer(BlockEntityRendererProvider.Context context) {

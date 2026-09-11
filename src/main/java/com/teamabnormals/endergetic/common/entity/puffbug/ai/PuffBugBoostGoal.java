@@ -45,7 +45,7 @@ public class PuffBugBoostGoal extends RandomStrollGoal {
 		double viewZ = view.z;
 		Vec3 vec3d = HoverRandomPos.getPos(this.mob, 8, 5, viewX, viewZ, ((float) Math.PI / 2F), 3, 1);
 
-		for (int i = 0; vec3d != null && !this.mob.level().getBlockState(BlockPos.containing(vec3d)).isPathfindable(this.mob.level(), BlockPos.containing(vec3d), PathComputationType.AIR) && i++ < 10; vec3d = HoverRandomPos.getPos(this.mob, 8, 5, viewX, viewZ, ((float) Math.PI / 2F), 3, 1)) {
+		for (int i = 0; vec3d != null && !this.mob.level().getBlockState(BlockPos.containing(vec3d)).isPathfindable(PathComputationType.AIR) && i++ < 10; vec3d = HoverRandomPos.getPos(this.mob, 8, 5, viewX, viewZ, ((float) Math.PI / 2F), 3, 1)) {
 			;
 		}
 

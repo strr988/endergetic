@@ -15,6 +15,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -38,7 +39,7 @@ public final class EEItemTagsProvider extends BlueprintItemTagsProvider {
 		this.copy(EEBlockTags.POISE_STEMS, EEItemTags.POISE_STEMS);
 		this.tag(EEItemTags.ENDER_FIRE_BASE_BLOCKS).add(Blocks.END_STONE.asItem(), EEBlocks.EUMUS.get().asItem(), EEBlocks.EUMUS_POISMOSS.get().asItem(), EEBlocks.POISMOSS.get().asItem());
 
-		this.tag(ItemTags.MUSIC_DISCS).add(MUSIC_DISC_KILOBYTE.get());
+		this.tag(Tags.Items.MUSIC_DISCS).add(MUSIC_DISC_KILOBYTE.get());
 
 		this.tag(ItemTags.BOATS).add(POISE_BOAT.getFirst().get());
 		this.tag(ItemTags.CHEST_BOATS).add(POISE_BOAT.getSecond().get());

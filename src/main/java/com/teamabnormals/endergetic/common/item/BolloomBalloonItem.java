@@ -209,8 +209,8 @@ public class BolloomBalloonItem extends Item {
 
 		@Override
 		protected ItemStack execute(BlockSource source, ItemStack stack) {
-			BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
-			Level world = source.getLevel();
+			BlockPos blockpos = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
+			Level world = source.level();
 			BlockState state = world.getBlockState(blockpos);
 
 			for (Entity entity : world.getEntitiesOfClass(Entity.class, new AABB(blockpos))) {

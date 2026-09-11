@@ -9,7 +9,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 public final class EndergeticItemSubRegistryHelper extends ItemSubRegistryHelper {
 
 	public EndergeticItemSubRegistryHelper(RegistryHelper parent) {
-		super(parent, parent.getItemSubHelper().getDeferredRegister());
+		super(parent);
 	}
 
 	public DeferredItem<EetleSpawnEggItem> createEetleSpawnEgg() {

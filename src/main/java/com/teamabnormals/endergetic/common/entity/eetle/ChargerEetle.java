@@ -5,6 +5,7 @@ import com.teamabnormals.endergetic.common.entity.eetle.ai.charger.EetleCatapult
 import com.teamabnormals.endergetic.common.entity.eetle.ai.charger.EetleMeleeAttackGoal;
 import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +18,8 @@ import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -53,7 +56,8 @@ public class ChargerEetle extends AbstractEetle {
 				.add(Attributes.ARMOR, 4.0F)
 				.add(Attributes.MAX_HEALTH, 30.0F)
 				.add(Attributes.FOLLOW_RANGE, 32.0F)
-				.add(Attributes.KNOCKBACK_RESISTANCE, 0.2F);
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.2F)
+				.add(Attributes.STEP_HEIGHT, 0.5F);
 	}
 
 	@Override
@@ -109,9 +113,15 @@ public class ChargerEetle extends AbstractEetle {
 				damage = attackDamage;
 			}
 
-			boolean attacked = target.hurt(this.damageSources().mobAttack(this), damage);
+			DamageSource damageSource = this.damageSources().mobAttack(this);
+			if (this.level() instanceof ServerLevel serverLevel) {
+				damage = EnchantmentHelper.modifyDamage(serverLevel, this.getWeaponItem(), target, damageSource, damage);
+			}
+			boolean attacked = target.hurt(damageSource, damage);
 			if (attacked) {
-				this.doEnchantDamageEffects(this, target);
+				if (this.level() instanceof ServerLevel serverLevel) {
+					EnchantmentHelper.doPostAttackEffects(serverLevel, target, damageSource);
+				}
 				this.blockedByShield((LivingEntity) target);
 			}
 			return attacked;

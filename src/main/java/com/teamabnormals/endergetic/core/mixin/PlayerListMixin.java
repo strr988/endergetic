@@ -7,6 +7,7 @@ import com.teamabnormals.endergetic.core.interfaces.BalloonHolder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.network.Connection;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -50,9 +51,9 @@ public final class PlayerListMixin {
 		CompoundTag compound = this.server.getWorldData().getLoadedPlayerTag();
 		if (!(compound != null && this.server.isSingleplayerOwner(player.getGameProfile()))) {
 			try {
-				File playerDataFile = new File(this.playerIo.getPlayerDataFolder(), player.getStringUUID() + ".dat");
+				File playerDataFile = new File(this.playerIo.getPlayerDir(), player.getStringUUID() + ".dat");
 				if (playerDataFile.exists() && playerDataFile.isFile()) {
-					compound = NbtIo.readCompressed(playerDataFile);
+					compound = NbtIo.readCompressed(playerDataFile.toPath(), NbtAccounter.unlimitedHeap());
 				}
 			} catch (Exception exception) {
 				EndergeticExpansion.LOGGER.warn("Failed to load player data for {}", player.getName().getString());

@@ -5,10 +5,10 @@
     "decorated_branch_chance": 0.4,
     "valid_ground_states": [
       {
-        "Name": "endergetic:eumus"
+        "Name": "endergetic:end_corrock_block"
       },
       {
-        "Name": "endergetic:end_corrock_block"
+        "Name": "endergetic:eumus"
       }
     ]
   }

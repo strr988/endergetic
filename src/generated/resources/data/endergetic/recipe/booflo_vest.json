@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "endergetic:booflo_hide"
+    },
+    "B": {
+      "item": "endergetic:boof_block"
+    }
+  },
+  "pattern": [
+    "# #",
+    "#B#",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "endergetic:booflo_vest"
+  }
+}

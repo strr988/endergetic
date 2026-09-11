@@ -1,6 +1,6 @@
 package com.teamabnormals.endergetic.core.registry;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.registry.builtin.EENoises;
 import net.minecraft.core.registries.Registries;
@@ -15,14 +15,14 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 
 public final class EESurfaceRules extends SurfaceRules {
-	public static final DeferredRegister<Codec<? extends RuleSource>> RULES = DeferredRegister.create(Registries.MATERIAL_RULE, EndergeticExpansion.MOD_ID);
+	public static final DeferredRegister<MapCodec<? extends RuleSource>> RULES = DeferredRegister.create(Registries.MATERIAL_RULE, EndergeticExpansion.MOD_ID);
 
-	public static final DeferredHolder<?, Codec<CorrockRuleSource>> CORROCK = RULES.register("corrock", CorrockRuleSource.CODEC::codec);
+	public static final DeferredHolder<MapCodec<? extends RuleSource>, MapCodec<CorrockRuleSource>> CORROCK = RULES.register("corrock", CorrockRuleSource.CODEC::codec);
 
 	public enum CorrockRuleSource implements SurfaceRules.RuleSource {
 		INSTANCE;
 
-		public static final KeyDispatchDataCodec<CorrockRuleSource> CODEC = KeyDispatchDataCodec.of(Codec.unit(INSTANCE));
+		public static final KeyDispatchDataCodec<CorrockRuleSource> CODEC = KeyDispatchDataCodec.of(MapCodec.unit(INSTANCE));
 
 		@Override
 		public KeyDispatchDataCodec<? extends RuleSource> codec() {

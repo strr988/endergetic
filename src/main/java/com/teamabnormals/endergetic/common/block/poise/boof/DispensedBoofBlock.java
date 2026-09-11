@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.block.poise.boof;
 
+import com.mojang.serialization.MapCodec;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.teamabnormals.endergetic.common.block.entity.boof.DispensedBlockBoofTileEntity;
@@ -7,6 +8,7 @@ import com.teamabnormals.endergetic.core.registry.EEBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -31,6 +33,12 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DispensedBoofBlock extends DirectionalBlock implements BucketPickup, LiquidBlockContainer, EntityBlock {
+	public static final MapCodec<DispensedBoofBlock> CODEC = simpleCodec(DispensedBoofBlock::new);
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
+	}
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	private static final Map<Direction, VoxelShape> SHAPES = Maps.newEnumMap(ImmutableMap.of(
 			Direction.NORTH, Block.box(2.0D, 0.0D, 4.0D, 14.0D, 12.0D, 16.0D),
@@ -75,7 +83,7 @@ public class DispensedBoofBlock extends DirectionalBlock implements BucketPickup
 	}
 
 	@Override
-	public boolean canPlaceLiquid(BlockGetter worldIn, BlockPos pos, BlockState state, Fluid fluidIn) {
+	public boolean canPlaceLiquid(@Nullable Player player, BlockGetter worldIn, BlockPos pos, BlockState state, Fluid fluidIn) {
 		return !state.getValue(WATERLOGGED) && fluidIn == Fluids.WATER;
 	}
 
@@ -107,7 +115,7 @@ public class DispensedBoofBlock extends DirectionalBlock implements BucketPickup
 	}
 
 	@Override
-	public ItemStack pickupBlock(LevelAccessor p_152719_, BlockPos p_152720_, BlockState p_152721_) {
+	public ItemStack pickupBlock(@Nullable Player player, LevelAccessor p_152719_, BlockPos p_152720_, BlockState p_152721_) {
 		return new ItemStack(this);
 	}
 

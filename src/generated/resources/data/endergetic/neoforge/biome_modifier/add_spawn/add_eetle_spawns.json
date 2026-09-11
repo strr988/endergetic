@@ -1,0 +1,18 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#endergetic:has_monster/eetle",
+  "spawners": [
+    {
+      "type": "endergetic:charger_eetle",
+      "maxCount": 5,
+      "minCount": 2,
+      "weight": 12
+    },
+    {
+      "type": "endergetic:glider_eetle",
+      "maxCount": 4,
+      "minCount": 2,
+      "weight": 8
+    }
+  ]
+}

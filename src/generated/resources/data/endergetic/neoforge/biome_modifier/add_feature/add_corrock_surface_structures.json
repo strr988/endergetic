@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#endergetic:has_feature/corrock",
+  "features": [
+    "endergetic:corrock_branch",
+    "endergetic:corrock_tower",
+    "endergetic:corrock_shelf",
+    "endergetic:corrock_arch",
+    "endergetic:eumus_patch",
+    "endergetic:speckled_corrock"
+  ],
+  "step": "surface_structures"
+}

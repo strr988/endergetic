@@ -1,0 +1,27 @@
+{
+  "parent": "endergetic:end/eat_bolloom_fruit",
+  "criteria": {
+    "up_up_and_away": {
+      "trigger": "endergetic:up_up_and_away"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.endergetic.end.up_up_and_away.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "endergetic:bolloom_balloon"
+    },
+    "title": {
+      "translate": "advancements.endergetic.end.up_up_and_away.title"
+    }
+  },
+  "requirements": [
+    [
+      "up_up_and_away"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

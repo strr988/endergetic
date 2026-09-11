@@ -159,7 +159,8 @@ public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 				.add(Attributes.ARMOR, 4.0F)
 				.add(Attributes.MAX_HEALTH, 25.0F)
 				.add(Attributes.FOLLOW_RANGE, 28.0F)
-				.add(Attributes.KNOCKBACK_RESISTANCE, 0.2F);
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.2F)
+				.add(Attributes.STEP_HEIGHT, 0.5F);
 	}
 
 	@Override

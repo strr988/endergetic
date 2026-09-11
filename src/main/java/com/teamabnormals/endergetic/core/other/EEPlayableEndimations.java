@@ -5,9 +5,7 @@ import com.teamabnormals.blueprint.core.endimator.PlayableEndimation.LoopType;
 import com.teamabnormals.blueprint.core.endimator.PlayableEndimationManager;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(modid = EndergeticExpansion.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EEPlayableEndimations {
 	public static final PlayableEndimation ADOLESCENT_BOOFLO_BOOF = register("adolescent_booflo/boof", 10, LoopType.NONE);
 	public static final PlayableEndimation ADOLESCENT_BOOFLO_EATING = register("adolescent_booflo/eating", 10, LoopType.NONE);

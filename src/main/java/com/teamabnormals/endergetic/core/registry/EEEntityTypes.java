@@ -33,24 +33,23 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 @EventBusSubscriber(modid = EndergeticExpansion.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EEEntityTypes {
-	public static final MobCategory END_CREATURE = MobCategory.create(EndergeticExpansion.MOD_ID + ":end_creature", "end_creature", 20, false, true, 128);
 	public static final EndergeticEntitySubRegistryHelper HELPER = EndergeticExpansion.REGISTRY_HELPER.getEntitySubHelper();
 
-	public static final DeferredHolder<?, EntityType<PoiseClusterEntity>> POISE_CLUSTER = HELPER.createLivingEntity("poise_cluster", PoiseClusterEntity::new, MobCategory.MISC, 1F, 1F);
-	public static final DeferredHolder<?, EntityType<BolloomFruit>> BOLLOOM_FRUIT = HELPER.createManuallyUpdatedEntity("bolloom_fruit", BolloomFruit::new, MobCategory.MISC, 0.5F, 0.5F);
-	public static final DeferredHolder<?, EntityType<BoofBlockEntity>> BOOF_BLOCK = HELPER.createEntity("boof_block", BoofBlockEntity::new, MobCategory.MISC, 1.75F, 1.75F);
-	public static final DeferredHolder<?, EntityType<PuffBug>> PUFF_BUG = HELPER.createLivingEntity("puff_bug", PuffBug::new, MobCategory.CREATURE, 0.3F, 1.15F);
-	public static final DeferredHolder<?, EntityType<BolloomBalloon>> BOLLOOM_BALLOON = HELPER.createManuallyUpdatedEntity("bolloom_balloon", BolloomBalloon::new, MobCategory.MISC, 0.5F, 0.5F);
-	public static final DeferredHolder<?, EntityType<BolloomKnot>> BOLLOOM_KNOT = HELPER.createEntity("bolloom_knot", BolloomKnot::new, MobCategory.MISC, 0.375F, 0.19F);
-	public static final DeferredHolder<?, EntityType<BoofloBaby>> BOOFLO_BABY = HELPER.createLivingEntity("booflo_baby", BoofloBaby::new, MobCategory.CREATURE, 0.375F, 0.325F);
-	public static final DeferredHolder<?, EntityType<BoofloAdolescent>> BOOFLO_ADOLESCENT = HELPER.createLivingEntity("booflo_adolescent", BoofloAdolescent::new, MobCategory.CREATURE, 0.8F, 0.7F);
-	public static final DeferredHolder<?, EntityType<Booflo>> BOOFLO = HELPER.createLivingEntity("booflo", Booflo::new, MobCategory.CREATURE, 1.3F, 1.3F);
-	public static final DeferredHolder<?, EntityType<ChargerEetle>> CHARGER_EETLE = HELPER.createLivingEntity("charger_eetle", ChargerEetle::new, MobCategory.MONSTER, 1.05F, 0.85F);
-	public static final DeferredHolder<?, EntityType<GliderEetle>> GLIDER_EETLE = HELPER.createLivingEntity("glider_eetle", GliderEetle::new, MobCategory.MONSTER, 1.05F, 0.85F);
-	public static final DeferredHolder<?, EntityType<BroodEetle>> BROOD_EETLE = HELPER.createLivingEntity("brood_eetle", BroodEetle::new, MobCategory.MONSTER, 3.4375F, 2.125F);
-	public static final DeferredHolder<?, EntityType<EetleEgg>> EETLE_EGG = HELPER.createEntity("eetle_egg", EetleEgg::new, MobCategory.MISC, 0.98F, 0.98F);
-	public static final DeferredHolder<?, EntityType<BroodEggSack>> BROOD_EGG_SACK = HELPER.createUnsummonableEntity("brood_egg_sack", BroodEggSack::new, MobCategory.MISC, 1.25F, 1.25F);
-	public static final DeferredHolder<?, EntityType<Purpoid>> PURPOID = HELPER.createLivingEntity("purpoid", Purpoid::new, MobCategory.CREATURE, 1.0F, 1.0F);
+	public static final DeferredHolder<EntityType<?>, EntityType<PoiseClusterEntity>> POISE_CLUSTER = HELPER.createEntity("poise_cluster", PoiseClusterEntity::new, MobCategory.MISC, 1F, 1F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BolloomFruit>> BOLLOOM_FRUIT = HELPER.createManuallyUpdatedEntity("bolloom_fruit", BolloomFruit::new, MobCategory.MISC, 0.5F, 0.5F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BoofBlockEntity>> BOOF_BLOCK = HELPER.createEntity("boof_block", BoofBlockEntity::new, MobCategory.MISC, 1.75F, 1.75F);
+	public static final DeferredHolder<EntityType<?>, EntityType<PuffBug>> PUFF_BUG = HELPER.createEntity("puff_bug", PuffBug::new, MobCategory.CREATURE, 0.3F, 1.15F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BolloomBalloon>> BOLLOOM_BALLOON = HELPER.createManuallyUpdatedEntity("bolloom_balloon", BolloomBalloon::new, MobCategory.MISC, 0.5F, 0.5F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BolloomKnot>> BOLLOOM_KNOT = HELPER.createEntity("bolloom_knot", BolloomKnot::new, MobCategory.MISC, 0.375F, 0.19F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BoofloBaby>> BOOFLO_BABY = HELPER.createEntity("booflo_baby", BoofloBaby::new, MobCategory.CREATURE, 0.375F, 0.325F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BoofloAdolescent>> BOOFLO_ADOLESCENT = HELPER.createEntity("booflo_adolescent", BoofloAdolescent::new, MobCategory.CREATURE, 0.8F, 0.7F);
+	public static final DeferredHolder<EntityType<?>, EntityType<Booflo>> BOOFLO = HELPER.createEntity("booflo", Booflo::new, MobCategory.CREATURE, 1.3F, 1.3F);
+	public static final DeferredHolder<EntityType<?>, EntityType<ChargerEetle>> CHARGER_EETLE = HELPER.createEntity("charger_eetle", ChargerEetle::new, MobCategory.MONSTER, 1.05F, 0.85F);
+	public static final DeferredHolder<EntityType<?>, EntityType<GliderEetle>> GLIDER_EETLE = HELPER.createEntity("glider_eetle", GliderEetle::new, MobCategory.MONSTER, 1.05F, 0.85F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BroodEetle>> BROOD_EETLE = HELPER.createEntity("brood_eetle", BroodEetle::new, MobCategory.MONSTER, 3.4375F, 2.125F);
+	public static final DeferredHolder<EntityType<?>, EntityType<EetleEgg>> EETLE_EGG = HELPER.createEntity("eetle_egg", EetleEgg::new, MobCategory.MISC, 0.98F, 0.98F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BroodEggSack>> BROOD_EGG_SACK = HELPER.createUnsummonableEntity("brood_egg_sack", BroodEggSack::new, MobCategory.MISC, 1.25F, 1.25F);
+	public static final DeferredHolder<EntityType<?>, EntityType<Purpoid>> PURPOID = HELPER.createEntity("purpoid", Purpoid::new, MobCategory.CREATURE, 1.0F, 1.0F);
 
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {

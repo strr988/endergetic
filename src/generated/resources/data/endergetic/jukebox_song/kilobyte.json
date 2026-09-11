@@ -1,0 +1,8 @@
+{
+  "comparator_output": 14,
+  "description": {
+    "translate": "jukebox_song.endergetic.kilobyte"
+  },
+  "length_in_seconds": 163.0,
+  "sound_event": "endergetic:music.record.kilobyte"
+}

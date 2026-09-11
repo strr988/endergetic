@@ -7,14 +7,13 @@
           "endergetic:bolloom_fruit": {
             "conditions": {
               "item": {
-                "items": [
-                  "endergetic:bolloom_fruit"
-                ]
+                "items": "endergetic:bolloom_fruit"
               }
             },
             "trigger": "minecraft:consume_item"
           }
         },
+        "indexed_requirements": [],
         "requirements": [
           [
             "endergetic:bolloom_fruit"

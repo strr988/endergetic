@@ -1,10 +1,10 @@
 package com.teamabnormals.endergetic.common.network;
 
-import com.teamabnormals.blueprint.core.util.NetworkUtil;
 import com.teamabnormals.endergetic.api.entity.util.EntityMotionHelper;
 import com.teamabnormals.endergetic.common.item.BoofloVestItem;
 import com.teamabnormals.endergetic.core.registry.EEItems;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
+import com.teamabnormals.endergetic.core.registry.EEParticleTypes;
 import com.teamabnormals.endergetic.core.other.tags.EEEntityTypeTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,6 +14,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.protocol.PacketFlow;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.minecraft.network.codec.StreamCodec;
@@ -43,12 +44,13 @@ public final class C2SInflateBoofloVestMessage implements CustomPacketPayload {
 				if (player != null && !player.onGround() && !player.isSpectator()) {
 					ItemStack stack = player.getInventory().armor.get(2);
 					if (stack.is(EEItems.BOOFLO_VEST.get()) && BoofloVestItem.canBoof(stack, player)) {
-						CompoundTag tag = stack.getOrCreateTag();
+						CompoundTag tag = BoofloVestItem.getTag(stack);
 						tag.putBoolean(BoofloVestItem.BOOFED_TAG, true);
 						tag.putInt(BoofloVestItem.TICKS_BOOFED_TAG, 0);
 
 						int increment = tag.getInt(BoofloVestItem.TIMES_BOOFED_TAG) + 1;
 						tag.putInt(BoofloVestItem.TIMES_BOOFED_TAG, increment);
+						BoofloVestItem.setTag(stack, tag);
 						player.getCooldowns().addCooldown(EEItems.BOOFLO_VEST.get(), increment < DELAY_INCREASE_THRESHOLD ? DEFAULT_DELAY : DELAY_MULTIPLIER * increment);
 
 						Entity ridingEntity = player.getVehicle();
@@ -68,7 +70,7 @@ public final class C2SInflateBoofloVestMessage implements CustomPacketPayload {
 							double x = posX + makeNegativeRandomly(rand.nextFloat() * 0.15F, rand);
 							double y = posY + (rand.nextFloat() * 0.05F) + 1.25F;
 							double z = posZ + makeNegativeRandomly(rand.nextFloat() * 0.15F, rand);
-							NetworkUtil.spawnParticle(POISE_BUBBLE_ID, x, y, z, makeNegativeRandomly((rand.nextFloat() * 0.3F), rand) + 0.025F, (rand.nextFloat() * 0.15F) + 0.1F, makeNegativeRandomly((rand.nextFloat() * 0.3F), rand) + 0.025F);
+							((ServerLevel) player.level()).sendParticles(EEParticleTypes.SHORT_POISE_BUBBLE.get(), x, y, z, 0, makeNegativeRandomly((rand.nextFloat() * 0.3F), rand) + 0.025F, (rand.nextFloat() * 0.15F) + 0.1F, makeNegativeRandomly((rand.nextFloat() * 0.3F), rand) + 0.025F, 1.0D);
 						}
 
 						player.level().playSound(null, posX, posY, posZ, EESoundEvents.BOOFLO_VEST_INFLATE.get(), SoundSource.PLAYERS, 1.0F, Mth.clamp(1.3F - (increment * 0.15F), 0.25F, 1.0F));

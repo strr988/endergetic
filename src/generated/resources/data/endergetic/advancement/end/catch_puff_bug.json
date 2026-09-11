@@ -1,0 +1,34 @@
+{
+  "parent": "endergetic:end/find_poise_forest",
+  "criteria": {
+    "puff_bug_bottle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "endergetic:puffbug_bottle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.endergetic.end.catch_puff_bug.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "endergetic:puffbug_bottle"
+    },
+    "title": {
+      "translate": "advancements.endergetic.end.catch_puff_bug.title"
+    }
+  },
+  "requirements": [
+    [
+      "puff_bug_bottle"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

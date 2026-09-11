@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "endergetic:bolloom_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "endergetic:bolloom_fruit"
+  }
+}

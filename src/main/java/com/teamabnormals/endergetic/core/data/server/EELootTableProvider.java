@@ -10,6 +10,7 @@ import com.teamabnormals.endergetic.core.registry.EEItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.WritableRegistry;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -58,6 +60,10 @@ public class EELootTableProvider extends LootTableProvider {
 		), provider);
 	}
 
+	@Override
+	protected void validate(WritableRegistry<LootTable> registry, ValidationContext context, ProblemReporter.Collector collector) {
+	}
+
 	private static class EEChestLoot implements LootTableSubProvider {
 		@Override
 		public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
@@ -66,10 +72,6 @@ public class EELootTableProvider extends LootTableProvider {
 					.add(LootItem.lootTableItem(EEItems.MUSIC_DISC_KILOBYTE.get())
 							.apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(1, 0.08F))))));
 		}
-	}
-
-	@Override
-	protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext context) {
 	}
 
 	private static class EEBlockLoot extends BlockLootSubProvider {
@@ -88,8 +90,8 @@ public class EELootTableProvider extends LootTableProvider {
 
 			this.add(EETLE_EGG.get(), block -> {
 				return LootTable.lootTable()
-						.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(this.applyExplosionDecay(block, LootItem.lootTableItem(block).apply(List.of(1, 2), (size) -> SetItemCountFunction.setCount(ConstantValue.exactly((float) size + 1)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(EetleEggBlock.SIZE, size)))))).when(HAS_SILK_TOUCH))
-						.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(this.applyExplosionDecay(block, LootItem.lootTableItem(block).apply(List.of(0, 1, 2), (size) -> SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(size + 1, 0.25F)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(EetleEggBlock.SIZE, size)))))).when(HAS_SILK_TOUCH));
+						.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(this.applyExplosionDecay(block, LootItem.lootTableItem(block).apply(List.of(1, 2), (size) -> SetItemCountFunction.setCount(ConstantValue.exactly((float) size + 1)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(EetleEggBlock.SIZE, size)))))).when(this.hasSilkTouch()))
+						.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(this.applyExplosionDecay(block, LootItem.lootTableItem(block).apply(List.of(0, 1, 2), (size) -> SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(size + 1, 0.25F)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(EetleEggBlock.SIZE, size)))))).when(this.doesNotHaveSilkTouch()));
 			});
 
 			this.dropWhenSilkTouch(PUFFBUG_HIVE.get());
@@ -142,7 +144,7 @@ public class EELootTableProvider extends LootTableProvider {
 			this.dropSelf(POISE_LADDER.get());
 			this.add(POISE_SLAB.get(), this::createSlabItemTable);
 			this.add(POISE_DOOR.get(), this::createDoorTable);
-			this.add(POISE_BEEHIVE.get(), BlockLootSubProvider::createBeeHiveDrop);
+			this.add(POISE_BEEHIVE.get(), this::createBeeHiveDrop);
 			this.add(POISE_CHEST.get(), this::createNameableBlockEntityTable);
 			this.add(TRAPPED_POISE_CHEST.get(), this::createNameableBlockEntityTable);
 			this.add(POISE_BOOKSHELF.get(), (block) -> createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F)));
@@ -191,7 +193,7 @@ public class EELootTableProvider extends LootTableProvider {
 
 		@Override
 		public Iterable<Block> getKnownBlocks() {
-			return BuiltInRegistries.BLOCK.getValues().stream().filter(block -> BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals(EndergeticExpansion.MOD_ID)).collect(Collectors.toSet());
+			return BuiltInRegistries.BLOCK.stream().filter(block -> BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals(EndergeticExpansion.MOD_ID)).collect(Collectors.toSet());
 		}
 
 		protected LootTable.Builder createTallPoiseBushDrops(Block block) {
@@ -213,9 +215,9 @@ public class EELootTableProvider extends LootTableProvider {
 			this.add(EEEntityTypes.BROOD_EETLE.get(), LootTable.lootTable());
 			this.add(EEEntityTypes.PUFF_BUG.get(), LootTable.lootTable());
 
-			this.add(EEEntityTypes.PURPOID.get(), ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purp"), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F))))));
+			this.add(EEEntityTypes.PURPOID.get(), ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purp")), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F))))));
 			this.add(EEEntityTypes.PURPOID.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))).apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 2.0F))))));
-			this.add(EEEntityTypes.PURPOID.get(), ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purpazoid"), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 8.0F))).apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1.0F, 3.0F))))));
+			this.add(EEEntityTypes.PURPOID.get(), ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purpazoid")), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEItems.PORTAPLASM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 8.0F))).apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1.0F, 3.0F))))));
 
 			this.add(EEEntityTypes.CHARGER_EETLE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEBlocks.EETLE_EGG.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.2F, 0.1F))));
 			this.add(EEEntityTypes.GLIDER_EETLE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(EEBlocks.EETLE_EGG.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.2F, 0.1F))));
@@ -223,7 +225,7 @@ public class EELootTableProvider extends LootTableProvider {
 
 		@Override
 		public Stream<EntityType<?>> getKnownEntityTypes() {
-			return BuiltInRegistries.ENTITY_TYPE.getValues().stream().filter(entity -> BuiltInRegistries.ENTITY_TYPE.getKey(entity).getNamespace().equals(EndergeticExpansion.MOD_ID));
+			return BuiltInRegistries.ENTITY_TYPE.stream().filter(entity -> BuiltInRegistries.ENTITY_TYPE.getKey(entity).getNamespace().equals(EndergeticExpansion.MOD_ID));
 		}
 	}
 }

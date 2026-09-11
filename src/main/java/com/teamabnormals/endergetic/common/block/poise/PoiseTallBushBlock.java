@@ -136,7 +136,7 @@ public class PoiseTallBushBlock extends Block implements BonemealableBlock {
 	}
 
 	@Override
-	public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+	public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
 		DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
 		BlockPos blockpos = doubleblockhalf == DoubleBlockHalf.LOWER ? pos.above() : pos.below();
 		BlockState blockstate = worldIn.getBlockState(blockpos);
@@ -148,7 +148,7 @@ public class PoiseTallBushBlock extends Block implements BonemealableBlock {
 				dropResources(blockstate, worldIn, blockpos, null, player, player.getMainHandItem());
 			}
 		}
-		super.playerWillDestroy(worldIn, pos, state, player);
+		return super.playerWillDestroy(worldIn, pos, state, player);
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class PoiseTallBushBlock extends Block implements BonemealableBlock {
 	}
 
 	@Override
-	public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
+	public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state) {
 		return true;
 	}
 

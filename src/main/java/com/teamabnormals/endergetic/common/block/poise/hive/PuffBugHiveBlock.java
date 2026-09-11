@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.block.poise.hive;
 
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.common.block.entity.PuffBugHiveTileEntity;
 import com.teamabnormals.endergetic.common.entity.puffbug.PuffBug;
 import com.teamabnormals.endergetic.core.registry.EEBlockEntityTypes;
@@ -32,6 +33,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class PuffBugHiveBlock extends BaseEntityBlock {
+	public static final MapCodec<PuffBugHiveBlock> CODEC = simpleCodec(PuffBugHiveBlock::new);
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return CODEC;
+	}
 	private static final VoxelShape HIVE_SHAPE = Shapes.or(Block.box(0.0D, 3.0D, 0.0D, 16.0D, 16.0D, 16.0D), Block.box(1.0D, 0.0D, 1.0D, 15.0D, 3.0D, 15.0D));
 
 	public PuffBugHiveBlock(BlockBehaviour.Properties properties) {
@@ -49,9 +56,9 @@ public class PuffBugHiveBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+	public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 		alertPuffBugs(world, pos, player);
-		super.playerWillDestroy(world, pos, state, player);
+		return super.playerWillDestroy(world, pos, state, player);
 	}
 
 	@Override

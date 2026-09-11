@@ -4,6 +4,8 @@ import com.teamabnormals.blueprint.core.util.MathUtil;
 import com.teamabnormals.blueprint.core.util.NetworkUtil;
 import com.teamabnormals.endergetic.common.entity.puffbug.PuffBug;
 import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
+import com.teamabnormals.endergetic.core.registry.EEParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -70,7 +72,7 @@ public class PuffBugRotateToFireGoal extends Goal {
 
 				Vec3 particleMotion = new Vec3(particleX, particleY, particleZ).normalize().scale(0.5F);
 
-				NetworkUtil.spawnParticle("endergetic:short_poise_bubble", posX, posY, posZ, particleMotion.x() + MathUtil.makeNegativeRandomly((this.random.nextFloat() * 0.25F), this.random), particleMotion.y() + (this.random.nextFloat() * 0.05F), MathUtil.makeNegativeRandomly(particleMotion.z() + (this.random.nextFloat() * 0.25F), this.random));
+				((ServerLevel) this.puffbug.level()).sendParticles(EEParticleTypes.SHORT_POISE_BUBBLE.get(), posX, posY, posZ, 0, particleMotion.x() + MathUtil.makeNegativeRandomly((this.random.nextFloat() * 0.25F), this.random), particleMotion.y() + (this.random.nextFloat() * 0.05F), MathUtil.makeNegativeRandomly(particleMotion.z() + (this.random.nextFloat() * 0.25F), this.random), 1.0D);
 			}
 		}
 		this.ticksPassed = 0;

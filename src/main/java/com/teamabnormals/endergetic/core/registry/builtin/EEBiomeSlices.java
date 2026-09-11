@@ -29,7 +29,7 @@ public class EEBiomeSlices {
 		context.register(POISE_FOREST, new ModdedBiomeSlice(40,
 				new OverlayModdedBiomeProvider(List.of(
 						Pair.of(HolderSet.direct(Stream.of(Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.END_BARRENS).map(biomes::getOrThrow
-						).collect(Collectors.toList())), new FixedBiomeSource(Holder.direct(biomes.getOrThrow(EEBiomes.POISE_FOREST)).get()))
+						).collect(Collectors.toList())), new FixedBiomeSource(biomes.getOrThrow(EEBiomes.POISE_FOREST)))
 				)), LevelStem.END));
 	}
 

@@ -37,7 +37,7 @@ public class EEPlugin implements IModPlugin {
 	}
 
 	private static Stream<RepairData> getRepairData() {
-		return Stream.of(new RepairData(EEArmorMaterials.BOOFLO_VEST.getRepairIngredient(), new ItemStack(EEItems.BOOFLO_VEST.get())));
+		return Stream.of(new RepairData(EEArmorMaterials.BOOFLO_VEST.get().repairIngredient().get(), new ItemStack(EEItems.BOOFLO_VEST.get())));
 	}
 
 	private static Stream<IJeiAnvilRecipe> getRepairRecipes(IVanillaRecipeFactory vanillaRecipeFactory) {

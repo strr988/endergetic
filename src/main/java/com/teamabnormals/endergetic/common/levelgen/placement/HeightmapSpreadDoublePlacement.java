@@ -1,6 +1,6 @@
 package com.teamabnormals.endergetic.common.levelgen.placement;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamabnormals.endergetic.core.registry.EEPlacementModifierTypes;
 import net.minecraft.core.BlockPos;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import java.util.stream.Stream;
 
 public final class HeightmapSpreadDoublePlacement extends PlacementModifier {
-	public static final Codec<HeightmapSpreadDoublePlacement> CODEC = RecordCodecBuilder.create((instance) -> {
+	public static final MapCodec<HeightmapSpreadDoublePlacement> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
 		return instance.group(Heightmap.Types.CODEC.fieldOf("heightmap").forGetter((placement) -> {
 			return placement.heightmap;
 		})).apply(instance, HeightmapSpreadDoublePlacement::new);

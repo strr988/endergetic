@@ -20,6 +20,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -105,7 +107,7 @@ public class EERecipeProvider extends BlueprintRecipeProvider {
 		storageRecipes(consumer, RecipeCategory.REDSTONE, EEItems.PORTAPLASM.get(), RecipeCategory.BUILDING_BLOCKS, PORTAPLASM_BLOCK.get());
 	}
 
-	public static void petrifiedCorrockRecipe(RecipeOutput consumer, DeferredHolder<?, ? extends Block> petrifiedCorrock, DeferredHolder<?, ? extends Block> corrock) {
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, petrifiedCorrock.get(), 8).define('#', corrock.get()).define('B', BlueprintItemTags.BUCKETS_WATER).pattern("###").pattern("#B#").pattern("###").unlockedBy(getHasName(corrock.get()), has(corrock.get())).save(consumer);
+	public static void petrifiedCorrockRecipe(RecipeOutput consumer, DeferredBlock<? extends Block> petrifiedCorrock, DeferredBlock<? extends Block> corrock) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, petrifiedCorrock.get(), 8).define('#', corrock.get()).define('B', Tags.Items.BUCKETS_WATER).pattern("###").pattern("#B#").pattern("###").unlockedBy(getHasName(corrock.get()), has(corrock.get())).save(consumer);
 	}
 }

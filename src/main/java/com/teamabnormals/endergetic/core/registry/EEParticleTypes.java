@@ -28,20 +28,20 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class EEParticleTypes {
 	public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, EndergeticExpansion.MOD_ID);
 
-	public static final DeferredHolder<?, SimpleParticleType> POISE_BUBBLE = createBasicParticleType("poise_bubble", true);
-	public static final DeferredHolder<?, SimpleParticleType> SHORT_POISE_BUBBLE = createBasicParticleType("short_poise_bubble", true);
-	public static final DeferredHolder<?, SimpleParticleType> ENDER_FIRE_FLAME = createBasicParticleType("ender_fire_flame", true);
-	public static final DeferredHolder<?, SimpleParticleType> SMALL_ENDER_FIRE_FLAME = createBasicParticleType("small_ender_fire_flame", false);
-	public static final DeferredHolder<?, ParticleType<BlockParticleOption>> FAST_BLOCK = createParticleType("fast_block", BlockParticleOption::codec, BlockParticleOption::streamCodec);
-	public static final DeferredHolder<?, ParticleType<CorrockCrownParticleData>> OVERWORLD_CROWN = createParticleType("overworld_crown", CorrockCrownParticleData::codec, CorrockCrownParticleData::streamCodec);
-	public static final DeferredHolder<?, ParticleType<CorrockCrownParticleData>> NETHER_CROWN = createParticleType("nether_crown", CorrockCrownParticleData::codec, CorrockCrownParticleData::streamCodec);
-	public static final DeferredHolder<?, ParticleType<CorrockCrownParticleData>> END_CROWN = createParticleType("end_crown", CorrockCrownParticleData::codec, CorrockCrownParticleData::streamCodec);
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> POISE_BUBBLE = createBasicParticleType("poise_bubble", true);
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SHORT_POISE_BUBBLE = createBasicParticleType("short_poise_bubble", true);
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDER_FIRE_FLAME = createBasicParticleType("ender_fire_flame", true);
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SMALL_ENDER_FIRE_FLAME = createBasicParticleType("small_ender_fire_flame", false);
+	public static final DeferredHolder<ParticleType<?>, ParticleType<BlockParticleOption>> FAST_BLOCK = createParticleType("fast_block", BlockParticleOption::codec, BlockParticleOption::streamCodec);
+	public static final DeferredHolder<ParticleType<?>, ParticleType<CorrockCrownParticleData>> OVERWORLD_CROWN = createParticleType("overworld_crown", CorrockCrownParticleData::codec, CorrockCrownParticleData::streamCodec);
+	public static final DeferredHolder<ParticleType<?>, ParticleType<CorrockCrownParticleData>> NETHER_CROWN = createParticleType("nether_crown", CorrockCrownParticleData::codec, CorrockCrownParticleData::streamCodec);
+	public static final DeferredHolder<ParticleType<?>, ParticleType<CorrockCrownParticleData>> END_CROWN = createParticleType("end_crown", CorrockCrownParticleData::codec, CorrockCrownParticleData::streamCodec);
 
-	private static DeferredHolder<?, SimpleParticleType> createBasicParticleType(String name, boolean alwaysShow) {
+	private static DeferredHolder<ParticleType<?>, SimpleParticleType> createBasicParticleType(String name, boolean alwaysShow) {
 		return PARTICLES.register(name, () -> new SimpleParticleType(alwaysShow));
 	}
 
-	private static <T extends ParticleOptions> DeferredHolder<?, ParticleType<T>> createParticleType(String name, Function<ParticleType<T>, MapCodec<T>> codecFactory, Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecFactory) {
+	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> createParticleType(String name, Function<ParticleType<T>, MapCodec<T>> codecFactory, Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecFactory) {
 		return PARTICLES.register(name, () -> new ParticleTypeWithData<>(codecFactory, streamCodecFactory));
 	}
 

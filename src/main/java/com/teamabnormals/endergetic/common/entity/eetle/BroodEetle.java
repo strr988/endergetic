@@ -49,25 +49,19 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.event.entity.EntityEvent;
-import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
-	private static final Field SIZE_FIELD = ObfuscationReflectionHelper.findField(Entity.class, "f_19815_");
-	private static final Field EYE_HEIGHT_FIELD = ObfuscationReflectionHelper.findField(Entity.class, "f_19816_");
 	private static final EntityDataAccessor<Boolean> FIRING_CANNON = SynchedEntityData.defineId(BroodEetle.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(BroodEetle.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> MOVING = SynchedEntityData.defineId(BroodEetle.class, EntityDataSerializers.BOOLEAN);
@@ -471,9 +465,15 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 				damage = attackDamage;
 			}
 
-			boolean attacked = target.hurt(this.damageSources().mobAttack(this), damage);
+			DamageSource damageSource = this.damageSources().mobAttack(this);
+			if (this.level() instanceof ServerLevel serverLevel) {
+				damage = EnchantmentHelper.modifyDamage(serverLevel, this.getWeaponItem(), target, damageSource, damage);
+			}
+			boolean attacked = target.hurt(damageSource, damage);
 			if (attacked) {
-				this.doEnchantDamageEffects(this, target);
+				if (this.level() instanceof ServerLevel serverLevel) {
+					EnchantmentHelper.doPostAttackEffects(serverLevel, target, damageSource);
+				}
 				this.blockedByShield((LivingEntity) target);
 			}
 			return attacked;
@@ -765,27 +765,11 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 		}
 	}
 
-	//The Brood Eetle's size changes greatly in size, causing too much motion when landing. To fix this, resizing motion is removed.
+	// The Brood Eetle changes size substantially; suppress vanilla's collision-driven
+	// repositioning so landing does not impart unwanted movement.
 	@Override
-	public void refreshDimensions() {
-		try {
-			EntityDimensions currentSize = (EntityDimensions) SIZE_FIELD.get(this);
-			Pose pose = this.getPose();
-			EntityDimensions newSize = this.getDimensions(pose);
-			EntityEvent.Size sizeEvent = EventHooks.getEntitySizeForge(this, pose, currentSize, newSize);
-			newSize = sizeEvent.getNewSize();
-			SIZE_FIELD.set(this, newSize);
-			EYE_HEIGHT_FIELD.set(this, newSize.eyeHeight());
-			if (newSize.width() < currentSize.width()) {
-				double d0 = newSize.width() / 2.0D;
-				this.setBoundingBox(new AABB(this.getX() - d0, this.getY(), this.getZ() - d0, this.getX() + d0, this.getY() + newSize.height(), this.getZ() + d0));
-			} else {
-				AABB axisalignedbb = this.getBoundingBox();
-				this.setBoundingBox(new AABB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + newSize.width(), axisalignedbb.minY + newSize.height(), axisalignedbb.minZ + newSize.width()));
-			}
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+	public boolean fudgePositionAfterSizeChange(EntityDimensions oldDimensions) {
+		return false;
 	}
 
 	public enum HeadTiltDirection {

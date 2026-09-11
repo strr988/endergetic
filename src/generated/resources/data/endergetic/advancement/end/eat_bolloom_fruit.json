@@ -1,0 +1,31 @@
+{
+  "parent": "endergetic:end/find_poise_forest",
+  "criteria": {
+    "bolloom_fruit": {
+      "conditions": {
+        "item": {
+          "items": "endergetic:bolloom_fruit"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.endergetic.end.eat_bolloom_fruit.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "endergetic:bolloom_fruit"
+    },
+    "title": {
+      "translate": "advancements.endergetic.end.eat_bolloom_fruit.title"
+    }
+  },
+  "requirements": [
+    [
+      "bolloom_fruit"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

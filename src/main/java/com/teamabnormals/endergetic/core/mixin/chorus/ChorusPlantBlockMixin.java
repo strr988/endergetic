@@ -6,7 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.ChorusPlantBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,14 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(ChorusPlantBlock.class)
-public final class ChorusPlantBlockMixin extends PipeBlock {
+public abstract class ChorusPlantBlockMixin {
 
-	public ChorusPlantBlockMixin(float f, Properties properties) {
-		super(f, properties);
-	}
-
-	@Inject(at = @At(value = "RETURN"), method = "Lnet/minecraft/world/level/block/ChorusPlantBlock;getStateForPlacement(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;", locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
-	private void getStateForPlacement(BlockGetter level, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
+	@Inject(at = @At("RETURN"), method = "getStateForPlacement", cancellable = true)
+	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> cir) {
+		BlockGetter level = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 		if (level.getBlockState(pos.below()).is(EEBlockTags.CHORUS_PLANTABLE)) {
 			cir.setReturnValue(cir.getReturnValue().setValue(PipeBlock.DOWN, true));
 		}
@@ -47,7 +47,7 @@ public final class ChorusPlantBlockMixin extends PipeBlock {
 		for (Direction direction : Direction.Plane.HORIZONTAL) {
 			BlockPos offset = pos.relative(direction);
 			BlockState block = level.getBlockState(offset);
-			if (block.is(this)) {
+			if (block.is((Block) (Object) this)) {
 				if (flag) {
 					canReturn = false;
 				}

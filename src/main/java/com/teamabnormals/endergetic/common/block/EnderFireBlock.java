@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.block;
 
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.core.other.tags.EEBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,6 +11,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class EnderFireBlock extends BaseFireBlock {
+	public static final MapCodec<EnderFireBlock> CODEC = simpleCodec(EnderFireBlock::new);
+
+	@Override
+	protected MapCodec<? extends BaseFireBlock> codec() {
+		return CODEC;
+	}
 
 	public EnderFireBlock(Properties builder) {
 		super(builder, 3.0F);

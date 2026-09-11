@@ -134,7 +134,7 @@ public class PuffBugBottleItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
 		PotionContents potionContents = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
 		if (!potionContents.customEffects().isEmpty()) {
 			tooltip.add(Component.translatable("tooltip.endergetic.activePotions").withStyle(ChatFormatting.DARK_PURPLE));
@@ -146,18 +146,11 @@ public class PuffBugBottleItem extends Item {
 	}
 
 	private ChatFormatting getEffectTextColor(MobEffectInstance effect) {
-		Map<Attribute, AttributeModifier> map = effect.getEffect().getAttributeModifiers();
-		if (!map.isEmpty()) {
-			for (Entry<Attribute, AttributeModifier> entry : map.entrySet()) {
-				AttributeModifier entryValue = entry.getValue();
-				AttributeModifier modifier = new AttributeModifier(entryValue.getName(), effect.getEffect().getAttributeModifierValue(effect.getAmplifier(), entryValue), entryValue.getOperation());
-
-				if (modifier.getAmount() <= 0.0F) {
-					return ChatFormatting.RED;
-				}
-			}
-		}
-		return effect.getEffect().isBeneficial() ? ChatFormatting.BLUE : ChatFormatting.RED;
+		boolean[] negativeModifier = {false};
+		effect.getEffect().value().createModifiers(effect.getAmplifier(), (attribute, modifier) -> {
+			if (modifier.amount() <= 0.0D) negativeModifier[0] = true;
+		});
+		return !negativeModifier[0] && effect.getEffect().value().isBeneficial() ? ChatFormatting.BLUE : ChatFormatting.RED;
 	}
 
 	private void emptyBottle(Player player, InteractionHand hand) {
@@ -170,10 +163,10 @@ public class PuffBugBottleItem extends Item {
 	public static class PuffBugBottleDispenseBehavior extends DefaultDispenseItemBehavior {
 
 		public ItemStack execute(BlockSource source, ItemStack stack) {
-			Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-			if (source.getLevel().getBlockState(source.getPos().relative(direction)).getCollisionShape(source.getLevel(), source.getPos().relative(direction)).isEmpty()) {
+			Direction direction = source.state().getValue(DispenserBlock.FACING);
+			if (source.level().getBlockState(source.pos().relative(direction)).getCollisionShape(source.level(), source.pos().relative(direction)).isEmpty()) {
 				EntityType<?> entitytype = EEEntityTypes.PUFF_BUG.get();
-				entitytype.spawn(source.getLevel(), stack, null, source.getPos().relative(direction), MobSpawnType.DISPENSER, direction != Direction.UP, false);
+				entitytype.spawn(source.level(), stack, null, source.pos().relative(direction), MobSpawnType.DISPENSER, direction != Direction.UP, false);
 				stack = new ItemStack(Items.GLASS_BOTTLE);
 			} else {
 				return super.execute(source, stack);

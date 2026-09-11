@@ -17,8 +17,8 @@ public class InstabilityMobEffect extends MobEffect {
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entity, int amplifier) {
-		if (entity.getType().is(EEEntityTypeTags.TELEPORT_IMMUNE)) return;
+	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+		if (entity.getType().is(EEEntityTypeTags.TELEPORT_IMMUNE)) return true;
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
@@ -34,10 +34,11 @@ public class InstabilityMobEffect extends MobEffect {
 				break;
 			}
 		}
+		return true;
 	}
 
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier) {
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 		return duration % (amplifier > 1 ? 60 : 20) == 0;
 	}
 

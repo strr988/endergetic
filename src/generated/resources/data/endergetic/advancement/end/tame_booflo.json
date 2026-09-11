@@ -1,0 +1,27 @@
+{
+  "parent": "endergetic:end/find_poise_forest",
+  "criteria": {
+    "tamed_booflo": {
+      "trigger": "endergetic:tamed_booflo"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.endergetic.end.tame_booflo.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "endergetic:booflo_hide"
+    },
+    "title": {
+      "translate": "advancements.endergetic.end.tame_booflo.title"
+    }
+  },
+  "requirements": [
+    [
+      "tamed_booflo"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

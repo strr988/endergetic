@@ -16,7 +16,8 @@
               "endergetic:bred_booflo"
             ]
           }
-        ]
+        ],
+        "should_replace_requirements": false
       }
     }
   ],

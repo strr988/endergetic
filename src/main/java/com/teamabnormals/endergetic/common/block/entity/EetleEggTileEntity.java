@@ -132,9 +132,9 @@ public class EetleEggTileEntity extends BlockEntity {
 	}
 
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
 		if (this.level != null) {
-			this.load(packet.getTag());
+			this.loadAdditional(packet.getTag(), registries);
 			if (this.hatchProgress > 0) {
 				for (SackGrowth growth : this.sackGrowths) {
 					growth.stage = SackGrowth.Stage.BURSTING;

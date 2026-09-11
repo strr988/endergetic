@@ -5,6 +5,8 @@ import com.teamabnormals.blueprint.core.util.MathUtil;
 import com.teamabnormals.blueprint.core.util.NetworkUtil;
 import com.teamabnormals.endergetic.common.entity.puffbug.PuffBug;
 import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
+import com.teamabnormals.endergetic.core.registry.EEParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -70,7 +72,7 @@ public class PuffBugCreateItemGoal extends EndimatedGoal<PuffBug> {
 					double y = posY + (rand.nextFloat() * 0.05F) + 0.5F;
 					double z = posZ + offsetZ;
 
-					NetworkUtil.spawnParticle("endergetic:short_poise_bubble", x, y, z, MathUtil.makeNegativeRandomly((rand.nextFloat() * 0.15F), rand) + 0.025F, (rand.nextFloat() * 0.025F) + 0.025F, MathUtil.makeNegativeRandomly((rand.nextFloat() * 0.15F), rand) + 0.025F);
+					((ServerLevel) this.entity.level()).sendParticles(EEParticleTypes.SHORT_POISE_BUBBLE.get(), x, y, z, 0, MathUtil.makeNegativeRandomly((rand.nextFloat() * 0.15F), rand) + 0.025F, (rand.nextFloat() * 0.025F) + 0.025F, MathUtil.makeNegativeRandomly((rand.nextFloat() * 0.15F), rand) + 0.025F, 1.0D);
 				}
 			} else if (this.isEndimationAtTick(85)) {
 				this.entity.playSound(this.entity.getItemCreationSound(), 0.1F, this.entity.isBaby() ? (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.5F : (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);

@@ -72,7 +72,7 @@ public class PurpoidRenderer extends MobRenderer<Purpoid, PurpoidModel> {
 	}
 
 	@Override
-	protected void setupRotations(Purpoid purpoid, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks) {
+	protected void setupRotations(Purpoid purpoid, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
 		Entity ridingEntity = purpoid.getVehicle();
 		if (ridingEntity != null) {
 			if (ridingEntity instanceof LivingEntity livingEntity) {
@@ -197,7 +197,7 @@ public class PurpoidRenderer extends MobRenderer<Purpoid, PurpoidModel> {
 		}
 		float progressedYDifference = yDifference > 0.0F ? yDifference * yProgress : yDifference - yDifference * (1.0F - yProgress);
 		float progressedZDifference = zDifference * progress;
-		vertexConsumer.vertex(matrix4f, progressedXDifference - zGap, progressedYDifference + secondaryWidth, progressedZDifference + xGap).color(r, g, b, alpha).uv2(15728880).endVertex();
-		vertexConsumer.vertex(matrix4f, progressedXDifference + zGap, progressedYDifference + width - secondaryWidth, progressedZDifference - xGap).color(r, g, b, alpha).uv2(15728880).endVertex();
+		vertexConsumer.addVertex(matrix4f, progressedXDifference - zGap, progressedYDifference + secondaryWidth, progressedZDifference + xGap).setColor(r, g, b, alpha).setLight(15728880);
+		vertexConsumer.addVertex(matrix4f, progressedXDifference + zGap, progressedYDifference + width - secondaryWidth, progressedZDifference - xGap).setColor(r, g, b, alpha).setLight(15728880);
 	}
 }

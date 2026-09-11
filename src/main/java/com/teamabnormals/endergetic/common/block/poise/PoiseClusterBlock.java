@@ -6,6 +6,7 @@ import com.teamabnormals.endergetic.core.registry.EEParticleTypes;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +49,7 @@ public class PoiseClusterBlock extends Block {
 	@Override
 	public void attack(BlockState state, Level world, BlockPos pos, Player player) {
 		ItemStack stack = player.getMainHandItem();
-		if (!stack.is(Tags.Items.SHEARS)) {
+		if (!stack.is(Tags.Items.TOOLS_SHEAR)) {
 			if (world.isEmptyBlock(pos.above()) && world.getEntitiesOfClass(PoiseClusterEntity.class, new AABB(pos).move(0, 1, 0)).isEmpty()) {
 				if (!world.isClientSide) {
 					PoiseClusterEntity cluster = new PoiseClusterEntity(world, pos, pos.getX(), pos.getY(), pos.getZ());
@@ -65,7 +66,7 @@ public class PoiseClusterBlock extends Block {
 						double y = pos.getY() + 0.5D + (rand.nextFloat() * 0.05F);
 						double z = pos.getZ() + 0.5D + offsetZ;
 
-						NetworkUtil.spawnParticle("endergetic:short_poise_bubble", x, y, z, GlowingPoiseStemBlock.makeNegativeRandomly((rand.nextFloat() * 0.1F), rand) + 0.025F, (rand.nextFloat() * 0.15F) + 0.1F, GlowingPoiseStemBlock.makeNegativeRandomly((rand.nextFloat() * 0.1F), rand) + 0.025F);
+						((ServerLevel) world).sendParticles(EEParticleTypes.SHORT_POISE_BUBBLE.get(), x, y, z, 0, GlowingPoiseStemBlock.makeNegativeRandomly((rand.nextFloat() * 0.1F), rand) + 0.025F, (rand.nextFloat() * 0.15F) + 0.1F, GlowingPoiseStemBlock.makeNegativeRandomly((rand.nextFloat() * 0.1F), rand) + 0.025F, 1.0D);
 					}
 					world.removeBlock(pos, false);
 					world.playSound(null, pos, EESoundEvents.CLUSTER_BREAK.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -74,7 +75,7 @@ public class PoiseClusterBlock extends Block {
 		} else {
 			if (!world.isClientSide()) {
 				world.destroyBlock(pos, false);
-				stack.hurtAndBreak(1, player, (broken) -> broken.broadcastBreakEvent(player.getUsedItemHand()));
+				stack.hurtAndBreak(1, player, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
 			}
 			popResource(world, pos, new ItemStack(this.asItem()));
 		}
@@ -105,7 +106,7 @@ public class PoiseClusterBlock extends Block {
 					double y = pos.getY() + 0.5D + (rand.nextFloat() * 0.05F);
 					double z = pos.getZ() + 0.5D + offsetZ;
 
-					NetworkUtil.spawnParticle("endergetic:short_poise_bubble", x, y, z, GlowingPoiseStemBlock.makeNegativeRandomly((rand.nextFloat() * 0.1F), rand) + 0.025F, (rand.nextFloat() * 0.15F) + 0.1F, GlowingPoiseStemBlock.makeNegativeRandomly((rand.nextFloat() * 0.1F), rand) + 0.025F);
+					((ServerLevel) world).sendParticles(EEParticleTypes.SHORT_POISE_BUBBLE.get(), x, y, z, 0, GlowingPoiseStemBlock.makeNegativeRandomly((rand.nextFloat() * 0.1F), rand) + 0.025F, (rand.nextFloat() * 0.15F) + 0.1F, GlowingPoiseStemBlock.makeNegativeRandomly((rand.nextFloat() * 0.1F), rand) + 0.025F, 1.0D);
 				}
 			}
 		}

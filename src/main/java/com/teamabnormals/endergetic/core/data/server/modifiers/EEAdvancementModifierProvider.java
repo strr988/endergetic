@@ -7,6 +7,7 @@ import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import com.teamabnormals.endergetic.core.registry.EEItems;
 import net.minecraft.advancements.AdvancementRequirements.Strategy;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.BredAnimalsTrigger;
 import net.minecraft.advancements.critereon.ConsumeItemTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -58,7 +59,7 @@ public final class EEAdvancementModifierProvider extends AdvancementModifierProv
 		ArrayList<String> names = new ArrayList<>();
 		for (EntityType<?> entityType : MOBS_TO_KILL) {
 			String name = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath();
-			KilledTrigger.TriggerInstance triggerInstance = KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(entityType));
+			Criterion<KilledTrigger.TriggerInstance> triggerInstance = KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(entityType));
 			killAMob.addCriterion(name, triggerInstance);
 			killAllMobs.addCriterion(name, triggerInstance);
 			names.add(name);

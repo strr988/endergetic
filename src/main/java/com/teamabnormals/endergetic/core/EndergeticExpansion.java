@@ -63,7 +63,7 @@ public class EndergeticExpansion {
 	});
 
 	public EndergeticExpansion(IEventBus bus, ModContainer context) {
-		NeoForge.EVENT_BUS.register(this);
+		NeoForge.EVENT_BUS.addListener(EEMobEffects::registerBrewingRecipes);
 
 		instance = this;
 
@@ -97,7 +97,6 @@ public class EndergeticExpansion {
 	private void commonSetup(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
 			EECompat.registerCompat();
-			EEMobEffects.registerBrewingRecipes();
 		});
 	}
 

@@ -4,6 +4,7 @@ import com.teamabnormals.blueprint.core.util.MathUtil;
 import com.teamabnormals.blueprint.core.util.NetworkUtil;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
+import com.teamabnormals.endergetic.core.registry.EEParticleTypes;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
@@ -123,7 +125,7 @@ public class PoiseClusterEntity extends LivingEntity {
 					double z = this.getOrigin().getZ() + 0.5D + offsetZ;
 
 					if (this.isEffectiveAi()) {
-						NetworkUtil.spawnParticle("endergetic:short_poise_bubble", x, y, z, MathUtil.makeNegativeRandomly((random.nextFloat() * 0.1F), random) + 0.025F, (random.nextFloat() * 0.15F) + 0.1F, MathUtil.makeNegativeRandomly((random.nextFloat() * 0.1F), random) + 0.025F);
+						((ServerLevel) this.level()).sendParticles(EEParticleTypes.SHORT_POISE_BUBBLE.get(), x, y, z, 0, MathUtil.makeNegativeRandomly((random.nextFloat() * 0.1F), random) + 0.025F, (random.nextFloat() * 0.15F) + 0.1F, MathUtil.makeNegativeRandomly((random.nextFloat() * 0.1F), random) + 0.025F, 1.0D);
 					}
 				}
 				this.level().setBlockAndUpdate(this.getOrigin(), EEBlocks.POISE_CLUSTER.get().defaultBlockState());
@@ -142,7 +144,7 @@ public class PoiseClusterEntity extends LivingEntity {
 					double z = pos.getZ() + 0.5D + offsetZ;
 
 					if (this.isEffectiveAi()) {
-						NetworkUtil.spawnParticle("endergetic:short_poise_bubble", x, y, z, MathUtil.makeNegativeRandomly((this.random.nextFloat() * 0.1F), this.random) + 0.025F, (this.random.nextFloat() * 0.15F) + 0.1F, MathUtil.makeNegativeRandomly((this.random.nextFloat() * 0.1F), this.random) + 0.025F);
+						((ServerLevel) this.level()).sendParticles(EEParticleTypes.SHORT_POISE_BUBBLE.get(), x, y, z, 0, MathUtil.makeNegativeRandomly((this.random.nextFloat() * 0.1F), this.random) + 0.025F, (this.random.nextFloat() * 0.15F) + 0.1F, MathUtil.makeNegativeRandomly((this.random.nextFloat() * 0.1F), this.random) + 0.025F, 1.0D);
 					}
 				}
 
@@ -423,7 +425,8 @@ public class PoiseClusterEntity extends LivingEntity {
 	}
 
 	@Override
-	public void setSecondsOnFire(int seconds) {
+	public boolean fireImmune() {
+		return true;
 	}
 
 	@Override

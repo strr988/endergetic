@@ -6,7 +6,9 @@ import com.teamabnormals.endergetic.common.block.EetleEggBlock;
 import com.teamabnormals.endergetic.common.block.PortaplasmBlock;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
+import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
@@ -24,7 +26,7 @@ public final class EEProperties {
 	public static final WoodSetProperties POISE = WoodSetProperties.builder(MapColor.TERRACOTTA_PURPLE).build();
 
 	public static final Properties POISE_CLUSTER = Properties.of().mapColor(MapColor.COLOR_PINK).noOcclusion().strength(0.15F);
-	public static final Properties BOOF_BLOCK = Properties.of().mapColor(MapColor.TERRACOTTA_YELLOW).sound(SoundType.WOOL).strength(0.85F).ignitedByLava();
+	public static final Properties BOOF_BLOCK = Properties.of().mapColor(MapColor.TERRACOTTA_YELLOW).sound(SoundType.WOOL).strength(0.85F).ignitedByLava().isValidSpawn((state, level, pos, entityType) -> false);
 	public static final Properties EUMUS = Properties.of().mapColor(MapColor.TERRACOTTA_PURPLE).strength(0.5F).sound(SoundType.GRAVEL);
 	public static final Properties EUMUS_POISMOSS = Properties.of().mapColor(MapColor.COLOR_PURPLE).randomTicks().strength(0.6F).sound(SoundType.GRASS);
 	public static final Properties EUMUS_POISMOSS_PATH = Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(0.6F).sound(SoundType.GRASS).isViewBlocking(EEProperties::blocksVision);
@@ -42,7 +44,7 @@ public final class EEProperties {
 	public static final Properties PETRIFIED_INFESTED_CORROCK = Properties.of().mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 12).strength(1.5F, 6.0F).sound(SoundType.CORAL_BLOCK);
 
 	public static Properties corrockBase(MapColor color, boolean isFullBlock) {
-		return isFullBlock ? Properties.of().mapColor(color).strength(1.5F, 6.0F) : Properties.of().mapColor(color).strength(0F).noCollission().pushReaction(PushReaction.DESTROY);
+		return isFullBlock ? Properties.of().mapColor(color).strength(1.5F, 6.0F).isValidSpawn((state, level, pos, entityType) -> entityType == EEEntityTypes.CHARGER_EETLE.get() || state.isFaceSturdy(level, pos, Direction.UP)) : Properties.of().mapColor(color).strength(0F).noCollission().pushReaction(PushReaction.DESTROY);
 	}
 
 	public static Properties glowingCorrockBase(MapColor color) {

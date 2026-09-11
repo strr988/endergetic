@@ -14,7 +14,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 public class EnderWallTorchBlock extends WallTorchBlock {
 
 	public EnderWallTorchBlock(Properties properties) {
-		super(properties, ParticleTypes.FLAME);
+		super(ParticleTypes.FLAME, properties);
 	}
 
 	@OnlyIn(Dist.CLIENT)

@@ -60,8 +60,7 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [],
-    "end_creature": [
+    "creature": [
       {
         "type": "endergetic:booflo_adolescent",
         "maxCount": 2,

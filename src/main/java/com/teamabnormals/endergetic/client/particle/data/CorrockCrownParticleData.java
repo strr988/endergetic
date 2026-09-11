@@ -61,8 +61,8 @@ public class CorrockCrownParticleData implements ParticleOptions {
 			buffer.writeInt(data.lifetimeBoost);
 			buffer.writeFloat(data.gravity);
 			buffer.writeFloat(data.gravityBoost);
-			buffer.writeOptional(data.scale, RegistryFriendlyByteBuf::writeFloat);
-		}, buffer -> new CorrockCrownParticleData(() -> type, buffer.readInt(), buffer.readInt(), buffer.readFloat(), buffer.readFloat(), buffer.readOptional(RegistryFriendlyByteBuf::readFloat)));
+			buffer.writeOptional(data.scale, (buf, scale) -> buf.writeFloat(scale));
+		}, buffer -> new CorrockCrownParticleData(() -> type, buffer.readInt(), buffer.readInt(), buffer.readFloat(), buffer.readFloat(), buffer.readOptional(buf -> buf.readFloat())));
 	}
 
 	@Override

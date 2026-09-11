@@ -12,13 +12,13 @@ import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.Musics;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(modid = EndergeticExpansion.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EEBiomes {
 	public static final ResourceKey<Biome> POISE_FOREST = createKey("poise_forest");
 
@@ -52,9 +52,9 @@ public final class EEBiomes {
 				)
 				.mobSpawnSettings(
 						new MobSpawnSettings.Builder()
-								.addSpawn(EEEntityTypes.END_CREATURE, new MobSpawnSettings.SpawnerData(EEEntityTypes.BOOFLO_ADOLESCENT.get(), 5, 1, 2))
-								.addSpawn(EEEntityTypes.END_CREATURE, new MobSpawnSettings.SpawnerData(EEEntityTypes.BOOFLO.get(), 15, 1, 3))
-								.addSpawn(EEEntityTypes.END_CREATURE, new MobSpawnSettings.SpawnerData(EEEntityTypes.PUFF_BUG.get(), 10, 2, 4))
+								.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EEEntityTypes.BOOFLO_ADOLESCENT.get(), 5, 1, 2))
+								.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EEEntityTypes.BOOFLO.get(), 15, 1, 3))
+								.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EEEntityTypes.PUFF_BUG.get(), 10, 2, 4))
 								.creatureGenerationProbability(0.9F)
 								.build()
 				)

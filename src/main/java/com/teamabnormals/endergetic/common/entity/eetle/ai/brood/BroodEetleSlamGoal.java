@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -82,8 +83,9 @@ public class BroodEetleSlamGoal extends EndimatedGoal<BroodEetle> {
 				damage = 0.0F;
 			}
 
-			if (livingEntity.hurt(world.damageSources().mobAttack(broodEetle), damage)) {
-				broodEetle.doEnchantDamageEffects(broodEetle, livingEntity);
+			var damageSource = world.damageSources().mobAttack(broodEetle);
+			if (livingEntity.hurt(damageSource, damage)) {
+				EnchantmentHelper.doPostAttackEffects(world, livingEntity, damageSource);
 				double knockbackForce = knockback - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
 				float inAirFactor = livingEntity.onGround() ? 1.0F : 0.75F;
 				Vec3 horizontalVelocity = new Vec3(livingEntity.getX() - posX, 0.0D, livingEntity.getZ() - posZ).normalize().scale((knockbackForce * (random.nextFloat() * 0.75F + 0.5F)) * inAirFactor * power);

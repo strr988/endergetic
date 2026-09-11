@@ -1,6 +1,6 @@
 package com.teamabnormals.endergetic.common.levelgen.placement;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.core.registry.EEPlacementModifierTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class HeightmapSpreadLowerPlacement extends PlacementModifier {
 	public static final HeightmapSpreadLowerPlacement INSTANCE = new HeightmapSpreadLowerPlacement();
-	public static final Codec<HeightmapSpreadLowerPlacement> CODEC = Codec.unit(INSTANCE);
+	public static final MapCodec<HeightmapSpreadLowerPlacement> CODEC = MapCodec.unit(INSTANCE);
 
 	private HeightmapSpreadLowerPlacement() {
 	}

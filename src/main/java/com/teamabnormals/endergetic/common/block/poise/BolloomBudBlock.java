@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.block.poise;
 
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.common.block.entity.BolloomBudTileEntity;
 import com.teamabnormals.endergetic.common.block.entity.BolloomBudTileEntity.BudSide;
 import com.teamabnormals.endergetic.core.registry.EEBlockEntityTypes;
@@ -29,6 +30,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class BolloomBudBlock extends BaseEntityBlock {
+	public static final MapCodec<BolloomBudBlock> CODEC = simpleCodec(BolloomBudBlock::new);
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return CODEC;
+	}
 	public static final BooleanProperty OPENED = BooleanProperty.create("opened");
 	private static final VoxelShape INSIDE = box(3.5D, 0.0D, 3.5D, 12.5D, 15.0D, 12.5D);
 	protected static final VoxelShape SHAPE = Shapes.join(box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D), Shapes.or(INSIDE), BooleanOp.ONLY_FIRST);
@@ -45,8 +52,8 @@ public class BolloomBudBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
-		super.playerWillDestroy(worldIn, pos, state, player);
+	public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+		return super.playerWillDestroy(worldIn, pos, state, player);
 	}
 
 	protected boolean isValidGround(BlockState state, BlockGetter getter, BlockPos pos) {

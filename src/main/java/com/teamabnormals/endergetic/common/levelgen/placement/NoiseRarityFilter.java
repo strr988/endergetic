@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.levelgen.placement;
 
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamabnormals.endergetic.core.registry.EEPlacementModifierTypes;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 public class NoiseRarityFilter extends PlacementFilter {
-	public static final Codec<NoiseRarityFilter> CODEC = RecordCodecBuilder.create((instance) -> {
+	public static final MapCodec<NoiseRarityFilter> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
 		return instance.group(
 			NormalNoise.NoiseParameters.CODEC.fieldOf("noise").forGetter(placement -> placement.noiseParameters),
 			Codec.DOUBLE.fieldOf("noise_level").forGetter(filter -> filter.noiseLevel),

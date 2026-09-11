@@ -5,7 +5,8 @@ import com.teamabnormals.endergetic.common.entity.eetle.BroodEetle.HealthStage;
 import com.teamabnormals.endergetic.common.entity.eetle.flying.TargetFlyingRotations;
 import com.teamabnormals.endergetic.common.entity.purpoid.PurpoidSize;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.phys.Vec3;
@@ -14,117 +15,48 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Optional;
 
-/**
- * @author SmellyModder (Luke Tonon)
- */
 public final class EEDataSerializers {
 	public static final DeferredRegister<EntityDataSerializer<?>> SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, EndergeticExpansion.MOD_ID);
 
-	public static final EntityDataSerializer<Optional<Vec3>> OPTIONAL_VEC3D = new EntityDataSerializer<>() {
-		@Override
-		public void write(FriendlyByteBuf buf, Optional<Vec3> value) {
-			buf.writeBoolean(value.isPresent());
+	public static final EntityDataSerializer<Optional<Vec3>> OPTIONAL_VEC3D = serializer(StreamCodec.of((buf, value) -> {
+		buf.writeBoolean(value.isPresent());
+		value.ifPresent(vec -> {
+			buf.writeDouble(vec.x());
+			buf.writeDouble(vec.y());
+			buf.writeDouble(vec.z());
+		});
+	}, buf -> buf.readBoolean() ? Optional.of(new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble())) : Optional.empty()));
 
-			if (value.isPresent()) {
-				Vec3 vec3d = value.get();
-				buf.writeDouble(vec3d.x());
-				buf.writeDouble(vec3d.y());
-				buf.writeDouble(vec3d.z());
+	public static final EntityDataSerializer<BalloonColor> BALLOON_COLOR = serializer(enumCodec(BalloonColor.class));
+	public static final EntityDataSerializer<TargetFlyingRotations> TARGET_FLYING_ROTATIONS = serializer(StreamCodec.of(
+			(buf, value) -> {
+				buf.writeFloat(value.getTargetFlyPitch());
+				buf.writeFloat(value.getTargetFlyRoll());
+			},
+			buf -> new TargetFlyingRotations(buf.readFloat(), buf.readFloat())
+	));
+	public static final EntityDataSerializer<EntityDimensions> ENTITY_SIZE = serializer(StreamCodec.of(
+			(buf, value) -> {
+				buf.writeFloat(value.width());
+				buf.writeFloat(value.height());
+				buf.writeBoolean(value.fixed());
+			},
+			buf -> {
+				float width = buf.readFloat();
+				float height = buf.readFloat();
+				return buf.readBoolean() ? EntityDimensions.fixed(width, height) : EntityDimensions.scalable(width, height);
 			}
-		}
+	));
+	public static final EntityDataSerializer<HealthStage> BROOD_HEALTH_STAGE = serializer(enumCodec(HealthStage.class));
+	public static final EntityDataSerializer<PurpoidSize> PURPOID_SIZE = serializer(enumCodec(PurpoidSize.class));
 
-		@Override
-		public Optional<Vec3> read(FriendlyByteBuf buf) {
-			return !buf.readBoolean() ? Optional.empty() : Optional.of(new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble()));
-		}
+	private static <T> EntityDataSerializer<T> serializer(StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
+		return EntityDataSerializer.forValueType(codec);
+	}
 
-		@Override
-		public Optional<Vec3> copy(Optional<Vec3> value) {
-			return value;
-		}
-	};
-
-	public static final EntityDataSerializer<BalloonColor> BALLOON_COLOR = new EntityDataSerializer<>() {
-		@Override
-		public void write(FriendlyByteBuf buf, BalloonColor value) {
-			buf.writeEnum(value);
-		}
-
-		@Override
-		public BalloonColor read(FriendlyByteBuf buf) {
-			return buf.readEnum(BalloonColor.class);
-		}
-
-		@Override
-		public BalloonColor copy(BalloonColor value) {
-			return value;
-		}
-	};
-
-	public static final EntityDataSerializer<TargetFlyingRotations> TARGET_FLYING_ROTATIONS = new EntityDataSerializer<>() {
-		@Override
-		public void write(FriendlyByteBuf buf, TargetFlyingRotations value) {
-			buf.writeFloat(value.getTargetFlyPitch());
-			buf.writeFloat(value.getTargetFlyRoll());
-		}
-
-		@Override
-		public TargetFlyingRotations read(FriendlyByteBuf buf) {
-			return new TargetFlyingRotations(buf.readFloat(), buf.readFloat());
-		}
-
-		@Override
-		public TargetFlyingRotations copy(TargetFlyingRotations value) {
-			return value;
-		}
-	};
-
-	public static final EntityDataSerializer<EntityDimensions> ENTITY_SIZE = new EntityDataSerializer<>() {
-		@Override
-		public void write(FriendlyByteBuf buf, EntityDimensions value) {
-			buf.writeFloat(value.width);
-			buf.writeFloat(value.height);
-			buf.writeBoolean(value.fixed);
-		}
-
-		@Override
-		public EntityDimensions read(FriendlyByteBuf buf) {
-			return new EntityDimensions(buf.readFloat(), buf.readFloat(), buf.readBoolean());
-		}
-
-		@Override
-		public EntityDimensions copy(EntityDimensions value) {
-			return value;
-		}
-	};
-
-	public static final EntityDataSerializer<HealthStage> BROOD_HEALTH_STAGE = new EntityDataSerializer<>() {
-		public void write(FriendlyByteBuf buf, HealthStage value) {
-			buf.writeEnum(value);
-		}
-
-		public HealthStage read(FriendlyByteBuf buf) {
-			return buf.readEnum(HealthStage.class);
-		}
-
-		public HealthStage copy(HealthStage value) {
-			return value;
-		}
-	};
-
-	public static final EntityDataSerializer<PurpoidSize> PURPOID_SIZE = new EntityDataSerializer<>() {
-		public void write(FriendlyByteBuf buf, PurpoidSize value) {
-			buf.writeEnum(value);
-		}
-
-		public PurpoidSize read(FriendlyByteBuf buf) {
-			return buf.readEnum(PurpoidSize.class);
-		}
-
-		public PurpoidSize copy(PurpoidSize value) {
-			return value;
-		}
-	};
+	private static <E extends Enum<E>> StreamCodec<RegistryFriendlyByteBuf, E> enumCodec(Class<E> enumClass) {
+		return StreamCodec.of((buf, value) -> buf.writeEnum(value), buf -> buf.readEnum(enumClass));
+	}
 
 	static {
 		SERIALIZERS.register("optional_vec3d", () -> OPTIONAL_VEC3D);

@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -60,14 +61,13 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Supplier;
 
 @EventBusSubscriber(modid = EndergeticExpansion.MOD_ID)
 public final class EEEvents {
-	private static final AttributeModifier SLOW_BALLOON = new AttributeModifier(UUID.fromString("eb2242e0-d3be-11ea-87d0-0242ac130003"), "Slow falling acceleration reduction", -0.07, AttributeModifier.Operation.ADDITION);
-	private static final AttributeModifier SUPER_SLOW_BALLOON = new AttributeModifier(UUID.fromString("b5c9b111-62b3-40da-b396-f90a138583ad"), "Super slow falling acceleration reduction", -0.075, AttributeModifier.Operation.ADDITION);
-	private static final AttributeModifier PURPOID_SLOWFALL = new AttributeModifier(UUID.fromString("6bec3438-1392-426b-9173-618fa9499de5"), "Slow falling acceleration reduction from a Purpoid", -0.07, AttributeModifier.Operation.ADDITION);
+	private static final AttributeModifier SLOW_BALLOON = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "slow_balloon"), -0.07, AttributeModifier.Operation.ADD_VALUE);
+	private static final AttributeModifier SUPER_SLOW_BALLOON = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "super_slow_balloon"), -0.075, AttributeModifier.Operation.ADD_VALUE);
+	private static final AttributeModifier PURPOID_SLOWFALL = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "purpoid_slowfall"), -0.07, AttributeModifier.Operation.ADD_VALUE);
 
 	public static final Map<Supplier<Block>, Supplier<Block>> PETRIFICATION_MAP = Util.make(Maps.newHashMap(), (petrifications) -> {
 		petrifications.put(EEBlocks.END_CORROCK, EEBlocks.PETRIFIED_END_CORROCK);
@@ -122,22 +122,22 @@ public final class EEEvents {
 				boolean isFalling = entity.getDeltaMovement().y <= 0.0D;
 
 				if (isFalling && balloonCount < 3 && hasABalloon) {
-					if (!gravity.hasModifier(SLOW_BALLOON)) gravity.addTransientModifier(SLOW_BALLOON);
-				} else if (gravity.hasModifier(SLOW_BALLOON)) {
-					gravity.removeModifier(SLOW_BALLOON);
+					if (!gravity.hasModifier(SLOW_BALLOON.id())) gravity.addTransientModifier(SLOW_BALLOON);
+				} else if (gravity.hasModifier(SLOW_BALLOON.id())) {
+					gravity.removeModifier(SLOW_BALLOON.id());
 				}
 
 				if (isFalling && balloonCount == 3) {
-					if (!gravity.hasModifier(SUPER_SLOW_BALLOON)) gravity.addTransientModifier(SUPER_SLOW_BALLOON);
-				} else if (gravity.hasModifier(SUPER_SLOW_BALLOON)) {
-					gravity.removeModifier(SUPER_SLOW_BALLOON);
+					if (!gravity.hasModifier(SUPER_SLOW_BALLOON.id())) gravity.addTransientModifier(SUPER_SLOW_BALLOON);
+				} else if (gravity.hasModifier(SUPER_SLOW_BALLOON.id())) {
+					gravity.removeModifier(SUPER_SLOW_BALLOON.id());
 				}
 
 				if (isFalling && entity.hasPassenger(e -> e instanceof Purpoid)) {
 					entity.fallDistance = 0.0F;
-					if (!gravity.hasModifier(PURPOID_SLOWFALL)) gravity.addTransientModifier(PURPOID_SLOWFALL);
-				} else if (gravity.hasModifier(PURPOID_SLOWFALL)) {
-					gravity.removeModifier(PURPOID_SLOWFALL);
+					if (!gravity.hasModifier(PURPOID_SLOWFALL.id())) gravity.addTransientModifier(PURPOID_SLOWFALL);
+				} else if (gravity.hasModifier(PURPOID_SLOWFALL.id())) {
+					gravity.removeModifier(PURPOID_SLOWFALL.id());
 				}
 
 				if (balloonCount > 3) {
@@ -194,7 +194,7 @@ public final class EEEvents {
 			if (newState != null && level.isEmptyBlock(pos.above())) {
 				level.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
 				level.setBlock(pos, newState, 11);
-				event.getItemStack().hurtAndBreak(1, player, (damage) -> damage.broadcastBreakEvent(hand));
+				event.getItemStack().hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
 				event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
 				event.setCanceled(true);
 			}

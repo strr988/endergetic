@@ -24,7 +24,7 @@ public class BroodEetleRenderer extends MobRenderer<BroodEetle, BroodEetleModel>
 	}
 
 	@Override
-	protected void setupRotations(BroodEetle broodEetle, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+	protected void setupRotations(BroodEetle broodEetle, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
 		matrixStackIn.mulPose(Axis.YP.rotationDegrees(180.0F - rotationYaw));
 		if (broodEetle.hasCustomName()) {
 			String name = ChatFormatting.stripFormatting(broodEetle.getName().getString());

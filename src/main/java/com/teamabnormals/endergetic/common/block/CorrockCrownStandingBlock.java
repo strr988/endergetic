@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.block;
 
+import com.mojang.serialization.MapCodec;
 import com.google.common.collect.Maps;
 import com.teamabnormals.endergetic.client.particle.data.CorrockCrownParticleData;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
@@ -14,6 +15,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -21,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -41,6 +44,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class CorrockCrownStandingBlock extends CorrockCrownBlock {
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return null;
+	}
 	private static final Map<ResourceLocation, Supplier<CorrockCrownBlock>> CONVERSIONS = Util.make(Maps.newHashMap(), (conversions) -> {
 		conversions.put(BuiltinDimensionTypes.OVERWORLD.location(), EEBlocks.OVERWORLD_CORROCK_CROWN);
 		conversions.put(BuiltinDimensionTypes.NETHER.location(), EEBlocks.NETHER_CORROCK_CROWN);
@@ -154,7 +161,7 @@ public class CorrockCrownStandingBlock extends CorrockCrownBlock {
 	}
 
 	@Override
-	public ItemStack pickupBlock(LevelAccessor p_152719_, BlockPos p_152720_, BlockState p_152721_) {
+	public ItemStack pickupBlock(@Nullable Player player, LevelAccessor p_152719_, BlockPos p_152720_, BlockState p_152721_) {
 		return new ItemStack(this);
 	}
 

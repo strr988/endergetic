@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.levelgen.placement;
 
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamabnormals.endergetic.core.registry.EEPlacementModifierTypes;
@@ -16,7 +17,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class NoiseHeightmap32Placement extends PlacementModifier {
-	public static final Codec<NoiseHeightmap32Placement> CODEC = RecordCodecBuilder.create((p_191761_) -> {
+	public static final MapCodec<NoiseHeightmap32Placement> CODEC = RecordCodecBuilder.mapCodec((p_191761_) -> {
 		return p_191761_.group(Codec.DOUBLE.fieldOf("noise_level").forGetter((p_191771_) -> {
 			return p_191771_.noiseLevel;
 		}), Codec.INT.fieldOf("below_noise").forGetter((p_191769_) -> {

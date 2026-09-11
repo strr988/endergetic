@@ -33,6 +33,7 @@
             "trigger": "minecraft:player_killed_entity"
           }
         },
+        "indexed_requirements": [],
         "requirements": [
           [
             "endergetic:booflo"

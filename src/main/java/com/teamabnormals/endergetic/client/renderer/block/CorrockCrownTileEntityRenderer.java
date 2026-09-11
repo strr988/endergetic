@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class CorrockCrownTileEntityRenderer implements BlockEntityRenderer<CorrockCrownTileEntity> {
 	public CorrockCrownStandingModel standingModel;
@@ -32,6 +33,11 @@ public class CorrockCrownTileEntityRenderer implements BlockEntityRenderer<Corro
 	public CorrockCrownTileEntityRenderer(BlockEntityRendererProvider.Context context) {
 		this.standingModel = new CorrockCrownStandingModel(context.bakeLayer(EEModelLayers.CORROCK_CROWN_STANDING));
 		this.wallModel = new CorrockCrownWallModel(context.bakeLayer(EEModelLayers.CORROCK_CROWN_WALL));
+	}
+
+	@Override
+	public AABB getRenderBoundingBox(CorrockCrownTileEntity blockEntity) {
+		return AABB.INFINITE;
 	}
 
 	@Override

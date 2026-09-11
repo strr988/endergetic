@@ -78,8 +78,8 @@ public class BoofloBreedGoal extends Goal {
 
 	protected void impregnateBooflo() {
 		final BabyEntitySpawnEvent event = new net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent(this.booflo, this.mate, null);
-		final boolean cancelled = NeoForge.EVENT_BUS.post(event);
-		if (cancelled) {
+		NeoForge.EVENT_BUS.post(event);
+		if (event.isCanceled()) {
 			this.booflo.resetInLove();
 			this.mate.resetInLove();
 			return;

@@ -4,13 +4,17 @@ import com.teamabnormals.endergetic.client.model.armor.BoofloVestModel;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.other.EEArmorMaterials;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -23,8 +27,8 @@ import java.util.function.Consumer;
  * @author - SmellyModder(Luke Tonon)
  */
 public class BoofloVestItem extends ArmorItem {
-	private static final String DEFAULT_TEXTURE = EndergeticExpansion.MOD_ID + ":textures/models/armor/booflo_vest.png";
-	private static final String BOOFED_TEXTURE = EndergeticExpansion.MOD_ID + ":textures/models/armor/booflo_vest_boofed.png";
+	private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/models/armor/booflo_vest.png");
+	private static final ResourceLocation BOOFED_TEXTURE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "textures/models/armor/booflo_vest_boofed.png");
 	public static final String TICKS_BOOFED_TAG = "ticksBoofed";
 	public static final String BOOFED_TAG = "boofed";
 	public static final String TIMES_BOOFED_TAG = "timesBoofed";
@@ -34,8 +38,9 @@ public class BoofloVestItem extends ArmorItem {
 	}
 
 	@Override
-	public void onArmorTick(ItemStack stack, Level world, Player player) {
-		CompoundTag tag = stack.getOrCreateTag();
+	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slotId, boolean isSelected) {
+		if (!(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.CHEST) != stack) return;
+		CompoundTag tag = getTag(stack);
 		int ticksBoofed = tag.getInt(TICKS_BOOFED_TAG);
 		if (tag.getBoolean(BOOFED_TAG)) {
 			ticksBoofed++;
@@ -49,28 +54,30 @@ public class BoofloVestItem extends ArmorItem {
 		}
 
 		if (tag.getInt(TICKS_BOOFED_TAG) == 10) {
-			player.getItemBySlot(EquipmentSlot.CHEST).hurtAndBreak(2, player, (onBroken) -> {
-				onBroken.broadcastBreakEvent(EquipmentSlot.CHEST);
-			});
+			player.getItemBySlot(EquipmentSlot.CHEST).hurtAndBreak(2, player, EquipmentSlot.CHEST);
 		}
 
 		if (player.onGround() || (player.isPassenger() && player.getVehicle().onGround())) {
 			tag.putInt(TIMES_BOOFED_TAG, 0);
 		}
-	}
-
-	@Override
-	public boolean canBeDepleted() {
-		return true;
+		setTag(stack, tag);
 	}
 
 	public static boolean canBoof(ItemStack stack, Player player) {
-		return !player.getCooldowns().isOnCooldown(stack.getItem()) && !stack.getOrCreateTag().getBoolean(BOOFED_TAG);
+		return !player.getCooldowns().isOnCooldown(stack.getItem()) && !getTag(stack).getBoolean(BOOFED_TAG);
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-		return stack.hasTag() && stack.getTag().getBoolean(BOOFED_TAG) ? BOOFED_TEXTURE : DEFAULT_TEXTURE;
+	public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+		return getTag(stack).getBoolean(BOOFED_TAG) ? BOOFED_TEXTURE : DEFAULT_TEXTURE;
+	}
+
+	public static CompoundTag getTag(ItemStack stack) {
+		return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+	}
+
+	public static void setTag(ItemStack stack, CompoundTag tag) {
+		CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
 	}
 
 	@Override
@@ -80,7 +87,7 @@ public class BoofloVestItem extends ArmorItem {
 			@Override
 			@NotNull
 			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack stack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-				return stack.hasTag() && stack.getTag().getBoolean(BOOFED_TAG) ? BoofloVestModel.INSTANCE : original;
+				return getTag(stack).getBoolean(BOOFED_TAG) ? BoofloVestModel.INSTANCE : original;
 			}
 		});
 	}

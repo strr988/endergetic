@@ -106,12 +106,13 @@ public class BroodEggSack extends Entity {
 			if (broodEetle != null && broodEetle.isAlive() && (broodEetle.isEggMouthOpen() || broodEetle.isOnLastHealthStage())) {
 				Entity trueSource = source.getEntity();
 				LivingEntity livingEntity = trueSource instanceof LivingEntity ? (LivingEntity) trueSource : null;
-				if (livingEntity != null) {
-					amount += 0.25F * EnchantmentHelper.getDamageBonus(livingEntity.getMainHandItem(), MobType.ARTHROPOD);
+				if (livingEntity != null && world instanceof ServerLevel serverLevel) {
+					float enchantedDamage = EnchantmentHelper.modifyDamage(serverLevel, livingEntity.getWeaponItem(), broodEetle, source, amount);
+					amount += 0.25F * (enchantedDamage - amount);
 				}
 				if (broodEetle.attackEntityFromEggSack(source, amount)) {
-					if (livingEntity != null) {
-						this.doEnchantDamageEffects(livingEntity, broodEetle);
+					if (livingEntity != null && world instanceof ServerLevel serverLevel) {
+						EnchantmentHelper.doPostAttackEffects(serverLevel, broodEetle, source);
 					}
 					if (world instanceof ServerLevel) {
 						((ServerLevel) world).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, EEBlocks.EETLE_EGG.get().defaultBlockState()), this.getX(), this.getY() + (double) this.getBbHeight() / 1.5D, this.getZ(), 15, this.getBbWidth() / 4.0F, this.getBbHeight() / 4.0F, this.getBbWidth() / 4.0F, 0.05D);

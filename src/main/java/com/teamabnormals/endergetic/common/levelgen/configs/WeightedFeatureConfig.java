@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 public final class WeightedFeatureConfig implements FeatureConfiguration {
 	private static final Codec<WeightedEntry.Wrapper<Holder<ConfiguredFeature<?, ?>>>> ENTRY_CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(
-				ConfiguredFeature.CODEC.fieldOf("feature").forGetter(WeightedEntry.Wrapper::getData),
-				Codec.intRange(0, Integer.MAX_VALUE).fieldOf("weight").forGetter(wrapper -> wrapper.getWeight().asInt())
+				ConfiguredFeature.CODEC.fieldOf("feature").forGetter(WeightedEntry.Wrapper::data),
+				Codec.intRange(0, Integer.MAX_VALUE).fieldOf("weight").forGetter(wrapper -> wrapper.weight().asInt())
 		).apply(instance, WeightedEntry::wrap);
 	});
 	public static final Codec<WeightedFeatureConfig> CODEC = RecordCodecBuilder.create(instance -> {
@@ -37,7 +37,7 @@ public final class WeightedFeatureConfig implements FeatureConfiguration {
 	}
 
 	public ConfiguredFeature<?, ?> getRandomFeature(RandomSource random) {
-		return this.weightedFeatures.getRandom(random).get().getData().value();
+		return this.weightedFeatures.getRandom(random).orElseThrow().data().value();
 	}
 
 	public WeightedRandomList<WeightedEntry.Wrapper<Holder<ConfiguredFeature<?, ?>>>> getWeightedFeatures() {

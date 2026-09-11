@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#endergetic:has_spawn/purpoid",
+  "spawners": {
+    "type": "endergetic:purpoid",
+    "maxCount": 6,
+    "minCount": 1,
+    "weight": 12
+  }
+}

@@ -1,11 +1,11 @@
 package com.teamabnormals.endergetic.common.item;
 
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
-
-import javax.annotation.Nullable;
 
 public final class EetleSpawnEggItem extends DeferredSpawnEggItem {
 
@@ -14,9 +14,9 @@ public final class EetleSpawnEggItem extends DeferredSpawnEggItem {
 	}
 
 	@Override
-	public EntityType<?> getType(@Nullable CompoundTag compound) {
-		if (compound != null && compound.contains("EntityTag", 10)) {
-			return super.getType(compound);
+	public EntityType<?> getType(ItemStack stack) {
+		if (!stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY).isEmpty()) {
+			return super.getType(stack);
 		}
 		return Math.random() < 0.6F ? EEEntityTypes.CHARGER_EETLE.get() : EEEntityTypes.GLIDER_EETLE.get();
 	}

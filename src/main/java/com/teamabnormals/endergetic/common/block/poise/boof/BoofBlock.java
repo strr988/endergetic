@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.block.poise.boof;
 
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.common.block.entity.boof.BoofBlockTileEntity;
 import com.teamabnormals.endergetic.common.entity.BoofBlockEntity;
 import com.teamabnormals.endergetic.core.registry.EEBlockEntityTypes;
@@ -33,6 +34,12 @@ import net.minecraft.world.level.pathfinder.PathType;
 import org.jetbrains.annotations.Nullable;
 
 public class BoofBlock extends BaseEntityBlock {
+	public static final MapCodec<BoofBlock> CODEC = simpleCodec(BoofBlock::new);
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return CODEC;
+	}
 	public static final BooleanProperty BOOFED = BooleanProperty.create("boofed");
 
 	public BoofBlock(Properties properties) {
@@ -48,11 +55,6 @@ public class BoofBlock extends BaseEntityBlock {
 
 	@Override
 	public boolean isPossibleToRespawnInThis(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, SpawnPlacementType type, EntityType<?> entityType) {
 		return false;
 	}
 
@@ -108,9 +110,9 @@ public class BoofBlock extends BaseEntityBlock {
 
 		@Override
 		protected ItemStack execute(BlockSource source, ItemStack stack) {
-			Level world = source.getLevel();
-			Direction facing = source.getBlockState().getValue(DispenserBlock.FACING);
-			BlockPos pos = source.getPos().relative(facing);
+			Level world = source.level();
+			Direction facing = source.state().getValue(DispenserBlock.FACING);
+			BlockPos pos = source.pos().relative(facing);
 			if (world.getBlockState(pos).canBeReplaced()) {
 				world.setBlockAndUpdate(pos, EEBlocks.DISPENSED_BOOF_BLOCK.get().defaultBlockState().setValue(DispensedBoofBlock.FACING, facing).setValue(DispensedBoofBlock.WATERLOGGED, world.getFluidState(pos).is(FluidTags.WATER)));
 				world.playSound(null, pos, EESoundEvents.BOOF_BLOCK_INFLATE.get(), SoundSource.NEUTRAL, 0.85F, 0.9F + world.random.nextFloat() * 0.15F);

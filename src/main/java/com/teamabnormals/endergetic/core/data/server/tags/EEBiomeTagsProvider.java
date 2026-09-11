@@ -23,8 +23,8 @@ public final class EEBiomeTagsProvider extends BiomeTagsProvider {
 		this.tag(BiomeTags.IS_END).add(EEBiomes.POISE_FOREST);
 		this.tag(Tags.Biomes.IS_COLD).add(EEBiomes.POISE_FOREST);
 		this.tag(Tags.Biomes.IS_COLD_END).add(EEBiomes.POISE_FOREST);
-		this.tag(Tags.Biomes.IS_SPARSE).add(EEBiomes.POISE_FOREST);
-		this.tag(Tags.Biomes.IS_SPARSE_END).add(EEBiomes.POISE_FOREST);
+		this.tag(Tags.Biomes.IS_SPARSE_VEGETATION).add(EEBiomes.POISE_FOREST);
+		this.tag(Tags.Biomes.IS_SPARSE_VEGETATION_END).add(EEBiomes.POISE_FOREST);
 		this.tag(Tags.Biomes.IS_MAGICAL).add(EEBiomes.POISE_FOREST);
 
 		this.tag(EEBiomeTags.HAS_EETLE_NEST);//.add(Biomes.END_HIGHLANDS);

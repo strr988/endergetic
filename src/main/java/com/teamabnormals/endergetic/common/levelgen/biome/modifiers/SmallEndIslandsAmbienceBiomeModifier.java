@@ -1,6 +1,6 @@
 package com.teamabnormals.endergetic.common.levelgen.biome.modifiers;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.AmbientAdditionsSettings;
@@ -12,7 +12,7 @@ import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
 public enum SmallEndIslandsAmbienceBiomeModifier implements BiomeModifier {
 	INSTANCE;
 
-	public static final Codec<SmallEndIslandsAmbienceBiomeModifier> CODEC = Codec.unit(INSTANCE);
+	public static final MapCodec<SmallEndIslandsAmbienceBiomeModifier> CODEC = MapCodec.unit(INSTANCE);
 
 	@Override
 	public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
@@ -24,7 +24,7 @@ public enum SmallEndIslandsAmbienceBiomeModifier implements BiomeModifier {
 	}
 
 	@Override
-	public Codec<? extends BiomeModifier> codec() {
+	public MapCodec<? extends BiomeModifier> codec() {
 		return CODEC;
 	}
 }

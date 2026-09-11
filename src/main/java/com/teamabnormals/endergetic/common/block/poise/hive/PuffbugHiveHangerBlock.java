@@ -4,6 +4,7 @@ import com.teamabnormals.endergetic.common.entity.puffbug.PuffBug;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +36,7 @@ public class PuffbugHiveHangerBlock extends Block {
 	}
 
 	@Override
-	public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+	public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 		if (!world.isClientSide) {
 			BlockPos down = pos.below();
 			BlockPos doubleDown = down.below();
@@ -43,15 +44,15 @@ public class PuffbugHiveHangerBlock extends Block {
 			Block block = downState.getBlock();
 			if (block == EEBlocks.PUFFBUG_HIVE.get() && !world.getBlockState(doubleDown).canOcclude() && world.getBlockState(doubleDown).getBlock() != EEBlocks.PUFFBUG_HIVE.get()) {
 				ItemStack stack = player.getMainHandItem();
-				PuffBugHiveBlock.alertPuffBugs(world, down, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0 ? player : null);
+				PuffBugHiveBlock.alertPuffBugs(world, down, EnchantmentHelper.getItemEnchantmentLevel(world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), stack) == 0 ? player : null);
 				block.playerDestroy(world, player, down, downState, world.getBlockEntity(down), stack);
 			}
 		}
-		super.playerWillDestroy(world, pos, state, player);
+		return super.playerWillDestroy(world, pos, state, player);
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(net.minecraft.world.level.LevelReader level, BlockPos pos, BlockState state) {
 		return new ItemStack(EEBlocks.PUFFBUG_HIVE.get());
 	}
 

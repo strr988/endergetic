@@ -13,6 +13,7 @@ import com.teamabnormals.endergetic.core.other.EEDataSerializers;
 import com.teamabnormals.endergetic.core.other.EEPlayableEndimations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -23,6 +24,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
@@ -47,6 +49,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -61,8 +64,8 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 	private static final EntityDataAccessor<Optional<BlockPos>> RESTING_POS = SynchedEntityData.defineId(Purpoid.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 	private static final EntityDataAccessor<Direction> RESTING_SIDE = SynchedEntityData.defineId(Purpoid.class, EntityDataSerializers.DIRECTION);
 	private static final EntityDataAccessor<Integer> SHIELDED_MOMMY_ID = SynchedEntityData.defineId(Purpoid.class, EntityDataSerializers.INT);
-	private static final ResourceLocation PURP_LOOT_TABLE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purp");
-	private static final ResourceLocation PURPAZOID_LOOT_TABLE = ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purpazoid");
+	private static final ResourceKey<LootTable> PURP_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purp"));
+	private static final ResourceKey<LootTable> PURPAZOID_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, "entities/purpazoid"));
 	private final TeleportController teleportController = new TeleportController();
 	private int growingAge;
 	private int teleportCooldown;
@@ -588,12 +591,9 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	public double getMyRidingOffset() {
-		Entity ridingEntity = this.getVehicle();
-		if (ridingEntity != null) {
-			return ridingEntity.getBoundingBox().maxY - (ridingEntity.getY() + ridingEntity.getPassengersRidingOffset());
-		}
-		return super.getMyRidingOffset();
+	public Vec3 getVehicleAttachmentPoint(Entity vehicle) {
+		Vec3 ridingPosition = vehicle.getPassengerRidingPosition(this);
+		return new Vec3(0.0D, ridingPosition.y() - vehicle.getBoundingBox().maxY, 0.0D);
 	}
 
 	@Override
@@ -635,7 +635,7 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 			if (this.getSize() == PurpoidSize.PURPAZOID) {
 				this.wantsToFlee = true;
 				this.setStunTimer(0);
-				if (source.isIndirect() && this.isNoEndimationPlaying() && !this.getTeleportController().isTeleporting() && this.tryToTeleportRandomly(2, 16, 12)) {
+				if (source.getDirectEntity() != source.getEntity() && this.isNoEndimationPlaying() && !this.getTeleportController().isTeleporting() && this.tryToTeleportRandomly(2, 16, 12)) {
 					this.wantsToFlee = false;
 					return true;
 				}
@@ -649,7 +649,7 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 				}
 				return super.hurt(source, amount);
 			} else if (this.isNoEndimationPlaying() && !this.getTeleportController().isTeleporting()) {
-				if (source.isIndirect()) {
+				if (source.getDirectEntity() != source.getEntity()) {
 					if (this.tryToTeleportRandomly(2, 16, 12)) return true;
 				} else if (!(source.getEntity() instanceof LivingEntity)) {
 					this.tryToTeleportRandomly(2, 16, 4);
@@ -728,7 +728,7 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 	}
 
 	@Override
-	protected ResourceLocation getDefaultLootTable() {
+	protected ResourceKey<LootTable> getDefaultLootTable() {
 		switch (this.getSize()) {
 			default -> {
 				return super.getDefaultLootTable();
@@ -868,7 +868,7 @@ public class Purpoid extends PathfinderMob implements Endimatable {
 			if (destination != null) {
 				Entity ridingEntity = purpoid.getVehicle();
 				if (ridingEntity != null) {
-					ridingEntity.teleportToWithTicket(destination.x, destination.y, destination.z);
+					ridingEntity.teleportTo(destination.x, destination.y, destination.z);
 				} else {
 					NetworkUtil.teleportEntity(purpoid, destination.x, destination.y, destination.z);
 				}

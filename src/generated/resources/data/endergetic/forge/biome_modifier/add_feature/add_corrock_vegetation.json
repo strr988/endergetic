@@ -1,9 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#endergetic:has_feature/corrock",
-  "features": [
-    "endergetic:corrock_patch",
-    "endergetic:eetle_egg_patch"
-  ],
-  "step": "vegetal_decoration"
-}

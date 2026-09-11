@@ -42,7 +42,8 @@
               "endergetic:puff_bug"
             ]
           }
-        ]
+        ],
+        "should_replace_requirements": false
       }
     }
   ],

@@ -1,5 +1,6 @@
 package com.teamabnormals.endergetic.common.block;
 
+import com.mojang.serialization.MapCodec;
 import com.teamabnormals.endergetic.common.block.entity.EetleEggTileEntity;
 import com.teamabnormals.endergetic.core.registry.EEBlockEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -29,6 +30,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 
 public class EetleEggBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+	public static final MapCodec<EetleEggBlock> CODEC = simpleCodec(EetleEggBlock::new);
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return CODEC;
+	}
 	public static final IntegerProperty SIZE = IntegerProperty.create("size", 0, 2);
 	public static final DirectionProperty FACING = DirectionalBlock.FACING;
 	private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

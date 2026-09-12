@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public final class EntityRenderDispatcherMixin {
 
 	@Inject(at = @At(value = "JUMP", shift = At.Shift.BEFORE, ordinal = 0), method = "renderHitbox")
-	private static void renderEggSackBoundingBox(PoseStack poseStack, VertexConsumer bufferIn, Entity entity, float partialTicks, CallbackInfo info) {
+	private static void renderEggSackBoundingBox(PoseStack poseStack, VertexConsumer bufferIn, Entity entity, float partialTicks, float green, float blue, float alpha, CallbackInfo info) {
 		if (entity instanceof BroodEetle broodEetle) {
 			BroodEggSack eggSackEntity = broodEetle.getEggSack(entity.level());
 			if (eggSackEntity != null) {
@@ -37,7 +37,7 @@ public final class EntityRenderDispatcherMixin {
 	}
 
 	@Inject(at = @At(value = "HEAD"), method = "renderHitbox", cancellable = true)
-	private static void cancelDefaultEggSackBoundingBox(PoseStack poseStack, VertexConsumer vertexConsumer, Entity entity, float partialTicks, CallbackInfo info) {
+	private static void cancelDefaultEggSackBoundingBox(PoseStack poseStack, VertexConsumer vertexConsumer, Entity entity, float partialTicks, float green, float blue, float alpha, CallbackInfo info) {
 		if (entity instanceof BroodEggSack) {
 			info.cancel();
 		}

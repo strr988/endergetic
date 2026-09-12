@@ -1,5 +1,4 @@
 {
-  "loader": "blueprint:fullbright",
   "texture_size": [64, 64],
   "parent": "block/block",
   "textures": {
@@ -23,7 +22,11 @@
     },
     {
       "name": "inner_emissive",
-      "fullbright": true,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15,
+        "ambient_occlusion": false
+      },
       "shade": false,
       "from": [1, 1, 1],
       "to": [15, 15, 15],

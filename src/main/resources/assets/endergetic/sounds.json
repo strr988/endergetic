@@ -223,9 +223,9 @@
   "entity.eetle.leetle_transform": {
     "subtitle": "subtitles.endergetic.eetle.leetle_transform",
     "sounds": [
-      {
-        "name": "endergetic:entity/eetle/leetle_transform"
-      }
+      "endergetic:entity/eetle/leetle_hurt_1",
+      "endergetic:entity/eetle/leetle_hurt_2",
+      "endergetic:entity/eetle/leetle_hurt_3"
     ]
   },
   "block.cluster.place": {
@@ -315,9 +315,9 @@
   "block.eetle_egg.step": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
-      {
-        "name": "endergetic:block/eetle_egg_step"
-      }
+      "endergetic:block/eetle_egg_place_1",
+      "endergetic:block/eetle_egg_place_2",
+      "endergetic:block/eetle_egg_place_3"
     ]
   },
   "block.eetle_egg.place": {
@@ -331,16 +331,16 @@
   "block.eetle_egg.hit": {
     "subtitle": "subtitles.block.generic.hit",
     "sounds": [
-      {
-        "name": "endergetic:block/eetle_egg_hit"
-      }
+      "endergetic:block/eetle_egg_break_1",
+      "endergetic:block/eetle_egg_break_2",
+      "endergetic:block/eetle_egg_break_3"
     ]
   },
   "block.eetle_egg.fall": {
     "sounds": [
-      {
-        "name": "endergetic:block/eetle_egg_fall"
-      }
+      "endergetic:block/eetle_egg_place_1",
+      "endergetic:block/eetle_egg_place_2",
+      "endergetic:block/eetle_egg_place_3"
     ]
   },
   "block.eetle_egg.ambient": {
@@ -462,7 +462,7 @@
         "weight": 7
       },
       {
-        "name": "music/game/end/end",
+        "name": "minecraft:music/game/end/end",
         "stream": true,
         "weight": 1
       }

@@ -1,5 +1,4 @@
 {
-  "loader": "blueprint:fullbright",
   "texture_size": [64, 64],
   "parent": "block/block",
   "textures": {

@@ -83,7 +83,6 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 	private final Set<ServerPlayer> trackedPlayers = new HashSet<>();
 	private final FlyingRotations flyingRotations = new FlyingRotations();
 	private final Set<LivingEntity> revengeTargets = new HashSet<>();
-	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	private Vec3[] dyingParticleDirectionals = null;
 	@Nullable

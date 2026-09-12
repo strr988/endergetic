@@ -1,7 +1,6 @@
 package com.teamabnormals.endergetic.core.registry;
 
 import com.mojang.datafixers.util.Pair;
-import com.teamabnormals.blueprint.client.renderer.block.TypedBlockEntityWithoutLevelRenderer;
 import com.teamabnormals.blueprint.common.block.BlueprintBeehiveBlock;
 import com.teamabnormals.blueprint.common.block.BlueprintDirectionalBlock;
 import com.teamabnormals.blueprint.common.block.LogBlock;
@@ -11,11 +10,9 @@ import com.teamabnormals.blueprint.common.block.sign.BlueprintCeilingHangingSign
 import com.teamabnormals.blueprint.common.block.sign.BlueprintStandingSignBlock;
 import com.teamabnormals.blueprint.common.block.sign.BlueprintWallHangingSignBlock;
 import com.teamabnormals.blueprint.common.block.sign.BlueprintWallSignBlock;
-import com.teamabnormals.blueprint.client.MemoizedBEWLR;
 import com.teamabnormals.blueprint.core.util.item.CreativeModeTabContentsPopulator;
 import com.teamabnormals.blueprint.core.util.registry.BlockSubRegistryHelper;
 import com.teamabnormals.endergetic.common.block.*;
-import com.teamabnormals.endergetic.common.block.entity.BolloomBudTileEntity;
 import com.teamabnormals.endergetic.common.block.poise.*;
 import com.teamabnormals.endergetic.common.block.poise.boof.BoofBlock;
 import com.teamabnormals.endergetic.common.block.poise.boof.DispensedBoofBlock;
@@ -25,10 +22,6 @@ import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.other.EEConstants;
 import com.teamabnormals.endergetic.core.other.EEProperties;
 import com.teamabnormals.endergetic.core.registry.util.EndergeticBlockSubRegistryHelper;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -38,9 +31,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.material.MapColor;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
@@ -52,6 +42,9 @@ import static net.minecraft.world.item.crafting.Ingredient.of;
 
 public final class EEBlocks {
 	private static final EndergeticBlockSubRegistryHelper HELPER = EndergeticExpansion.REGISTRY_HELPER.getBlockSubHelper();
+
+	public static void bootstrap() {
+	}
 
 	public static final DeferredBlock<Block> OVERWORLD_CORROCK = HELPER.createBlock("overworld_corrock", () -> new CorrockPlantBlock(EEProperties.corrockBase(MapColor.TERRACOTTA_BROWN, false), false));
 	public static final DeferredBlock<Block> NETHER_CORROCK = HELPER.createBlock("nether_corrock", () -> new CorrockPlantBlock(EEProperties.corrockBase(MapColor.TERRACOTTA_RED, false), false));
@@ -125,7 +118,7 @@ public final class EEBlocks {
 	public static final DeferredBlock<BlueprintChestBlock> POISE_CHEST = HELPER.createChestBlock("poise", EEProperties.POISE.chest());
 	public static final DeferredBlock<BlueprintTrappedChestBlock> TRAPPED_POISE_CHEST = HELPER.createTrappedChestBlock("poise", EEProperties.POISE.chest());
 
-	public static final DeferredBlock<Block> BOLLOOM_BUD = HELPER.createBlockWithBEWLR("bolloom_bud", () -> new BolloomBudBlock(EEProperties.bolloomBud().randomTicks()), EEBlocks::bolloomBudISTER);
+	public static final DeferredBlock<Block> BOLLOOM_BUD = HELPER.createBolloomBudBlock("bolloom_bud", () -> new BolloomBudBlock(EEProperties.bolloomBud().randomTicks()));
 	public static final DeferredBlock<Block> PUFFBUG_HIVE = HELPER.createBlock("puffbug_hive", () -> new PuffBugHiveBlock(EEProperties.getPuffBugHive(true)));
 	public static final DeferredBlock<Block> HIVE_HANGER = HELPER.createBlockNoItem("hive_hanger", () -> new PuffbugHiveHangerBlock(EEProperties.getPuffBugHive(false)));
 	public static final DeferredBlock<Block> BOOF_BLOCK = HELPER.createBlock("boof_block", () -> new BoofBlock(EEProperties.BOOF_BLOCK));
@@ -221,8 +214,4 @@ public final class EEBlocks {
 		return stack -> (BlockSubRegistryHelper.areModsLoaded(modids) && of(BuiltInRegistries.ITEM.get(location)).test(stack));
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	private static MemoizedBEWLR.Factory bolloomBudISTER() {
-		return (dispatcher, modelSet) -> new TypedBlockEntityWithoutLevelRenderer<>(dispatcher, modelSet, new BolloomBudTileEntity(BlockPos.ZERO, BOLLOOM_BUD.get().defaultBlockState()));
-	}
 }

@@ -35,6 +35,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public final class EEEntityTypes {
 	public static final EndergeticEntitySubRegistryHelper HELPER = EndergeticExpansion.REGISTRY_HELPER.getEntitySubHelper();
 
+	public static void bootstrap() {
+	}
+
 	public static final DeferredHolder<EntityType<?>, EntityType<PoiseClusterEntity>> POISE_CLUSTER = HELPER.createEntity("poise_cluster", PoiseClusterEntity::new, MobCategory.MISC, 1F, 1F);
 	public static final DeferredHolder<EntityType<?>, EntityType<BolloomFruit>> BOLLOOM_FRUIT = HELPER.createManuallyUpdatedEntity("bolloom_fruit", BolloomFruit::new, MobCategory.MISC, 0.5F, 0.5F);
 	public static final DeferredHolder<EntityType<?>, EntityType<BoofBlockEntity>> BOOF_BLOCK = HELPER.createEntity("boof_block", BoofBlockEntity::new, MobCategory.MISC, 1.75F, 1.75F);

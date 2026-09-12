@@ -70,6 +70,11 @@ public class EndergeticExpansion {
 		bus.addListener(this::registerPayloadHandlers);
 		EEDataProcessors.registerTrackedData();
 
+		EEBlocks.bootstrap();
+		EEEntityTypes.bootstrap();
+		EEItems.bootstrap();
+		EEBlockEntityTypes.bootstrap();
+		EESoundEvents.bootstrap();
 		REGISTRY_HELPER.register(bus);
 		EECriteriaTriggers.TRIGGERS.register(bus);
 		EEArmorMaterials.ARMOR_MATERIALS.register(bus);

@@ -9,6 +9,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public final class EESoundEvents {
+	public static void bootstrap() {
+	}
 	private static final SoundSubRegistryHelper HELPER = EndergeticExpansion.REGISTRY_HELPER.getSoundSubHelper();
 
 	public static final DeferredHolder<SoundEvent, SoundEvent> KILOBYTE = HELPER.createSoundEvent("music.record.kilobyte");

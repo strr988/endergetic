@@ -31,5 +31,6 @@ public final class EEBiomeTagsProvider extends BiomeTagsProvider {
 		this.tag(EEBiomeTags.HAS_EETLE);//.add(Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS);
 		this.tag(EEBiomeTags.HAS_CORROCK);//.add(Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS);
 		this.tag(EEBiomeTags.HAS_SPARSE_CORROCK);//.add(Biomes.END_MIDLANDS);
+		this.tag(EEBiomeTags.HAS_PURPOID);
 	}
 }

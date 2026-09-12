@@ -12,6 +12,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import java.util.Set;
 
 public final class EEBlockEntityTypes {
+	public static void bootstrap() {
+	}
 	private static final BlockEntitySubRegistryHelper HELPER = EndergeticExpansion.REGISTRY_HELPER.getBlockEntitySubHelper();
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CorrockCrownTileEntity>> CORROCK_CROWN = HELPER.createBlockEntity("corrock_crown", CorrockCrownTileEntity::new, () -> Set.of(

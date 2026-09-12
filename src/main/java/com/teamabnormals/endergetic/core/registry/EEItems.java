@@ -26,6 +26,9 @@ import static net.minecraft.world.item.crafting.Ingredient.of;
 public final class EEItems {
 	private static final EndergeticItemSubRegistryHelper HELPER = EndergeticExpansion.REGISTRY_HELPER.getItemSubHelper();
 
+	public static void bootstrap() {
+	}
+
 	public static final DeferredItem<Item> EUMUS_BRICK = HELPER.createItem("eumus_brick", () -> new Item(new Item.Properties()));
 
 	public static final Pair<DeferredItem<com.teamabnormals.blueprint.common.item.BlueprintBoatItem>, DeferredItem<com.teamabnormals.blueprint.common.item.BlueprintBoatItem>> POISE_BOAT = HELPER.createBoatAndChestBoatItem("poise", EEBlocks.POISE_PLANKS);

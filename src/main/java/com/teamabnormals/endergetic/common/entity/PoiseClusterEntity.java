@@ -2,14 +2,11 @@ package com.teamabnormals.endergetic.common.entity;
 
 import com.teamabnormals.blueprint.core.util.MathUtil;
 import com.teamabnormals.blueprint.core.util.NetworkUtil;
+import com.teamabnormals.endergetic.client.EEClientEntityEffects;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import com.teamabnormals.endergetic.core.registry.EEParticleTypes;
 import com.teamabnormals.endergetic.core.registry.EESoundEvents;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.TerrainParticle;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -18,7 +15,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -209,31 +205,10 @@ public class PoiseClusterEntity extends LivingEntity {
 			if (!this.level().isClientSide) {
 				Block.popResource(this.level(), this.blockPosition(), new ItemStack(EEBlocks.POISE_CLUSTER.get()));
 				this.playSound(EESoundEvents.CLUSTER_BREAK.get());
-			} else if (this.level() instanceof ClientLevel clientLevel) {
+			} else {
 				BlockState state = EEBlocks.POISE_CLUSTER.get().defaultBlockState();
 				VoxelShape voxelshape = state.getShape(this.level(), this.blockPosition());
-				voxelshape.forAllBoxes((x1, y1, z1, x2, y2, z2) -> {
-					double d1 = Math.min(1.0D, x2 - x1);
-					double d2 = Math.min(1.0D, y2 - y1);
-					double d3 = Math.min(1.0D, z2 - z1);
-					int i = Math.max(2, Mth.ceil(d1 / 0.25D));
-					int j = Math.max(2, Mth.ceil(d2 / 0.25D));
-					int k = Math.max(2, Mth.ceil(d3 / 0.25D));
-
-					for (int l = 0; l < i; ++l) {
-						for (int i1 = 0; i1 < j; ++i1) {
-							for (int j1 = 0; j1 < k; ++j1) {
-								double d4 = ((double) l + 0.5D) / (double) i;
-								double d5 = ((double) i1 + 0.5D) / (double) j;
-								double d6 = ((double) j1 + 0.5D) / (double) k;
-								double d7 = d4 * d1 + x1;
-								double d8 = d5 * d2 + y1;
-								double d9 = d6 * d3 + z1;
-								Minecraft.getInstance().particleEngine.add(new TerrainParticle(clientLevel, this.getX() + d7 - 0.5F, this.getY() + d8, this.getZ() + d9 - 0.5F, d4 - 0.5D, d5 - 0.5D, d6 - 0.5D, state, this.blockPosition()).updateSprite(state, this.blockPosition()));
-							}
-						}
-					}
-				});
+				EEClientEntityEffects.breakPoiseCluster(this, state, voxelshape);
 			}
 
 			this.discard();
@@ -271,7 +246,7 @@ public class PoiseClusterEntity extends LivingEntity {
 	@Override
 	public void handleEntityEvent(byte id) {
 		if (id == 1) {
-			Minecraft.getInstance().getSoundManager().play(new PoiseClusterSound(this));
+			EEClientEntityEffects.playPoiseClusterSound(this);
 		} else {
 			super.handleEntityEvent(id);
 		}
@@ -448,42 +423,4 @@ public class PoiseClusterEntity extends LivingEntity {
 		return HumanoidArm.RIGHT;
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	private static class PoiseClusterSound extends AbstractTickableSoundInstance {
-		private final PoiseClusterEntity cluster;
-		private int ticksRemoved;
-
-		private PoiseClusterSound(PoiseClusterEntity cluster) {
-			super(EESoundEvents.POISE_CLUSTER_AMBIENT.get(), SoundSource.NEUTRAL, cluster.random);
-			this.cluster = cluster;
-			this.looping = true;
-			this.delay = 0;
-			this.volume = 1.0F;
-			this.x = (float) cluster.getX();
-			this.y = (float) cluster.getY();
-			this.z = (float) cluster.getZ();
-
-			this.pitch = cluster.getRandom().nextFloat() * 0.3F + 0.8F;
-		}
-
-		@Override
-		public boolean canStartSilent() {
-			return true;
-		}
-
-		public void tick() {
-			if (this.cluster.isAlive()) {
-				this.x = (float) this.cluster.getX();
-				this.y = (float) this.cluster.getY();
-				this.z = (float) this.cluster.getZ();
-			} else {
-				this.ticksRemoved++;
-				if (this.ticksRemoved > 10) {
-					this.stop();
-				}
-			}
-
-			this.volume = Math.max(0.0F, this.volume - ((float) this.ticksRemoved / 10.0F));
-		}
-	}
 }

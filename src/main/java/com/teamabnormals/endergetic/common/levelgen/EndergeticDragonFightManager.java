@@ -3,6 +3,7 @@ package com.teamabnormals.endergetic.common.levelgen;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.teamabnormals.endergetic.common.levelgen.feature.EndergeticEndPodiumFeature;
+import com.teamabnormals.endergetic.core.mixin.EndDragonFightAccessor;
 import com.teamabnormals.endergetic.core.EEConfig;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import net.minecraft.core.BlockPos;
@@ -29,7 +30,6 @@ import net.minecraft.world.level.dimension.end.EndDragonFight;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -286,7 +286,7 @@ public final class EndergeticDragonFightManager extends EndDragonFight {
 
 	@Override
 	protected void spawnNewGateway() {
-		List<Integer> gateways = ObfuscationReflectionHelper.getPrivateValue(EndDragonFight.class, this, "f_64062_");
+		List<Integer> gateways = ((EndDragonFightAccessor) (Object) this).endergetic$getGateways();
 		if (!gateways.isEmpty()) {
 			int removed = gateways.remove(gateways.size() - 1);
 			BlockPos pos = new BlockPos(Mth.floor(96.0D * Math.cos(2.0D * (-Math.PI + 0.15707963267948966D * (double) removed))), 75, Mth.floor(96.0D * Math.sin(2.0D * (-Math.PI + 0.15707963267948966D * (double) removed))));

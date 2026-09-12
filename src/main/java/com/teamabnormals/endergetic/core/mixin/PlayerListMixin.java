@@ -12,6 +12,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -45,7 +46,7 @@ public final class PlayerListMixin {
 	}
 
 	@Inject(at = @At("RETURN"), method = "placeNewPlayer")
-	private void spawnBalloons(Connection connection, ServerPlayer player, CallbackInfo info) {
+	private void spawnBalloons(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo info) {
 		ServerLevel serverWorld = (ServerLevel) player.level();
 
 		CompoundTag compound = this.server.getWorldData().getLoadedPlayerTag();

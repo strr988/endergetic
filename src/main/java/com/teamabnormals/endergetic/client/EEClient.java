@@ -47,6 +47,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 import static com.teamabnormals.endergetic.core.EndergeticExpansion.MOD_ID;
 
@@ -58,6 +59,11 @@ public final class EEClient {
 		bus.addListener(KeybindHandler::registerKeys);
 		bus.addListener(EEClient::registerLayerDefinitions);
 		bus.addListener(EEClient::registerRenderers);
+		bus.addListener(EEClient::registerClientExtensions);
+	}
+
+	private static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+		event.registerItem(EEClientItemExtensions.boofloVest(), EEItems.BOOFLO_VEST);
 	}
 
 	private static void clientSetup(FMLClientSetupEvent event) {

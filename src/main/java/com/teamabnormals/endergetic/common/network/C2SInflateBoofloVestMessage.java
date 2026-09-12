@@ -23,7 +23,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public final class C2SInflateBoofloVestMessage implements CustomPacketPayload {
 	public static final Type<C2SInflateBoofloVestMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "inflate_booflo_vest"));
-	public static final StreamCodec<FriendlyByteBuf, C2SInflateBoofloVestMessage> STREAM_CODEC = StreamCodec.unit(new C2SInflateBoofloVestMessage());
+	public static final C2SInflateBoofloVestMessage INSTANCE = new C2SInflateBoofloVestMessage();
+	public static final StreamCodec<FriendlyByteBuf, C2SInflateBoofloVestMessage> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
 	@Override
 	public Type<C2SInflateBoofloVestMessage> type() {

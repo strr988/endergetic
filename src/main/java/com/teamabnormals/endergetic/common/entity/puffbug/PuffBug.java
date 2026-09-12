@@ -814,7 +814,7 @@ public class PuffBug extends Animal implements Endimatable {
 		Iterator<Holder<MobEffect>> iterator = activePotionMap.keySet().iterator();
 		while (iterator.hasNext()) {
 			Holder<MobEffect> effect = iterator.next();
-			if (!effect.is(MobEffects.LEVITATION)) {
+			if (!effect.equals(MobEffects.LEVITATION)) {
 				MobEffectInstance effectInstance = activePotionMap.get(effect);
 				activePotionMap.put(effect, new MobEffectInstance(effect, effectInstance.getDuration() + 1, effectInstance.getAmplifier(), effectInstance.isAmbient(), effectInstance.isVisible()));
 			}

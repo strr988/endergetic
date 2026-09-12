@@ -106,7 +106,7 @@ public class PurpoidTelefragGoal extends Goal {
 					teleportController.beginTeleportation(purpoid, teleportPos, true);
 					ridingEntity.hurt(purpoid.level().damageSources().mobAttack(purpoid), (float) purpoid.getAttributeValue(Attributes.ATTACK_DAMAGE));
 					if (ridingEntity instanceof ServerPlayer) {
-						PacketDistributor.sendToPlayer((ServerPlayer) ridingEntity, new S2CEnablePurpoidFlash());
+						PacketDistributor.sendToPlayer((ServerPlayer) ridingEntity, S2CEnablePurpoidFlash.INSTANCE);
 					}
 				}
 			}

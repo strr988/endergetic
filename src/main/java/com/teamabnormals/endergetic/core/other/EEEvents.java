@@ -1,21 +1,16 @@
 package com.teamabnormals.endergetic.core.other;
 
 import com.google.common.collect.Maps;
-import com.teamabnormals.blueprint.client.ClientInfo;
 import com.teamabnormals.blueprint.common.world.storage.tracking.IDataManager;
-import com.teamabnormals.blueprint.core.util.EntityUtil;
 import com.teamabnormals.endergetic.common.advancement.EECriteriaTriggers;
 import com.teamabnormals.endergetic.common.block.*;
 import com.teamabnormals.endergetic.common.entity.bolloom.BolloomBalloon;
 import com.teamabnormals.endergetic.common.entity.purpoid.Purpoid;
-import com.teamabnormals.endergetic.common.item.BolloomBalloonItem;
 import com.teamabnormals.endergetic.common.network.entity.S2CUpdateBalloonsMessage;
 import com.teamabnormals.endergetic.core.EndergeticExpansion;
 import com.teamabnormals.endergetic.core.interfaces.BalloonHolder;
 import com.teamabnormals.endergetic.core.registry.EEBlocks;
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +29,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
@@ -45,10 +39,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult.Type;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
@@ -59,7 +49,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -197,23 +186,6 @@ public final class EEEvents {
 				event.getItemStack().hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
 				event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
 				event.setCanceled(true);
-			}
-		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@SubscribeEvent
-	public static void onPlayerSwing(InputEvent.InteractionKeyMappingTriggered event) {
-		if (event.isAttack()) {
-			LocalPlayer player = ClientInfo.getClientPlayer();
-			if (player.getXRot() > -25.0F) return;
-			Entity ridingEntity = player.getVehicle();
-			if (ridingEntity instanceof Boat && BolloomBalloonItem.hasNoEntityTarget(player) && EntityUtil.rayTrace(player, BolloomBalloonItem.getPlayerReach(player), 1.0F).getType() == Type.MISS) {
-				List<BolloomBalloon> balloons = ((BalloonHolder) ridingEntity).getBalloons();
-				if (!balloons.isEmpty()) {
-					Minecraft.getInstance().gameMode.attack(player, balloons.get(player.getRandom().nextInt(balloons.size())));
-					event.setSwingHand(true);
-				}
 			}
 		}
 	}

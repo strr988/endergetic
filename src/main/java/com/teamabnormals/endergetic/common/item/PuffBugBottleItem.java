@@ -5,7 +5,6 @@ import com.teamabnormals.endergetic.common.entity.booflo.Booflo;
 import com.teamabnormals.endergetic.common.entity.puffbug.PuffBug;
 import com.teamabnormals.endergetic.core.registry.EEEntityTypes;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.Direction;
@@ -140,7 +139,7 @@ public class PuffBugBottleItem extends Item {
 			tooltip.add(Component.translatable("tooltip.endergetic.activePotions").withStyle(ChatFormatting.DARK_PURPLE));
 			for (MobEffectInstance effects : potionContents.customEffects()) {
 				ChatFormatting[] potionTextFormat = new ChatFormatting[]{ChatFormatting.ITALIC, this.getEffectTextColor(effects)};
-				tooltip.add(Component.literal(" " + I18n.get(effects.getDescriptionId()) + " " + ItemStackUtil.intToRomanNumerals(effects.getAmplifier() + 1)).withStyle(potionTextFormat));
+				tooltip.add(Component.literal(" ").append(Component.translatable(effects.getDescriptionId())).append(" " + ItemStackUtil.intToRomanNumerals(effects.getAmplifier() + 1)).withStyle(potionTextFormat));
 			}
 		}
 	}

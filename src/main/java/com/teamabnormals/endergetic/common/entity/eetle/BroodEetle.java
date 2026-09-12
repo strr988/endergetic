@@ -1,6 +1,5 @@
 package com.teamabnormals.endergetic.common.entity.eetle;
 
-import com.teamabnormals.blueprint.client.ClientInfo;
 import com.teamabnormals.blueprint.core.endimator.Endimatable;
 import com.teamabnormals.blueprint.core.endimator.PlayableEndimation;
 import com.teamabnormals.blueprint.core.endimator.TimedEndimation;
@@ -228,7 +227,7 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 					Vec3[] dyingParticleDirectionals = this.dyingParticleDirectionals;
 					if (dyingParticleDirectionals != null) {
 						CorrockCrownParticleData dyingParticle = new CorrockCrownParticleData(EEParticleTypes.END_CROWN, 30, 10, 1.0F, 0.05F, Optional.of(0.2F));
-						Vec3 eggSackPos = BroodEggSack.getEggPos(this.position(), this.yBodyRot, this.getEggCannonProgress(), this.getEggCannonFlyingProgress(), this.getFlyingRotations().getFlyPitch(), this.isOnLastHealthStage());
+						Vec3 eggSackPos = BroodEggSack.getEggPos(this.position(), this.yBodyRot, this.getEggCannonProgress(0.0F), this.getEggCannonFlyingProgress(0.0F), this.getFlyingRotations().getFlyPitch(), this.isOnLastHealthStage());
 						double minY = eggSackPos.y() - 0.4D;
 						for (int i = 0; i < 8; i++) {
 							Vec3 directional = dyingParticleDirectionals[i];
@@ -558,32 +557,32 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 		return this.entityData.get(FIRING_CANNON);
 	}
 
-	public float getEggCannonProgress() {
-		return this.eggCannonEndimation.getProgress(ClientInfo.getPartialTicks());
+	public float getEggCannonProgress(float partialTicks) {
+		return this.eggCannonEndimation.getProgress(partialTicks);
 	}
 
 	public float getEggCannonProgressServer() {
 		return this.eggCannonEndimation.getServerProgress();
 	}
 
-	public float getEggMouthProgress() {
-		return this.eggMouthEndimation.getProgress(ClientInfo.getPartialTicks());
+	public float getEggMouthProgress(float partialTicks) {
+		return this.eggMouthEndimation.getProgress(partialTicks);
 	}
 
 	public boolean isEggMouthOpen() {
 		return this.eggMouthEndimation.isMaxed();
 	}
 
-	public float getTakeoffProgress() {
-		return this.takeoffEndimation.getProgress(ClientInfo.getPartialTicks());
+	public float getTakeoffProgress(float partialTicks) {
+		return this.takeoffEndimation.getProgress(partialTicks);
 	}
 
 	public boolean isEggCannonFlyingAtMax() {
 		return this.eggCannonFlyingEndimation.isMaxed();
 	}
 
-	public float getEggCannonFlyingProgress() {
-		return this.eggCannonFlyingEndimation.getProgress(ClientInfo.getPartialTicks());
+	public float getEggCannonFlyingProgress(float partialTicks) {
+		return this.eggCannonFlyingEndimation.getProgress(partialTicks);
 	}
 
 	public float getEggCannonFlyingProgressServer() {
@@ -598,16 +597,16 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 		return this.sleepingEndimation.getTick() == 2 && this.wokenUpAggressively;
 	}
 
-	public float getSleepingProgress() {
-		return Mth.sin(1.5708F * this.sleepingEndimation.getProgress(ClientInfo.getPartialTicks()));
+	public float getSleepingProgress(float partialTicks) {
+		return Mth.sin(1.5708F * this.sleepingEndimation.getProgress(partialTicks));
 	}
 
-	public float getFlyingProgress() {
-		return this.flyingEndimation.getProgress(ClientInfo.getPartialTicks());
+	public float getFlyingProgress(float partialTicks) {
+		return this.flyingEndimation.getProgress(partialTicks);
 	}
 
-	public float getHealPulseProgress() {
-		return this.healPulseEndimation.getProgress(ClientInfo.getPartialTicks());
+	public float getHealPulseProgress(float partialTicks) {
+		return this.healPulseEndimation.getProgress(partialTicks);
 	}
 
 	public void resetIdleFlapDelay() {
@@ -744,8 +743,8 @@ public class BroodEetle extends Monster implements Endimatable, IFlyingEetle {
 		return this.revengeTargets.contains(entity);
 	}
 
-	public float getWingFlap() {
-		return Mth.lerp(ClientInfo.getPartialTicks(), this.prevWingFlap, this.wingFlap);
+	public float getWingFlap(float partialTicks) {
+		return Mth.lerp(partialTicks, this.prevWingFlap, this.wingFlap);
 	}
 
 	@Override

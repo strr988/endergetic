@@ -38,10 +38,10 @@ public final class LocalPlayerMixin extends AbstractClientPlayer {
 		if (ridingEntity instanceof Booflo booflo) {
 			if (!booflo.onGround()) {
 				if (!flag && this.input.jumping) {
-					PacketDistributor.sendToServer(new C2SInflateMessage());
+					PacketDistributor.sendToServer(C2SInflateMessage.INSTANCE);
 				} else if (!this.input.jumping) {
 					if (booflo.isBoostExpanding() && booflo.isBoofed() && !booflo.isBoostLocked() && booflo.getBoostPower() > 0) {
-						PacketDistributor.sendToServer(new C2SBoostMessage());
+						PacketDistributor.sendToServer(C2SBoostMessage.INSTANCE);
 					}
 				}
 			}

@@ -12,6 +12,7 @@ import com.teamabnormals.endergetic.common.network.entity.puffbug.RotateMessage;
 import com.teamabnormals.endergetic.core.data.client.EEBlockStateProvider;
 import com.teamabnormals.endergetic.core.data.client.EEEndimationProvider;
 import com.teamabnormals.endergetic.core.data.server.EEAdvancementProvider;
+import com.teamabnormals.endergetic.core.data.server.EEDataMapProvider;
 import com.teamabnormals.endergetic.core.data.server.EEDatapackBuiltinEntriesProvider;
 import com.teamabnormals.endergetic.core.data.server.EELootTableProvider;
 import com.teamabnormals.endergetic.core.data.server.EERecipeProvider;
@@ -69,6 +70,7 @@ public class EndergeticExpansion {
 
 		bus.addListener(this::registerPayloadHandlers);
 		EEDataProcessors.registerTrackedData();
+		EEPlayableEndimations.bootstrap();
 
 		EEBlocks.bootstrap();
 		EEEntityTypes.bootstrap();
@@ -120,6 +122,7 @@ public class EndergeticExpansion {
 		generator.addProvider(server, new EELootTableProvider(output, provider));
 		generator.addProvider(server, new EEAdvancementModifierProvider(output, provider));
 		generator.addProvider(server, new EELootModifierProvider(output, provider));
+		generator.addProvider(server, new EEDataMapProvider(output, provider));
 		EEBlockTagsProvider blockTags = new EEBlockTagsProvider(output, provider, helper);
 		generator.addProvider(server, blockTags);
 		generator.addProvider(server, new EEItemTagsProvider(output, provider, blockTags.contentsGetter(), helper));

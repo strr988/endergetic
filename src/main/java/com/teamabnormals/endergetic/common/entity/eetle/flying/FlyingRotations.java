@@ -1,6 +1,5 @@
 package com.teamabnormals.endergetic.common.entity.eetle.flying;
 
-import com.teamabnormals.blueprint.client.ClientInfo;
 import net.minecraft.util.Mth;
 
 public final class FlyingRotations {
@@ -50,12 +49,12 @@ public final class FlyingRotations {
 		return this.flyRoll;
 	}
 
-	public float getRenderFlyPitch() {
-		return Mth.lerp(ClientInfo.getPartialTicks(), this.prevFlyPitch, this.flyPitch);
+	public float getRenderFlyPitch(float partialTicks) {
+		return Mth.lerp(partialTicks, this.prevFlyPitch, this.flyPitch);
 	}
 
-	public float getRenderFlyRoll() {
-		return Mth.lerp(ClientInfo.getPartialTicks(), this.prevFlyRoll, this.flyRoll);
+	public float getRenderFlyRoll(float partialTicks) {
+		return Mth.lerp(partialTicks, this.prevFlyRoll, this.flyRoll);
 	}
 
 	public static float clampedRotate(float from, float to, float delta) {

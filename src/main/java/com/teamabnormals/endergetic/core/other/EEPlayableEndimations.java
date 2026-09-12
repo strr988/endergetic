@@ -60,6 +60,9 @@ public final class EEPlayableEndimations {
 	public static final PlayableEndimation PURPOID_DEATH = register("purpoid/death", 20, LoopType.NONE);
 	public static final PlayableEndimation PURPOID_SQUIRT_ATTACK = register("purpoid/squirt_attack", 65, LoopType.NONE);
 
+	public static void bootstrap() {
+	}
+
 	private static PlayableEndimation register(String name, int duration, PlayableEndimation.LoopType loopType) {
 		return PlayableEndimationManager.INSTANCE.registerPlayableEndimation(new PlayableEndimation(ResourceLocation.fromNamespaceAndPath(EndergeticExpansion.MOD_ID, name), duration, loopType));
 	}

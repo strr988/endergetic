@@ -49,6 +49,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForgeMod;
 
 import javax.annotation.Nullable;
 
@@ -202,7 +203,7 @@ public class BoofloAdolescent extends PathfinderMob implements Endimatable {
 			this.growUp();
 		}
 
-		if (!this.level().isClientSide && ((!this.isDescenting() && !this.isEating()) && this.getBoofBoostCooldown() <= 0 && (this.onGround() || this.isEyeInFluid(FluidTags.WATER)))) {
+		if (!this.level().isClientSide && ((!this.isDescenting() && !this.isEating()) && this.getBoofBoostCooldown() <= 0 && (this.onGround() || this.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value())))) {
 			this.push(-Mth.sin((float) (this.getYRot() * Math.PI / 180.0F)) * (5 * (random.nextFloat() + 0.1F)) * 0.1F, (random.nextFloat() * 0.45F) + 0.65F, Mth.cos((float) (this.getYRot() * Math.PI / 180.0F)) * (5 * (random.nextFloat() + 0.1F)) * 0.1F);
 			NetworkUtil.setPlayingAnimation(this, EEPlayableEndimations.ADOLESCENT_BOOFLO_BOOF);
 			this.setFallSpeed(0.0F);

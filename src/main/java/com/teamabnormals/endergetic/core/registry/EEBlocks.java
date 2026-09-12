@@ -102,18 +102,18 @@ public final class EEBlocks {
 	public static final DeferredBlock<Block> POISE_DOOR = HELPER.createBlock("poise_door", () -> new DoorBlock(EEProperties.POISE_BLOCK_SET, EEProperties.POISE.door()));
 	public static final DeferredBlock<Block> POISE_SLAB = HELPER.createBlock("poise_slab", () -> new SlabBlock(EEProperties.POISE.planks()));
 	public static final DeferredBlock<Block> POISE_STAIRS = HELPER.createBlock("poise_stairs", () -> new StairBlock(POISE_PLANKS.get().defaultBlockState(), EEProperties.POISE.planks()));
-	public static final DeferredBlock<Block> POISE_FENCE = HELPER.createFuelBlock("poise_fence", () -> new FenceBlock(EEProperties.POISE.planks()), 300);
-	public static final DeferredBlock<Block> POISE_FENCE_GATE = HELPER.createFuelBlock("poise_fence_gate", () -> new FenceGateBlock(EEProperties.POISE_WOOD_TYPE, EEProperties.POISE.planks()), 300);
+	public static final DeferredBlock<Block> POISE_FENCE = HELPER.createBlock("poise_fence", () -> new FenceBlock(EEProperties.POISE.planks()));
+	public static final DeferredBlock<Block> POISE_FENCE_GATE = HELPER.createBlock("poise_fence_gate", () -> new FenceGateBlock(EEProperties.POISE_WOOD_TYPE, EEProperties.POISE.planks()));
 	public static final DeferredBlock<Block> POISE_PRESSURE_PLATE = HELPER.createBlock("poise_pressure_plate", () -> new PressurePlateBlock(EEProperties.POISE_BLOCK_SET, EEProperties.POISE.pressurePlate()));
 	public static final DeferredBlock<Block> POISE_BUTTON = HELPER.createBlock("poise_button", () -> new ButtonBlock(EEProperties.POISE_BLOCK_SET, 30, EEProperties.POISE.button()));
 	public static final DeferredBlock<Block> POISE_TRAPDOOR = HELPER.createBlock("poise_trapdoor", () -> new TrapDoorBlock(EEProperties.POISE_BLOCK_SET, EEProperties.POISE.trapdoor()));
 	public static final Pair<DeferredBlock<BlueprintStandingSignBlock>, DeferredBlock<BlueprintWallSignBlock>> POISE_SIGNS = HELPER.createSignBlock("poise", EEProperties.POISE_WOOD_TYPE, EEProperties.POISE.sign());
 	public static final Pair<DeferredBlock<BlueprintCeilingHangingSignBlock>, DeferredBlock<BlueprintWallHangingSignBlock>> POISE_HANGING_SIGNS = HELPER.createHangingSignBlock("poise", EEProperties.POISE_WOOD_TYPE, EEProperties.POISE.hangingSign());
 
-	public static final DeferredBlock<Block> POISE_BOARDS = HELPER.createFuelBlock("poise_boards", () -> new RotatedPillarBlock(EEProperties.POISE.planks()), 300);
-	public static final DeferredBlock<Block> POISE_BOOKSHELF = HELPER.createFuelBlock("poise_bookshelf", () -> new Block(EEProperties.POISE.chiseledBookshelf()), 300);
-	public static final DeferredBlock<Block> CHISELED_POISE_BOOKSHELF = HELPER.createFuelBlock("chiseled_poise_bookshelf", () -> new ChiseledPoiseBookShelfBlock(EEProperties.POISE.chiseledBookshelf()), 300);
-	public static final DeferredBlock<Block> POISE_LADDER = HELPER.createFuelBlock("poise_ladder", () -> new LadderBlock(EEProperties.POISE.ladder()), 300);
+	public static final DeferredBlock<Block> POISE_BOARDS = HELPER.createBlock("poise_boards", () -> new RotatedPillarBlock(EEProperties.POISE.planks()));
+	public static final DeferredBlock<Block> POISE_BOOKSHELF = HELPER.createBlock("poise_bookshelf", () -> new Block(EEProperties.POISE.chiseledBookshelf()));
+	public static final DeferredBlock<Block> CHISELED_POISE_BOOKSHELF = HELPER.createBlock("chiseled_poise_bookshelf", () -> new ChiseledPoiseBookShelfBlock(EEProperties.POISE.chiseledBookshelf()));
+	public static final DeferredBlock<Block> POISE_LADDER = HELPER.createBlock("poise_ladder", () -> new LadderBlock(EEProperties.POISE.ladder()));
 	public static final DeferredBlock<Block> POISE_BEEHIVE = HELPER.createBlock("poise_beehive", () -> new BlueprintBeehiveBlock(EEProperties.POISE.beehive()));
 	public static final DeferredBlock<BlueprintChestBlock> POISE_CHEST = HELPER.createChestBlock("poise", EEProperties.POISE.chest());
 	public static final DeferredBlock<BlueprintTrappedChestBlock> TRAPPED_POISE_CHEST = HELPER.createTrappedChestBlock("poise", EEProperties.POISE.chest());
@@ -123,7 +123,7 @@ public final class EEBlocks {
 	public static final DeferredBlock<Block> HIVE_HANGER = HELPER.createBlockNoItem("hive_hanger", () -> new PuffbugHiveHangerBlock(EEProperties.getPuffBugHive(false)));
 	public static final DeferredBlock<Block> BOOF_BLOCK = HELPER.createBlock("boof_block", () -> new BoofBlock(EEProperties.BOOF_BLOCK));
 	public static final DeferredBlock<Block> DISPENSED_BOOF_BLOCK = HELPER.createBlockNoItem("dispensed_boof_block", () -> new DispensedBoofBlock(EEProperties.BOOF_BLOCK.noCollission().noOcclusion().noLootTable().strength(-1, 3600000.0F)));
-	public static final DeferredBlock<Block> BOLLOOM_CRATE = HELPER.createFuelBlock("bolloom_crate", () -> new BlueprintDirectionalBlock(EEProperties.BOLLOOM_CRATE), 300);
+	public static final DeferredBlock<Block> BOLLOOM_CRATE = HELPER.createBlock("bolloom_crate", () -> new BlueprintDirectionalBlock(EEProperties.BOLLOOM_CRATE));
 
 	/*
 	 * Misc

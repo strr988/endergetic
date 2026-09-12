@@ -52,7 +52,7 @@ public final class KeybindHandler {
 			if (stack.getItem() == EEItems.BOOFLO_VEST.get() && !player.onGround() && !player.isSpectator()) {
 				if (BoofloVestItem.canBoof(stack, player)) {
 					EntityMotionHelper.knockbackEntity(player, C2SInflateBoofloVestMessage.HORIZONTAL_BOOST_FORCE, C2SInflateBoofloVestMessage.VERTICAL_BOOST_FORCE, true, true);
-					PacketDistributor.sendToServer(new C2SInflateBoofloVestMessage());
+					PacketDistributor.sendToServer(C2SInflateBoofloVestMessage.INSTANCE);
 				}
 			}
 		}
@@ -60,7 +60,7 @@ public final class KeybindHandler {
 			if (!booflo.onGround()) {
 				if (BOOFLO_SLAM.isDown()) {
 					if (booflo.isBoofed() && booflo.getBoostPower() <= 0 && booflo.isNoEndimationPlaying()) {
-						PacketDistributor.sendToServer(new C2SSlamMessage());
+						PacketDistributor.sendToServer(C2SSlamMessage.INSTANCE);
 					}
 				}
 			}

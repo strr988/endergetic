@@ -1,13 +1,16 @@
 package com.teamabnormals.endergetic.common.levelgen.placement;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamabnormals.endergetic.core.registry.EEPlacementModifierTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
@@ -17,6 +20,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class NoiseHeightmap32Placement extends PlacementModifier {
+	private static final PerlinSimplexNoise BIOME_INFO_NOISE = new PerlinSimplexNoise(new WorldgenRandom(new LegacyRandomSource(2345L)), ImmutableList.of(0));
 	public static final MapCodec<NoiseHeightmap32Placement> CODEC = RecordCodecBuilder.mapCodec((p_191761_) -> {
 		return p_191761_.group(Codec.DOUBLE.fieldOf("noise_level").forGetter((p_191771_) -> {
 			return p_191771_.noiseLevel;
@@ -38,7 +42,7 @@ public class NoiseHeightmap32Placement extends PlacementModifier {
 
 	@Override
 	public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
-		double d0 = Biome.BIOME_INFO_NOISE.getValue((double) pos.getX() / 200.0D, (double) pos.getZ() / 200.0D, false);
+		double d0 = BIOME_INFO_NOISE.getValue((double) pos.getX() / 200.0D, (double) pos.getZ() / 200.0D, false);
 		int i = d0 < this.noiseLevel ? this.belowNoise : this.aboveNoise;
 		return IntStream.range(0, i).mapToObj((p_227449_3_) -> {
 			int x = random.nextInt(16) + pos.getX();

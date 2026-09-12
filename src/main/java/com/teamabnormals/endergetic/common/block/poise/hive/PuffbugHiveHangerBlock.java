@@ -8,7 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -44,7 +43,7 @@ public class PuffbugHiveHangerBlock extends Block {
 			Block block = downState.getBlock();
 			if (block == EEBlocks.PUFFBUG_HIVE.get() && !world.getBlockState(doubleDown).canOcclude() && world.getBlockState(doubleDown).getBlock() != EEBlocks.PUFFBUG_HIVE.get()) {
 				ItemStack stack = player.getMainHandItem();
-				PuffBugHiveBlock.alertPuffBugs(world, down, EnchantmentHelper.getItemEnchantmentLevel(world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), stack) == 0 ? player : null);
+				PuffBugHiveBlock.alertPuffBugs(world, down, stack.getEnchantmentLevel(world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) == 0 ? player : null);
 				block.playerDestroy(world, player, down, downState, world.getBlockEntity(down), stack);
 			}
 		}

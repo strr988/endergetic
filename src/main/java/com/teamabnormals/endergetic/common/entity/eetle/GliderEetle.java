@@ -1,6 +1,5 @@
 package com.teamabnormals.endergetic.common.entity.eetle;
 
-import com.teamabnormals.blueprint.client.ClientInfo;
 import com.teamabnormals.blueprint.common.world.storage.tracking.IDataManager;
 import com.teamabnormals.blueprint.core.endimator.TimedEndimation;
 import com.teamabnormals.blueprint.core.util.NetworkUtil;
@@ -444,16 +443,16 @@ public class GliderEetle extends AbstractEetle implements IFlyingEetle {
 		return this.getPassengers().isEmpty() && this.ticksFlown >= 30;
 	}
 
-	public float getTakeoffProgress() {
-		return this.takeoffEndimation.getProgress(ClientInfo.getPartialTicks());
+	public float getTakeoffProgress(float partialTicks) {
+		return this.takeoffEndimation.getProgress(partialTicks);
 	}
 
-	public float getFlyingProgress() {
-		return this.flyingEndimation.getProgress(ClientInfo.getPartialTicks());
+	public float getFlyingProgress(float partialTicks) {
+		return this.flyingEndimation.getProgress(partialTicks);
 	}
 
-	public float getWingFlap() {
-		return Mth.lerp(ClientInfo.getPartialTicks(), this.prevWingFlap, this.wingFlap);
+	public float getWingFlap(float partialTicks) {
+		return Mth.lerp(partialTicks, this.prevWingFlap, this.wingFlap);
 	}
 
 	public static boolean isEntityLarge(Entity entity) {

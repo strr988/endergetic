@@ -76,14 +76,15 @@ public class GliderEetleModel extends EndimatorEntityModel<GliderEetle> {
 	@Override
 	public void setupAnim(GliderEetle entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+		float partialTicks = ageInTicks - entity.tickCount;
 
 		FlyingRotations flyingRotations = entity.getFlyingRotations();
-		float flyingProgress = entity.getFlyingProgress();
-		this.body.xRot += flyingRotations.getRenderFlyPitch() * ((float) Math.PI / 180.0F);
+		float flyingProgress = entity.getFlyingProgress(partialTicks);
+		this.body.xRot += flyingRotations.getRenderFlyPitch(partialTicks) * ((float) Math.PI / 180.0F);
 		this.head.xRot += 0.52F * flyingProgress;
 
 		if (entity.isFlying()) {
-			this.body.zRot = flyingRotations.getRenderFlyRoll() * ((float) Math.PI / 180.0F);
+			this.body.zRot = flyingRotations.getRenderFlyRoll(partialTicks) * ((float) Math.PI / 180.0F);
 		}
 
 		float frontLegFlying = 0.87F * flyingProgress;
@@ -97,7 +98,7 @@ public class GliderEetleModel extends EndimatorEntityModel<GliderEetle> {
 		this.head.yRot = netHeadYaw * ((float) Math.PI / 180.0F);
 		this.head.xRot += (headPitch * ((float) Math.PI / 180.0F));
 
-		float takeOffProgress = entity.getTakeoffProgress();
+		float takeOffProgress = entity.getTakeoffProgress(partialTicks);
 
 		float elytronZ = 0.35F * takeOffProgress;
 		this.leftElytron.zRot += -elytronZ;
@@ -112,7 +113,7 @@ public class GliderEetleModel extends EndimatorEntityModel<GliderEetle> {
 		this.rightWing.yRot += -wingY;
 
 		if (entity.isFlying()) {
-			float wingX = 0.1F * Mth.sin(8.0F * entity.getWingFlap()) + 0.15F;
+			float wingX = 0.1F * Mth.sin(8.0F * entity.getWingFlap(partialTicks)) + 0.15F;
 
 			this.leftWing.xRot += wingX;
 			this.rightWing.xRot += wingX;

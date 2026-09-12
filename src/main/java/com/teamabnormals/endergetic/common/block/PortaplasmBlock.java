@@ -251,7 +251,7 @@ public class PortaplasmBlock extends Block {
 	private static boolean tryToTeleportLiving(LivingEntity livingEntity, double randomX, double randomY, double randomZ) {
 		if (livingEntity.randomTeleport(randomX, randomY, randomZ, false)) {
 			if (livingEntity instanceof ServerPlayer player) {
-				PacketDistributor.sendToPlayer(player, new S2CEnablePurpoidFlash());
+				PacketDistributor.sendToPlayer(player, S2CEnablePurpoidFlash.INSTANCE);
 			}
 			return true;
 		}

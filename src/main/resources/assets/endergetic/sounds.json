@@ -462,7 +462,7 @@
         "weight": 7
       },
       {
-        "name": "minecraft:music/game/end/end",
+        "name": "minecraft:music/game/end/the_end",
         "stream": true,
         "weight": 1
       }

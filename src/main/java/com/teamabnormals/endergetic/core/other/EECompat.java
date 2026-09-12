@@ -13,7 +13,6 @@ public class EECompat {
 	public static void registerCompat() {
 		registerFlammables();
 		registerDispenserBehaviors();
-		registerCompostables();
 	}
 
 	private static void registerDispenserBehaviors() {
@@ -36,15 +35,6 @@ public class EECompat {
 		DispenserBlock.registerBehavior(EEItems.BLACK_BOLLOOM_BALLOON.get(), new BolloomBalloonItem.BalloonDispenseBehavior());
 		DispenserBlock.registerBehavior(EEItems.WHITE_BOLLOOM_BALLOON.get(), new BolloomBalloonItem.BalloonDispenseBehavior());
 		DispenserBlock.registerBehavior(EEItems.PUFF_BUG_BOTTLE.get(), new PuffBugBottleItem.PuffBugBottleDispenseBehavior());
-	}
-
-	private static void registerCompostables() {
-		DataUtil.registerCompostable(EEBlocks.POISE_BUSH.get(), 0.3F);
-		DataUtil.registerCompostable(EEBlocks.TALL_POISE_BUSH.get(), 0.5F);
-		DataUtil.registerCompostable(EEBlocks.POISE_CLUSTER.get(), 0.85F);
-		DataUtil.registerCompostable(EEBlocks.BOLLOOM_BUD.get(), 1.0F);
-		DataUtil.registerCompostable(EEItems.BOLLOOM_FRUIT.get(), 0.65F);
-		DataUtil.registerCompostable(EEBlocks.BOLLOOM_CRATE.get(), 1.0F);
 	}
 
 	private static void registerFlammables() {

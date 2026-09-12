@@ -19,7 +19,8 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class C2SInflateMessage implements CustomPacketPayload {
 	public static final Type<C2SInflateMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "inflate_booflo"));
-	public static final StreamCodec<FriendlyByteBuf, C2SInflateMessage> STREAM_CODEC = StreamCodec.unit(new C2SInflateMessage());
+	public static final C2SInflateMessage INSTANCE = new C2SInflateMessage();
+	public static final StreamCodec<FriendlyByteBuf, C2SInflateMessage> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
 	@Override
 	public Type<C2SInflateMessage> type() {

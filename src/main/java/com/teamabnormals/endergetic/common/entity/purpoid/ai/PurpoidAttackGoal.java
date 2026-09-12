@@ -101,7 +101,7 @@ public class PurpoidAttackGoal extends Goal {
 						double randomZ = targetZ + (random.nextDouble() - 0.5D) * 32.0D;
 						if (target.randomTeleport(randomX, randomY, randomZ, false)) {
 							if (target instanceof ServerPlayer) {
-								PacketDistributor.sendToPlayer((ServerPlayer) target, new S2CEnablePurpoidFlash());
+								PacketDistributor.sendToPlayer((ServerPlayer) target, S2CEnablePurpoidFlash.INSTANCE);
 							}
 							break;
 						}

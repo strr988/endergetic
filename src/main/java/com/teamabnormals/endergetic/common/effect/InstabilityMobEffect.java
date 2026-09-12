@@ -29,7 +29,7 @@ public class InstabilityMobEffect extends MobEffect {
 			double randomZ = z + (random.nextDouble() - 0.5D) * 32.0D;
 			if (entity.randomTeleport(randomX, randomY, randomZ, false)) {
 				if (entity instanceof ServerPlayer player) {
-					PacketDistributor.sendToPlayer(player, new S2CEnablePurpoidFlash());
+					PacketDistributor.sendToPlayer(player, S2CEnablePurpoidFlash.INSTANCE);
 				}
 				break;
 			}

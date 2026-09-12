@@ -21,14 +21,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPacketListener.class)
 public final class ClientPacketListenerMixin {
 	@Shadow
-	private Minecraft minecraft;
-	@Shadow
 	private ClientLevel level;
 
 	@Inject(at = @At("RETURN"), method = "handleGameEvent")
 	private void detachBalloons(ClientboundGameEventPacket packet, CallbackInfo info) {
-		if (packet.getEvent() == ClientboundGameEventPacket.CHANGE_GAME_MODE && this.minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
-			BalloonHolder holder = (BalloonHolder) this.minecraft.player;
+		Minecraft minecraft = Minecraft.getInstance();
+		if (packet.getEvent() == ClientboundGameEventPacket.CHANGE_GAME_MODE && minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
+			BalloonHolder holder = (BalloonHolder) minecraft.player;
 			if (!holder.getBalloons().isEmpty()) {
 				holder.detachBalloons();
 			}
@@ -37,11 +36,12 @@ public final class ClientPacketListenerMixin {
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;setOverlayMessage(Lnet/minecraft/network/chat/Component;Z)V", shift = At.Shift.AFTER), method = "handleSetEntityPassengersPacket")
 	private void setBoofloRidingOverlayMessage(ClientboundSetPassengersPacket packet, CallbackInfo info) {
+		Minecraft minecraft = Minecraft.getInstance();
 		Entity entity = this.level.getEntity(packet.getVehicle());
 		if (entity instanceof Booflo) {
-			this.minecraft.gui.setOverlayMessage(Component.translatable("overlay.mount.booflo", this.minecraft.options.keyShift.getTranslatedKeyMessage(), KeybindHandler.BOOFLO_SLAM.getTranslatedKeyMessage()), false);
+			minecraft.gui.setOverlayMessage(Component.translatable("overlay.mount.booflo", minecraft.options.keyShift.getTranslatedKeyMessage(), KeybindHandler.BOOFLO_SLAM.getTranslatedKeyMessage()), false);
 		} else if (entity instanceof GliderEetle) {
-			this.minecraft.gui.setOverlayMessage(Component.empty(), false);
+			minecraft.gui.setOverlayMessage(Component.empty(), false);
 		}
 	}
 }

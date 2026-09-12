@@ -1,0 +1,22 @@
+{
+  "values": {
+    "endergetic:bolloom_bud": {
+      "chance": 1.0
+    },
+    "endergetic:bolloom_crate": {
+      "chance": 1.0
+    },
+    "endergetic:bolloom_fruit": {
+      "chance": 0.65
+    },
+    "endergetic:poise_bush": {
+      "chance": 0.3
+    },
+    "endergetic:poise_cluster": {
+      "chance": 0.85
+    },
+    "endergetic:tall_poise_bush": {
+      "chance": 0.5
+    }
+  }
+}

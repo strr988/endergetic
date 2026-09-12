@@ -69,10 +69,7 @@ public class EEAdvancementProvider implements AdvancementGenerator {
 	}
 
 	private static Advancement.Builder createAdvancement(String name, String category, ResourceLocation parent, ItemLike icon, AdvancementType frame, boolean showToast, boolean announceToChat, boolean hidden) {
-		return Advancement.Builder.advancement().parent(parent).display(icon,
-				Component.translatable("advancements." + EndergeticExpansion.MOD_ID + "." + category + "." + name + ".title"),
-				Component.translatable("advancements." + EndergeticExpansion.MOD_ID + "." + category + "." + name + ".description"),
-				null, frame, showToast, announceToChat, hidden);
+		return createAdvancement(name, category, Advancement.Builder.advancement().build(parent), icon, frame, showToast, announceToChat, hidden);
 	}
 
 	private static Advancement.Builder createAdvancement(String name, String category, AdvancementHolder parent, ItemLike icon, AdvancementType frame, boolean showToast, boolean announceToChat, boolean hidden) {

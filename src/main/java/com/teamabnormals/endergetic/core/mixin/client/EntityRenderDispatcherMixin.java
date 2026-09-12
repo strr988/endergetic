@@ -27,7 +27,7 @@ public final class EntityRenderDispatcherMixin {
 				double x = -Mth.lerp(partialTicks, entity.xOld, entity.getX());
 				double y = -Mth.lerp(partialTicks, entity.yOld, entity.getY());
 				double z = -Mth.lerp(partialTicks, entity.zOld, entity.getZ());
-				Vec3 eggSackPos = BroodEggSack.getEggPos(new Vec3(-x, -y, -z), Mth.lerp(partialTicks, broodEetle.yBodyRotO, broodEetle.yBodyRot), broodEetle.getEggCannonProgress(), broodEetle.getEggCannonFlyingProgress(), broodEetle.getFlyingRotations().getRenderFlyPitch(), broodEetle.isOnLastHealthStage());
+				Vec3 eggSackPos = BroodEggSack.getEggPos(new Vec3(-x, -y, -z), Mth.lerp(partialTicks, broodEetle.yBodyRotO, broodEetle.yBodyRot), broodEetle.getEggCannonProgress(partialTicks), broodEetle.getEggCannonFlyingProgress(partialTicks), broodEetle.getFlyingRotations().getRenderFlyPitch(partialTicks), broodEetle.isOnLastHealthStage());
 				poseStack.translate(x + eggSackPos.x, y + eggSackPos.y, z + eggSackPos.z);
 				AABB axisalignedbb = eggSackEntity.getBoundingBox().move(-eggSackEntity.getX(), -eggSackEntity.getY(), -eggSackEntity.getZ());
 				LevelRenderer.renderLineBox(poseStack, bufferIn, axisalignedbb, 0.25F, 1.0F, 0.0F, 1.0F);

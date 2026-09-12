@@ -10,7 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public final class S2CEnablePurpoidFlash implements CustomPacketPayload {
 	public static final Type<S2CEnablePurpoidFlash> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "enable_purpoid_flash"));
-	public static final StreamCodec<FriendlyByteBuf, S2CEnablePurpoidFlash> STREAM_CODEC = StreamCodec.unit(new S2CEnablePurpoidFlash());
+	public static final S2CEnablePurpoidFlash INSTANCE = new S2CEnablePurpoidFlash();
+	public static final StreamCodec<FriendlyByteBuf, S2CEnablePurpoidFlash> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
 	@Override
 	public Type<S2CEnablePurpoidFlash> type() {

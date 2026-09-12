@@ -19,7 +19,8 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class C2SBoostMessage implements CustomPacketPayload {
 	public static final Type<C2SBoostMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "boost_booflo"));
-	public static final StreamCodec<FriendlyByteBuf, C2SBoostMessage> STREAM_CODEC = StreamCodec.unit(new C2SBoostMessage());
+	public static final C2SBoostMessage INSTANCE = new C2SBoostMessage();
+	public static final StreamCodec<FriendlyByteBuf, C2SBoostMessage> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
 	@Override
 	public Type<C2SBoostMessage> type() {

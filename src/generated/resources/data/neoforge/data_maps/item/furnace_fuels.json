@@ -1,0 +1,25 @@
+{
+  "values": {
+    "endergetic:bolloom_crate": {
+      "burn_time": 300
+    },
+    "endergetic:chiseled_poise_bookshelf": {
+      "burn_time": 300
+    },
+    "endergetic:poise_boards": {
+      "burn_time": 300
+    },
+    "endergetic:poise_bookshelf": {
+      "burn_time": 300
+    },
+    "endergetic:poise_fence": {
+      "burn_time": 300
+    },
+    "endergetic:poise_fence_gate": {
+      "burn_time": 300
+    },
+    "endergetic:poise_ladder": {
+      "burn_time": 300
+    }
+  }
+}

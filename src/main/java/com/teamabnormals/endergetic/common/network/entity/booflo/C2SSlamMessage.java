@@ -19,7 +19,8 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class C2SSlamMessage implements CustomPacketPayload {
 	public static final Type<C2SSlamMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("endergetic", "slam_booflo"));
-	public static final StreamCodec<FriendlyByteBuf, C2SSlamMessage> STREAM_CODEC = StreamCodec.unit(new C2SSlamMessage());
+	public static final C2SSlamMessage INSTANCE = new C2SSlamMessage();
+	public static final StreamCodec<FriendlyByteBuf, C2SSlamMessage> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
 	@Override
 	public Type<C2SSlamMessage> type() {
